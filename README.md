@@ -1,9 +1,12 @@
 # icm
 Official implementation of the ICM algorithm.
 
-# install
-./configure
-make
-sudo make install
+# installation
 
-If using windows, install Linux first.
+./configure
+
+make
+
+make install
+
+If you are using windows, install Linux first.
