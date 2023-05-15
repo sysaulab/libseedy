@@ -1,11 +1,9 @@
 /******************************************************************************
  |                                                                            |
- |  libicm.c                                                                  |
- |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
- |                                                                            |
- |  Institutional licence available upon request                              |
+ |  Covered by agpl-v3                                                        |
+ |  Commercial licence available upon request                                 |
  |                                                                            |
  ******************************************************************************/
 
@@ -31,28 +29,28 @@ int ___libicm_modify( uint64_t* in, uint64_t* out )
 
     for( int x = 0; x < 64; x++ )
     {
-        acc = ( acc << 13 ) + ( acc >> ( 64 - 13 ) );
+        *in = ( *in << 13 ) + ( *in >> ( 64 - 13 ) );     /* source is rotated by 13 bits... */
         acc *= primes[ (2 * x) + (1 & *in) ];                /* accumulate a unique prime for this run... */
         *out += acc;                                            /* add uncertainty in the sink too as we go... */
-        *in = ( *in << 13 ) + ( *in >> ( 64 - 13 ) );     /* source is rotated by 13 bits... */
     }
     *out ^= acc;                                                   /* finally XOR the accumulated product to the sink */
     return 0;
 }
 
-void ___icm_pause(icm_state_t* icm)
+void icm_stop(icm_state_t* icm)
 {
     for( int x = 0; x < NUM_THREADS; x++ )
     {
-        pthread_mutex_lock(&icm->threads[x].mutx);
+        pthread_mutex_lock(&(icm->threads[x].mutx));
         icm->threads[x].pause = 1;
     }
 }
 
-void ___icm_play(icm_state_t* icm){
+void icm_go(icm_state_t* icm)
+{
     for( int x = 0; x < NUM_THREADS; x++ )
     {
-        pthread_mutex_unlock(&icm->threads[x].mutx);
+        pthread_mutex_unlock(&(icm->threads[x].mutx));
     }
 }
 
@@ -76,31 +74,37 @@ void icm_init(icm_state_t* state)
 {
     pthread_t threads[NUM_THREADS];
     state->delay.tv_sec = 0;
-    state->delay.tv_nsec = 1;
-    for( int index = 0; index < NUM_THREADS; index++ )
+    state->delay.tv_nsec = 5000;
+    for( int i = 0; i < NUM_THREADS; i++ )
     {
-        state->nodes[index] = 0;
-        state->threads[index].source = &state->nodes[index];
-        state->threads[index].sink = &state->nodes[(index + 1)%NUM_THREADS];
-        state->threads[index].pause = 0;
-        pthread_mutex_init(&state->threads[index].mutx, NULL);
-        pthread_mutex_lock(&state->threads[index].mutx);
-        pthread_create(&threads[index], NULL, &___libicm_threadwork, &state->threads[index]);
+        state->nodes[i] = 0;
+        state->threads[i].source = &(state->nodes[i]);
+        state->threads[i].sink = &(state->nodes[(i + 1) % NUM_THREADS]);
+        state->threads[i].run = 1;
+        state->threads[i].pause = 1;
+        pthread_mutex_init(&(state->threads[i].mutx), NULL);
+        pthread_mutex_lock(&(state->threads[i].mutx));
+        pthread_create(&(threads[i]), NULL, &___libicm_threadwork, &(state->threads[i]));
     }
+    for( int i = 0; i < NUM_THREADS; i++ )
+    {
+        fprintf(stderr, "%016llx\n", state->nodes[i]);
+    }
+    icm_go(state);
+    usleep(1);
+    icm_stop(state);
 }
 
 void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count, uint64_t debug)
 {
     uint64_t answer = 0;
-    ___icm_play(state);
-    for( int index = 0; index < count; index++ )
+    for( int i = 0; i < count; i++ )
     {
         nanosleep( &state->delay, &state->rem );
         answer = state->nodes[0];
         for( int y = 1; y < NUM_THREADS; y++ )
             answer ^= state->nodes[y];
-        destination[index] = answer;
+        destination[i] = answer;
     }
-    ___icm_pause(state);
 }
 #endif

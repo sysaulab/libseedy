@@ -1,13 +1,11 @@
-/*----------------------------------------------------------------------------*\
- |                                                                            |
- |  icm.c                                                                    |
+/******************************************************************************
  |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
+ |  Covered by agpl-v3                                                        |
+ |  Commercial licence available upon request                                 |
  |                                                                            |
- |  Institutional licence available upon request                              |
- |                                                                            |
-\*----------------------------------------------------------------------------*/
+ ******************************************************************************/
 
 #include <stdint.h>
 #include <stdio.h>

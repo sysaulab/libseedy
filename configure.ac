@@ -1,4 +1,4 @@
-AC_INIT([icm], [0.3.1], [sylvain@sysau.com])
+AC_INIT([icm], [0.3.2], [sylvain@sysau.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 AC_CONFIG_HEADERS([config.h])

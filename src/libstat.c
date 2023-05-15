@@ -1,13 +1,11 @@
-/*----------------------------------------------------------------------------*\
- |                                                                            |
- |  libstat.c                                                                 |
+/******************************************************************************
  |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
+ |  Covered by agpl-v3                                                        |
+ |  Commercial licence available upon request                                 |
  |                                                                            |
- |  Institutional licence available upon request                              |
- |                                                                            |
-\*----------------------------------------------------------------------------*/
+ ******************************************************************************/
 
 #ifndef ___libstat_h
 #define ___libstat_h

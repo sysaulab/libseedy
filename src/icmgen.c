@@ -1,14 +1,13 @@
-/*----------------------------------------------------------------------------*\
- |                                                                            |
- |  icm.c                                                                    |
+/******************************************************************************
  |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
+ |  Covered by agpl-v3                                                        |
+ |  Commercial licence available upon request                                 |
  |                                                                            |
- |  Institutional licence available upon request                              |
- |                                                                            |
-\*----------------------------------------------------------------------------*/
+ ******************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -186,15 +185,15 @@ int main(int argc, const char * argv[])
         x = 0;
         while( x < NUM_THREADS )
         {
-            fprintf( stderr, "node #%i %016llx\n", x, state.nodes[x] );
+            fprintf( stderr, "node #%i %016llx (%p %p)\n", x, state.nodes[x], state.threads[x].source, state.threads[x].sink);
             x++;
         }
         fprintf(stderr, "\n");
-        fprintf(stderr, "--- icm --- WORK IN PROGRESS --------------------------------------------------\n");
+        fprintf(stderr, "--- icm --- INTERNAL STATE ----------------------------------------------------\n");
     }
+    icm_go(&state);
 
     x = 0;
-
     while( cfg_forever || x < block_count )
     {
         fillbuffer(&state, buffer, ___icm_BLOCKSIZE, cfg_first);
@@ -208,8 +207,15 @@ int main(int argc, const char * argv[])
         }
 
         if( cfg_info )
-            fprintf(stderr, "·");
-
+        {
+            fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+            fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+            fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+            for( int x = 0; x < NUM_THREADS; x++)
+            {
+                fprintf(stderr, "%016llx", state.nodes[x]);
+            }
+        }
         x++;
     }
 
@@ -230,9 +236,6 @@ int main(int argc, const char * argv[])
             else
                 flush_buffer_bin(buffer, remains);
         }
-
-        if( cfg_info )
-            fprintf(stderr, ".");
     }
 
     if( cfg_info )
@@ -241,6 +244,7 @@ int main(int argc, const char * argv[])
     if(cfg_info)
         fprintf(stderr, "\n=== icm === INFORMATION SHEET === END =========================================\n");
 
+    icm_stop(&state);
     free(buffer);
 
     return 0;
