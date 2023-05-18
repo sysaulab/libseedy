@@ -1,11 +1,7 @@
-/******************************************************************************
- |                                                                            |
- |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
- |  sylvain@sysau.com                                                         |
- |  Covered by agpl-v3                                                        |
- |  Commercial licence available upon request                                 |
- |                                                                            |
- ******************************************************************************/
+/*  Copyright 2023, All rights reserved, Sylvain Saucier
+    sylvain@sysau.com
+    Distributed under Affero GNU Public Licence version 3
+    Commercial licence available upon request */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -14,12 +10,15 @@
 #include <pthread.h>
 #include <time.h>
 #include <math.h>
-#include <unistd.h> // usleep
+#include <unistd.h>
 
 #include "stat.h"
 #include "ftime.h"
 
 #define ___STAT_BLOCK_SIZE (4096) // size of uint64_t array, size in mb is 8 times greater
+
+int max_stage = 0;
+int stage = 0; 
 
 void* live_view(void* raw)
 {
@@ -35,6 +34,7 @@ void* live_view(void* raw)
         double iter_per_sec = progress / ftime_elapsed;
         double iter_remain = 1 - progress;
         double ftime_remaining = iter_remain / iter_per_sec;
+        double kbps = (dist->u32_A.count / ftime_elapsed)/1024;
 
         if( progress > 1 )
             ftime_remaining = ftime() - dist->start;
@@ -48,7 +48,7 @@ void* live_view(void* raw)
         uint32_t secs = f_remaining;
 
         fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
-        fprintf(stderr, "%.9f - %02uh%02um%02us - %.3f ", dist->u32_A.score_unique, hours, mins, secs, iter_per_sec);
+        fprintf(stderr, "%.15f - %02uh%02um%02us - %.0fKiB/s - %u/%u", dist->u32_A.score_unique, hours, mins, secs, kbps, stage, max_stage);
         fprintf( dist->logfile, "%.9f,%.9f,%.9f\n", progress, dist->u32_A.score_unique, ftime_elapsed );
     }
 
@@ -57,10 +57,8 @@ void* live_view(void* raw)
 
 int main(int argc, const char * argv[])
 {
-    int max_stage = 0;
     uint64_t* buffer;
     distribution* dist;
-    int stage = 0; 
     
     buffer = calloc(___STAT_BLOCK_SIZE, sizeof(uint64_t));
     dist = calloc(1, sizeof(distribution));
@@ -74,7 +72,7 @@ int main(int argc, const char * argv[])
         max_stage = atoi(argv[1]);
 
     dist->logfile = fopen("icm_stat.log", "a");
-    fprintf(dist->logfile, "time,score,progress\n");
+    fprintf(dist->logfile, "progress,score,time\n");
 
     pthread_t live;
     pthread_create(&live, NULL, &live_view, dist);

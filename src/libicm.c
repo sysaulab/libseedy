@@ -1,11 +1,7 @@
-/******************************************************************************
- |                                                                            |
- |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
- |  sylvain@sysau.com                                                         |
- |  Covered by agpl-v3                                                        |
- |  Commercial licence available upon request                                 |
- |                                                                            |
- ******************************************************************************/
+/*  Copyright 2023, All rights reserved, Sylvain Saucier
+    sylvain@sysau.com
+    Distributed under Affero GNU Public Licence version 3
+    Commercial licence available upon request */
 
 #ifndef ___libicm_c
 #define ___libicm_c
@@ -23,17 +19,18 @@ int ___libicm_modify( uint64_t* in, uint64_t* out )
     if ( in == NULL || out == NULL )
         return 1;
 
-    uint64_t acc = 1;                                               /* newvalue : 128 unique prime numbers will be multiplied together in this accumulator */
-    uint64_t primes[128] =                                               /* primes : list of prime numbers, 256 first prime numbers. */
+    uint64_t acc = 1;                                   /* newvalue : 128 unique prime numbers will be multiplied together in this accumulator */
+    uint64_t primes[128] =                              /* primes : list of prime numbers, 256 first prime numbers. */
     #include "primes.large.txt"
 
     for( int x = 0; x < 64; x++ )
     {
-        *in = ( *in << 13 ) + ( *in >> ( 64 - 13 ) );     /* source is rotated by 13 bits... */
-        acc *= primes[ (2 * x) + (1 & *in) ];                /* accumulate a unique prime for this run... */
-        *out += acc;                                            /* add uncertainty in the sink too as we go... */
+        *in = ( *in << 13 ) + ( *in >> ( 64 - 13 ) );   /* source is rotated by 13 bits... */
+        acc = ( acc << x ) + ( acc >> ( 64 - x ) );     /* smooth out bit distribution in acc */
+        acc *= primes[ (2 * x) + (1 & *in) ];           /* accumulate a unique prime for this run... */
+        *out += acc;                                    /* add uncertainty in the sink too as we go... */
     }
-    *out ^= acc;                                                   /* finally XOR the accumulated product to the sink */
+    *out ^= acc;                                        /* finally XOR the accumulated product to the sink */
     return 0;
 }
 
@@ -54,9 +51,20 @@ void icm_go(icm_state_t* icm)
     }
 }
 
+void icm_wait(icm_state_t* icm)
+{
+    for( int x = 0; x < NUM_THREADS; x++ )
+    {
+        pthread_join(icm->threads[x].thr, NULL);
+    }
+}
+
 void* ___libicm_threadwork(void* raw)
 {
     icm_thread_t* state = (icm_thread_t*) raw;
+
+    int is_last_node = state->source > state->sink;
+
     while(state->run)
     {
         ___libicm_modify(state->source, state->sink);
@@ -66,32 +74,58 @@ void* ___libicm_threadwork(void* raw)
             pthread_mutex_lock(&state->mutx); //waiting for restart
             pthread_mutex_unlock(&state->mutx); //unlocking the mutex right away...
         }
+#ifdef ICM_EXPERIMENTAL
+        state->fresh++;
+        if(is_last_node)
+        {
+            uint64_t val = 0;
+            int ok = 1;
+
+            for ( int x = 0; x < NUM_THREADS; x++ )
+                if ( ICM_SKIP > *state->freshes[x] ) 
+                    ok = 0;
+            
+            if(ok)
+            {
+            for ( int x = 0; x < NUM_THREADS; x++ )
+            {
+                *state->freshes[x] = 0;
+                val ^= state->nodes[x];
+            }
+            fwrite(&val, sizeof(uint64_t), 1, stdout);
+            }
+
+        }
+#endif
     }
     return NULL;
 }
 
 void icm_init(icm_state_t* state)
 {
-    pthread_t threads[NUM_THREADS];
+//    pthread_t threads[NUM_THREADS];
     state->delay.tv_sec = 0;
     state->delay.tv_nsec = 5000;
     for( int i = 0; i < NUM_THREADS; i++ )
     {
         state->nodes[i] = 0;
+/*        for(int n = 0; n < NUM_THREADS; n++)
+        {
+            state->threads[i].freshes[n] = &state->threads[n].fresh;
+        }*/
+        
         state->threads[i].source = &(state->nodes[i]);
         state->threads[i].sink = &(state->nodes[(i + 1) % NUM_THREADS]);
+//        state->threads[i].fresh = 0;
         state->threads[i].run = 1;
         state->threads[i].pause = 1;
+//        state->threads[i].nodes = state->nodes;
         pthread_mutex_init(&(state->threads[i].mutx), NULL);
         pthread_mutex_lock(&(state->threads[i].mutx));
-        pthread_create(&(threads[i]), NULL, &___libicm_threadwork, &(state->threads[i]));
-    }
-    for( int i = 0; i < NUM_THREADS; i++ )
-    {
-        fprintf(stderr, "%016llx\n", state->nodes[i]);
+        pthread_create(&(state->threads[i].thr), NULL, &___libicm_threadwork, &(state->threads[i]));
     }
     icm_go(state);
-    usleep(1);
+    usleep(state->delay.tv_nsec);
     icm_stop(state);
 }
 
@@ -101,8 +135,7 @@ void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count, uint64_t
     for( int i = 0; i < count; i++ )
     {
         nanosleep( &state->delay, &state->rem );
-        answer = state->nodes[0];
-        for( int y = 1; y < NUM_THREADS; y++ )
+        for( int y = 0; y < NUM_THREADS; y++ )
             answer ^= state->nodes[y];
         destination[i] = answer;
     }

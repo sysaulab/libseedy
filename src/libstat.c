@@ -2,7 +2,7 @@
  |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
- |  Covered by agpl-v3                                                        |
+ |  Distributed under Affero GNU Public Licence version 3                     |
  |  Commercial licence available upon request                                 |
  |                                                                            |
  ******************************************************************************/
@@ -15,6 +15,45 @@
 #include <stdlib.h>
 #include <string.h>
 #include "stat.h"
+
+
+
+
+void fstat_init(fstat_t* fstat)
+{
+    fstat->min = 0xffffffffffffffff;
+    fstat->sum = 0;
+    fstat->max = 0;
+}
+
+void fstat_analyze(fstat_t* fstat, double value)
+{
+    if( value < fstat->min )
+        fstat->min = value;
+
+    if( value > fstat->max )
+        fstat->max = value;
+
+    fstat->sum += value;
+    fstat->count++;
+}
+
+double fstat_min(fstat_t* fstat)
+{
+    return fstat->min;
+}
+
+double fstat_max(fstat_t* fstat)
+{
+    return fstat->max;
+}
+
+double fstat_avg(fstat_t* fstat)
+{
+    return fstat->sum / fstat->count;
+}
+
+
 
 uint64_t count_bits_fast(uint16_t value, uint8_t* bits)
 {
@@ -43,27 +82,6 @@ void init_bits(uint8_t* bits)
     }
 }
 
-void u8_update_unique(distribution_8_t* dist)
-{
-    fprintf(stderr, "u8_update_unique(%p)", dist);
-    dist->unique = 0;
-    dist->unique_diff = 0;
-    dist->count = 0;
-    uint64_t x = 0;
-    while( x < 0x100 )
-    {
-        if ( dist->value[x] > 0 )
-            dist->unique++;
-
-        if ( dist->diff[x] > 0 )
-            dist->unique_diff++;
-
-        dist->count += dist->value[x];
-        x++;
-    }
-    fprintf(stderr, "u8_update_unique() -> %llu %llu, ", dist->unique, dist->unique_diff);
-}
-
 void count_u32_bits( distribution_32_t* dist )
 {
     uint8_t* cache = dist->bits_cache;
@@ -89,17 +107,6 @@ double deviation( double a, double b )
     return b / a;
 }
 
-void u8_update_score(distribution_8_t* dist)
-{
-    double target_dist = dist->count;
-    if ( target_dist > U8_MAX_VALUE+1L ) 
-        target_dist = U8_MAX_VALUE+1L;
-
-    u8_update_unique(dist);
-    dist->score_uniqueness = deviation(target_dist, dist->unique);
-    dist->score_uniqueness_diff = deviation(target_dist, dist->unique_diff);
-}
-
 void u32_update_score(distribution_32_t* dist)
 {
     double target_unique = dist->count;
@@ -114,19 +121,9 @@ void u32_update_score(distribution_32_t* dist)
 double update_score(distribution* dist)
 {
     double score = 1.0;
-
     u32_update_score(&dist->u32_A);
     score *= dist->u32_A.score_unique;
-
     return score;
-}
-
-uint8_t difference(uint8_t a, uint8_t b)
-{
-    if ( a < b )
-        return b - a;
-    else
-        return a - b;
 }
 
 void add_u32 (distribution_32_t* stat32, uint32_t value)
@@ -139,8 +136,9 @@ void add_u32 (distribution_32_t* stat32, uint32_t value)
 
 void add_u64( distribution* dist, uint64_t value )
 {
-    add_u32(&dist->u32_A, (uint32_t)(value));
-    add_u32(&dist->u32_A, (uint32_t)(value >> 32));
+    uint32_t* sub = (uint32_t*)&value;
+    add_u32(&dist->u32_A, sub[0]);
+    add_u32(&dist->u32_A, sub[1]);
 }
 
 #endif

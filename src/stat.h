@@ -2,7 +2,7 @@
  |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
- |  Covered by agpl-v3                                                        |
+ |  Distributed under Affero GNU Public Licence version 3                     |
  |  Commercial licence available upon request                                 |
  |                                                                            |
  ******************************************************************************/
@@ -51,6 +51,21 @@ typedef struct {
     double start;
     double stage_start;
 } distribution;
+
+
+typedef struct {
+    double min;
+    double sum;
+    double max;
+    uint64_t count;
+} fstat_t;
+
+void fstat_init(fstat_t* fstat);
+void fstat_analyze(fstat_t* fstat, double value);
+double fstat_min(fstat_t* fstat);
+double fstat_max(fstat_t* fstat);
+double fstat_avg(fstat_t* fstat);
+
 
 void distribution_init( distribution* dist );
 double deviation(double a, double b);

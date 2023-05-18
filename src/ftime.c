@@ -2,7 +2,7 @@
  |                                                                            |
  |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
  |  sylvain@sysau.com                                                         |
- |  Covered by agpl-v3                                                        |
+ |  Distributed under Affero GNU Public Licence version 3                     |
  |  Commercial licence available upon request                                 |
  |                                                                            |
  ******************************************************************************/
