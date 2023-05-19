@@ -1,7 +1,7 @@
 /*  Copyright 2023, All rights reserved, Sylvain Saucier
     sylvain@sysau.com
     Distributed under Affero GNU Public Licence version 3
-    Commercial licence available upon request */
+    Other licences available upon request */
 
 #ifndef ___libicm_c
 #define ___libicm_c
@@ -13,6 +13,7 @@
 #include <unistd.h>
 
 #include "libicm.h"
+#include "config.h"
 
 int ___libicm_modify( uint64_t* in, uint64_t* out )
 {
@@ -36,7 +37,7 @@ int ___libicm_modify( uint64_t* in, uint64_t* out )
 
 void icm_stop(icm_state_t* icm)
 {
-    for( int x = 0; x < NUM_THREADS; x++ )
+    for( int x = 0; x < _SSRNG_THREADS; x++ )
     {
         pthread_mutex_lock(&(icm->threads[x].mutx));
         icm->threads[x].pause = 1;
@@ -45,15 +46,15 @@ void icm_stop(icm_state_t* icm)
 
 void icm_go(icm_state_t* icm)
 {
-    for( int x = 0; x < NUM_THREADS; x++ )
+    for( int x = 0; x < _SSRNG_THREADS; x++ )
     {
         pthread_mutex_unlock(&(icm->threads[x].mutx));
     }
 }
 
-void icm_wait(icm_state_t* icm)
+void icm_join(icm_state_t* icm)
 {
-    for( int x = 0; x < NUM_THREADS; x++ )
+    for( int x = 0; x < _SSRNG_THREADS; x++ )
     {
         pthread_join(icm->threads[x].thr, NULL);
     }
@@ -81,13 +82,13 @@ void* ___libicm_threadwork(void* raw)
             uint64_t val = 0;
             int ok = 1;
 
-            for ( int x = 0; x < NUM_THREADS; x++ )
-                if ( ICM_SKIP > *state->freshes[x] ) 
+            for ( int x = 0; x < _SSRNG_THREADS; x++ )
+                if ( _SSRNG_EXP_SKIP > *state->freshes[x] ) 
                     ok = 0;
             
             if(ok)
             {
-            for ( int x = 0; x < NUM_THREADS; x++ )
+            for ( int x = 0; x < _SSRNG_THREADS; x++ )
             {
                 *state->freshes[x] = 0;
                 val ^= state->nodes[x];
@@ -103,23 +104,26 @@ void* ___libicm_threadwork(void* raw)
 
 void icm_init(icm_state_t* state)
 {
-//    pthread_t threads[NUM_THREADS];
+#ifdef ICM_EXPERIMENTAL
+    pthread_t threads[_SSRNG_THREADS];
+#endif
     state->delay.tv_sec = 0;
     state->delay.tv_nsec = 5000;
-    for( int i = 0; i < NUM_THREADS; i++ )
+    for( int i = 0; i < _SSRNG_THREADS; i++ )
     {
         state->nodes[i] = 0;
-/*        for(int n = 0; n < NUM_THREADS; n++)
+#ifdef ICM_EXPERIMENTAL
+        for(int n = 0; n <_SSRNG_THREADS; n++)
         {
             state->threads[i].freshes[n] = &state->threads[n].fresh;
-        }*/
-        
+        }
+        state->threads[i].fresh = 0;
+        state->threads[i].nodes = state->nodes;
+#endif
         state->threads[i].source = &(state->nodes[i]);
-        state->threads[i].sink = &(state->nodes[(i + 1) % NUM_THREADS]);
-//        state->threads[i].fresh = 0;
+        state->threads[i].sink = &(state->nodes[(i + 1) % _SSRNG_THREADS]);
         state->threads[i].run = 1;
         state->threads[i].pause = 1;
-//        state->threads[i].nodes = state->nodes;
         pthread_mutex_init(&(state->threads[i].mutx), NULL);
         pthread_mutex_lock(&(state->threads[i].mutx));
         pthread_create(&(state->threads[i].thr), NULL, &___libicm_threadwork, &(state->threads[i]));
@@ -129,13 +133,13 @@ void icm_init(icm_state_t* state)
     icm_stop(state);
 }
 
-void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count, uint64_t debug)
+void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count)
 {
     uint64_t answer = 0;
     for( int i = 0; i < count; i++ )
     {
         nanosleep( &state->delay, &state->rem );
-        for( int y = 0; y < NUM_THREADS; y++ )
+        for( int y = 0; y < _SSRNG_THREADS; y++ )
             answer ^= state->nodes[y];
         destination[i] = answer;
     }

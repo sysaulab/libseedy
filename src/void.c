@@ -4,12 +4,11 @@
     Commercial licence available upon request */
 
 #include <stdio.h>
-
-#define BUFSIZE 16384
+#include "config.h"
 
 int main(int argc, char** argv)
 {
-    char buffer[BUFSIZE];
-    while(fread(&buffer, sizeof(char), BUFSIZE, stdin))
+    char buffer[_SSRNG_BUFSIZE];
+    while(fread(&buffer, sizeof(char), _SSRNG_BUFSIZE, stdin))
     {;}
 }

@@ -1,11 +1,7 @@
-/******************************************************************************
- |                                                                            |
- |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
- |  sylvain@sysau.com                                                         |
- |  Distributed under Affero GNU Public Licence version 3                     |
- |  Commercial licence available upon request                                 |
- |                                                                            |
- ******************************************************************************/
+/*  Copyright 2023, All rights reserved, Sylvain Saucier
+    sylvain@sysau.com
+    Distributed under Affero GNU Public Licence version 3
+    Other licences available upon request */
 
 #ifndef ___icmstat_h
 #define ___icmstat_h
@@ -52,7 +48,6 @@ typedef struct {
     double stage_start;
 } distribution;
 
-
 typedef struct {
     double min;
     double sum;
@@ -65,7 +60,6 @@ void fstat_analyze(fstat_t* fstat, double value);
 double fstat_min(fstat_t* fstat);
 double fstat_max(fstat_t* fstat);
 double fstat_avg(fstat_t* fstat);
-
 
 void distribution_init( distribution* dist );
 double deviation(double a, double b);

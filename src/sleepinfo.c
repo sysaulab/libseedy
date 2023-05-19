@@ -1,7 +1,7 @@
 /*  Copyright 2023, All rights reserved, Sylvain Saucier
     sylvain@sysau.com
     Distributed under Affero GNU Public Licence version 3
-    Commercial licence available upon request */
+    Other licences available upon request */
 
 #include <stdio.h>
 #include <stdint.h>
@@ -12,9 +12,6 @@
 #include "ftime.h"
 #include "stat.h"
 
-/*
-    get_platform_delay() : return the minimum sleep delay possible in current environment
-*/
 double get_minimum_nanosleep_delay()
 {
     struct timespec t;
@@ -35,10 +32,9 @@ double get_minimum_usleep_delay()
     return ftime() - start;
 }
 
-
-
 int main(int argc, char** argv)
 {
+    printf("Distributed under Affero GNU Public Licence version 3\n\n");
     fstat_t stats;
 
     fstat_init(&stats);

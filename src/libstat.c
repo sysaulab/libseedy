@@ -1,11 +1,7 @@
-/******************************************************************************
- |                                                                            |
- |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
- |  sylvain@sysau.com                                                         |
- |  Distributed under Affero GNU Public Licence version 3                     |
- |  Commercial licence available upon request                                 |
- |                                                                            |
- ******************************************************************************/
+/*  Copyright 2023, All rights reserved, Sylvain Saucier
+    sylvain@sysau.com
+    Distributed under Affero GNU Public Licence version 3
+    Other licences available upon request */
 
 #ifndef ___libstat_h
 #define ___libstat_h
@@ -15,9 +11,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "stat.h"
-
-
-
 
 void fstat_init(fstat_t* fstat)
 {
@@ -52,8 +45,6 @@ double fstat_avg(fstat_t* fstat)
 {
     return fstat->sum / fstat->count;
 }
-
-
 
 uint64_t count_bits_fast(uint16_t value, uint8_t* bits)
 {
