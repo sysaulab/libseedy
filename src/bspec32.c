@@ -59,21 +59,6 @@ int main(int argc, const char * argv[])
 {
     uint64_t* buffer;
     distribution* dist;
-
-    uint32_t cfg_debug = 0;
-    for( int x = 1; x < argc; x++ )
-    {
-        if(!strcmp("debug", argv[x]))
-            cfg_debug = 1;
-        else
-        {
-            printf("Distributed under Affero GNU Public Licence version 3\n\n");
-            printf("usage : <stdin> | bspec {0-10}\n");
-            printf("ex.: seed | bspec 10\n");
-            
-            return 1;
-        }
-    }
     
     buffer = calloc(_SSRNG_BUFLEN, sizeof(uint64_t));
     dist = calloc(1, sizeof(distribution));

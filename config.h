@@ -11,7 +11,7 @@
 #define PACKAGE_NAME "icm"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "icm 0.4.0-experimental"
+#define PACKAGE_STRING "icm 0.4.0-beta"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "icm"
@@ -20,7 +20,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.4.0-experimental"
+#define PACKAGE_VERSION "0.4.0-beta"
 
 /* Version number of package */
-#define VERSION "0.4.0-experimental"
+#define VERSION "0.4.0-beta"

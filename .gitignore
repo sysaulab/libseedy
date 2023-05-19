@@ -61,3 +61,10 @@ src/icmgen
 *.bin
 *.log
 icm_stat.log
+src/hex
+src/bench
+src/bspec32
+src/keep
+src/prng
+src/seed
+src/sleepinfo

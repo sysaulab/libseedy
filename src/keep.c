@@ -60,4 +60,5 @@ int main(int argc, char** argv)
         if(!have) break;
         bytes_written += fwrite(&buffer, sizeof(uint8_t), have > remains ? remains : have, stdout);
     }
+    return EXIT_SUCCESS;
 }

@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <pthread.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "ftime.h"
 #include "config.h"
@@ -50,4 +51,5 @@ int main(int argc, char** argv)
         bytes_readed += buf_received;
         bytes_written += fwrite(&buffer, sizeof(char), buf_received, stdout);
     }
+    return EXIT_SUCCESS;
 }

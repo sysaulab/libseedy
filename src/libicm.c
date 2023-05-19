@@ -135,6 +135,7 @@ void icm_init(icm_state_t* state)
 
 void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count)
 {
+    icm_go(state);
     uint64_t answer = 0;
     for( int i = 0; i < count; i++ )
     {
@@ -143,5 +144,6 @@ void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count)
             answer ^= state->nodes[y];
         destination[i] = answer;
     }
+    icm_stop(state);
 }
 #endif

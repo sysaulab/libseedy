@@ -1,4 +1,4 @@
-bin_PROGRAMS = seed bspec32 sleepinfo trim bench void hex
+bin_PROGRAMS = seed bspec32 sleepinfo keep bench void hex prng
 
 seeddir = ./
 seed_SOURCES = seed.c libicm.c
@@ -12,9 +12,13 @@ sleepinfodir = ./
 sleepinfo_SOURCES = sleepinfo.c ftime.c libstat.c
 sleepinfo_HEADERS = ftime.h stat.h config.h
 
-trimdir = ./
-trim_SOURCES = trim.c
-trim_HEADERS = config.h
+keepdir = ./
+keep_SOURCES = keep.c
+keep_HEADERS = config.h
+
+prngdir = ./
+prng_SOURCES = prng.c
+prng_HEADERS = config.h
 
 voiddir = ./
 void_SOURCES = void.c

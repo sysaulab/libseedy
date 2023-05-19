@@ -54,7 +54,6 @@ int main(int argc, const char * argv[])
 #endif
     icm_state_t state;
     icm_init(&state);
-    icm_go(&state);
 
 #ifdef _SSRNG_EXPERIMENTAL //Enable in libicm.h. Output from library, thread function.
     fprintf(stderr, "!!! WARNING !!! Experimental features in use\n");
@@ -67,6 +66,7 @@ int main(int argc, const char * argv[])
 #else
         icm_get(&state, buffer, _SSRNG_BUFLEN, 0);
 #endif
+        fwrite(buffer, sizeof(uint64_t), _SSRNG_BUFLEN, stdout);
         
 #ifndef _SSRNG_CORE
         if( cfg_debug )
@@ -80,6 +80,5 @@ int main(int argc, const char * argv[])
     }
 #endif
 
-    icm_stop(&state);
     return EXIT_SUCCESS;
 }
