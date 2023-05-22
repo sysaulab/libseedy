@@ -27,7 +27,7 @@ int ___libicm_modify( uint64_t* in, uint64_t* out )
     for( int x = 0; x < 64; x++ )
     {
         *in = ( *in << 13 ) + ( *in >> ( 64 - 13 ) );   /* source is rotated by 13 bits... */
-        acc = ( acc << x ) + ( acc >> ( 64 - x ) );     /* smooth out bit distribution in acc */
+//        acc = ( acc << x ) + ( acc >> ( 64 - x ) );     /* smooth out bit distribution in acc */
         acc *= primes[ (2 * x) + (1 & *in) ];           /* accumulate a unique prime for this run... */
         *out += acc;                                    /* add uncertainty in the sink too as we go... */
     }

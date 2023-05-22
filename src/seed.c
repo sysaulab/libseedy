@@ -64,7 +64,7 @@ int main(int argc, const char * argv[])
 #ifndef _SSRNG_CORE
         fillbuffer(&state, buffer, _SSRNG_BUFLEN, cfg_reset);
 #else
-        icm_get(&state, buffer, _SSRNG_BUFLEN, 0);
+        icm_get(&state, buffer, _SSRNG_BUFLEN);
 #endif
         fwrite(buffer, sizeof(uint64_t), _SSRNG_BUFLEN, stdout);
         

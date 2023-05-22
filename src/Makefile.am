@@ -1,4 +1,4 @@
-bin_PROGRAMS = seed bspec32 sleepinfo keep bench void hex prng
+bin_PROGRAMS = seed bspec32 sleepinfo keep bench void hex prng pcurve
 
 seeddir = ./
 seed_SOURCES = seed.c libicm.c
@@ -27,6 +27,10 @@ void_HEADERS = config.h
 hexdir = ./
 hex_SOURCES = hex.c
 hex_HEADERS = config.h
+
+pcurvedir = ./
+pcurve_SOURCES = pcurve.c
+pcurve_HEADERS = config.h
 
 benchdir = ./
 bench_SOURCES = bench.c ftime.c

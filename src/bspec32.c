@@ -18,7 +18,7 @@
 int max_stage = 0;
 int stage = 0; 
 
-#ifndef _SSRNG_CORE
+
 void* live_view(void* raw)
 {
     distribution* dist = raw;
@@ -53,7 +53,6 @@ void* live_view(void* raw)
 
     return NULL;
 }
-#endif
 
 int main(int argc, const char * argv[])
 {
@@ -68,14 +67,9 @@ int main(int argc, const char * argv[])
         return EXIT_FAILURE;
     }
 
-    if(argc > 1)
-        max_stage = atoi(argv[1]);
-
-    if(max_stage < 0)
-        max_stage = 0;
-
-    if(max_stage > 10)
-        max_stage = 10;
+    if(argc > 1)        max_stage = atoi(argv[1]);
+    if(max_stage < 0)   max_stage = 0;
+    if(max_stage > 10)  max_stage = 10;
 
     dist->logfile = fopen("icm_stat.log", "a");
     fprintf(dist->logfile, "progress,score,seconds\n");

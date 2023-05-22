@@ -4,6 +4,7 @@
     Other licences available upon request */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -24,15 +25,15 @@ void* live(void* unused)
 
         double speed = bytes_written / (ftime() - start);
         if(speed > 1000000000000)
-            fprintf(stderr, "%0.3f tb/s   ", speed / 1000000000000);
+            fprintf(stderr, "%0.3f tb/s (%llu)   ", speed / 1000000000000, bytes_written);
         else if(speed > 1000000000)
-            fprintf(stderr, "%0.3f gb/s   ", speed / 1000000000);
+            fprintf(stderr, "%0.3f gb/s (%llu)   ", speed / 1000000000, bytes_written);
         else if(speed > 1000000)
-            fprintf(stderr, "%0.3f mb/s   ", speed / 1000000);
+            fprintf(stderr, "%0.2f mb/s (%llu)   ", speed / 1000000, bytes_written);
         else if(speed > 1000)
-            fprintf(stderr, "%0.3f kb/s   ", speed / 1000);
+            fprintf(stderr, "%0.1f kb/s (%llu)   ", speed / 1000, bytes_written);
         else
-            fprintf(stderr, "%0.3f b/s    ", speed);
+            fprintf(stderr, "%0.0f b/s (%llu)    ", speed, bytes_written);
     }
 }
 
