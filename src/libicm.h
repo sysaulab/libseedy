@@ -1,11 +1,13 @@
-/******************************************************************************
- |                                                                            |
- |  Copyright 2023, All rights reserved, Sylvain Saucier                      |
- |  sylvain@sysau.com                                                         |
- |  Covered by agpl-v3                                                        |
- |  Commercial licence available upon request                                 |
- |                                                                            |
- ******************************************************************************/
+/**
+* @file libicm.h
+* @author Sylvain Saucier <sylvain@sysau.com>
+* @version 0.4.0
+* @section LICENSE *
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the Affero GNU Public Licence version 3.
+* Other licences available upon request.
+* @section DESCRIPTION *
+* ICM library header */
 
 #ifndef ___libicm_h
 #define ___libicm_h
@@ -15,31 +17,34 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
+#include "sr_config.h"
 
-#define NUM_THREADS 3
+#define _ICM_WARMUP         1000                    // Warmup after init in microseconds
+#define _ICM_WAIT           30                      // Sleeping time in microseconds
+#define _ICM_MAX_THREADS    3                       // number of threads and nodes in ICM (3 recommended)
 
-typedef struct
-{
-    uint64_t        *source;
-    uint64_t        *sink;
+typedef struct{
+    volatile uint64_t    *source;
+    volatile uint64_t    *sink;
+#ifdef ICM_EXPERIMENTAL
+    uint64_t        fresh;
+    uint64_t        *freshes[NUM_THREADS];
+    uint64_t*       nodes;
+#endif
     int             pause;
     int             run;
     pthread_mutex_t mutx;
+    pthread_t       thr;
 } icm_thread_t;
 
-typedef struct
-{
-    uint64_t        nodes[NUM_THREADS];
-    struct timespec delay;
-    struct timespec rem;
-    icm_thread_t    threads[NUM_THREADS];
+typedef struct{
+    volatile uint64_t        nodes[_ICM_MAX_THREADS];
+    icm_thread_t    threads[_ICM_MAX_THREADS];
 } icm_state_t;
 
-int ___libicm_modify(uint64_t* source, uint64_t* sink);
-void* ___libicm_threadwork(void* raw);
 void icm_init(icm_state_t* state);
-void icm_get(icm_state_t* state, uint64_t* destination, uint64_t count, uint64_t debug);
-void icm_stop(icm_state_t* icm);
-void icm_go(icm_state_t* icm);
+void icm_fill64(icm_state_t* state, uint64_t* buffer, uint64_t count);
+void icm_mix64(icm_state_t* state, uint64_t* buffer, uint64_t count);
+void icm_join(icm_state_t* icm);
 
 #endif
