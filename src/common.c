@@ -1,7 +1,13 @@
-/*  Copyright 2023, All rights reserved, Sylvain Saucier
-    sylvain@sysau.com
-    Distributed under Affero GNU Public Licence version 3
-    Other licences available upon request */
+/**
+* @file libstat.c
+* @author Sylvain Saucier <sylvain@sysau.com>
+* @version 0.4.0
+* @section LICENSE *
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the Affero GNU Public Licence version 3.
+* Other licences available upon request.
+* @section DESCRIPTION *
+* The basic stats implementation */
 
 #ifndef ___libstat_h
 #define ___libstat_h
@@ -10,7 +16,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "stat.h"
+#include "common.h"
+
+#include <time.h>
+double ftime(){
+#ifdef __APPLE__
+    return (double)(clock_gettime_nsec_np(CLOCK_REALTIME)) / 1000000000.0;
+#else
+//    fprintf(stderr, "UNTESTED CODE RUNNING REF#072384");
+    struct timespec _linux_ts;
+    clock_gettime(CLOCK_REALTIME, &_linux_ts);
+    double _linux_time = _linux_ts.tv_sec;
+    _linux_time += _linux_ts.tv_nsec / 1000000000.0;
+    return _linux_time;
+#endif
+}
 
 void fstat_init(fstat_t* fstat)
 {
@@ -73,7 +93,7 @@ void init_bits(uint8_t* bits)
     }
 }
 
-void count_u32_bits( distribution_32_t* dist )
+void count_u32_bits( distribution* dist )
 {
     uint8_t* cache = dist->bits_cache;
     if(dist->bits_cache_ready == 0)
@@ -98,12 +118,12 @@ double deviation( double a, double b )
     return b / a;
 }
 
-void u32_update_score(distribution_32_t* dist)
+void u32_update_score(distribution* dist)
 {
     double target_unique = dist->count;
 
-    if ( target_unique > U32_MAX_VALUE+1L ) 
-        target_unique = U32_MAX_VALUE+1L;
+    if ( target_unique > 0x100000000 ) 
+        target_unique = 0x100000000;
         
     count_u32_bits(dist);
     dist->score_unique = deviation(target_unique, dist->unique);
@@ -112,12 +132,12 @@ void u32_update_score(distribution_32_t* dist)
 double update_score(distribution* dist)
 {
     double score = 1.0;
-    u32_update_score(&dist->u32_A);
-    score *= dist->u32_A.score_unique;
+    u32_update_score(dist);
+    score *= dist->score_unique;
     return score;
 }
 
-void add_u32 (distribution_32_t* stat32, uint32_t value)
+void add_u32 (distribution* stat32, uint32_t value)
 {
     uint64_t prefix = value / 64;
     uint64_t suffix = value % 64;
@@ -128,8 +148,8 @@ void add_u32 (distribution_32_t* stat32, uint32_t value)
 void add_u64( distribution* dist, uint64_t value )
 {
     uint32_t* sub = (uint32_t*)&value;
-    add_u32(&dist->u32_A, sub[0]);
-    add_u32(&dist->u32_A, sub[1]);
+    add_u32(dist, sub[0]);
+    add_u32(dist, sub[1]);
 }
 
 #endif

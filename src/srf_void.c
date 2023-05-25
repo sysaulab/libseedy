@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "config.h"
+#include "sr_config.h"
 
 int main(int argc, char** argv)
 {

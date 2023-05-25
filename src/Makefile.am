@@ -1,39 +1,51 @@
-bin_PROGRAMS = seed bspec32 sleepinfo keep bench void hex prng pcurve
+bin_PROGRAMS = rngsetup srs_icm64 srs_icm64mix srt_bspec32 sr_sleepinfo srf_limitsize srf_bench srf_void srf_hex srg_roxo64-8k srg_roxo64-8kc srt_bspec32_ref
 
-seeddir = ./
-seed_SOURCES = seed.c libicm.c
-seed_HEADERS = libicm.h primes.txt primes.large.txt config.h
+rngsetupdir = ./
+rngsetup_SOURCES = rngsetup.c
+rngsetup_HEADERS = 
 
-bspec32dir = ./
-bspec32_SOURCES = bspec32.c libstat.c ftime.c
-bspec32_HEADERS = stat.h ftime.h config.h
+srs_icm64dir = ./
+srs_icm64_SOURCES = srs_icm64.c libicm.c
+srs_icm64_HEADERS = libicm.h primes.txt primes.large.txt sr_config.h
 
-sleepinfodir = ./
-sleepinfo_SOURCES = sleepinfo.c ftime.c libstat.c
-sleepinfo_HEADERS = ftime.h stat.h config.h
+srs_icm64mixdir = ./
+srs_icm64mix_SOURCES = srs_icm64mix.c libicm.c
+srs_icm64mix_HEADERS = libicm.h primes.txt primes.large.txt sr_config.h
 
-keepdir = ./
-keep_SOURCES = keep.c
-keep_HEADERS = config.h
+srt_bspec32dir = ./
+srt_bspec32_SOURCES = srt_bspec32.c common.c
+srt_bspec32_HEADERS = common.h sr_config.h
 
-prngdir = ./
-prng_SOURCES = prng.c
-prng_HEADERS = config.h
+sr_sleepinfodir = ./
+sr_sleepinfo_SOURCES = sr_sleepinfo.c common.c 
+sr_sleepinfo_HEADERS = common.h sr_config.h
 
-voiddir = ./
-void_SOURCES = void.c
-void_HEADERS = config.h
+srf_limitsizedir = ./
+srf_limitsize_SOURCES = srf_limitsize.c
+srf_limitsize_HEADERS = sr_config.h
 
-hexdir = ./
-hex_SOURCES = hex.c
-hex_HEADERS = config.h
+srg_roxo64_8kdir = ./
+srg_roxo64_8k_SOURCES = srg_roxo64-8k.c
+srg_roxo64_8k_HEADERS = sr_config.h
 
-pcurvedir = ./
-pcurve_SOURCES = pcurve.c
-pcurve_HEADERS = config.h
+srg_roxo64_8kcdir = ./
+srg_roxo64_8kc_SOURCES = srg_roxo64-8kc.c
+srg_roxo64_8kc_HEADERS = sr_config.h
 
-benchdir = ./
-bench_SOURCES = bench.c ftime.c
-bench_HEADERS = ftime.h config.h
+srf_voiddir = ./
+srf_void_SOURCES = srf_void.c
+srf_void_HEADERS = sr_config.h
+
+srf_hexdir = ./
+srf_hex_SOURCES = srf_hex.c
+srf_hex_HEADERS = sr_config.h
+
+srt_bspec32_refdir = ./
+srt_bspec32_ref_SOURCES = srt_bspec32_ref.c
+srt_bspec32_ref_HEADERS = sr_config.h
+
+srf_benchdir = ./
+srf_bench_SOURCES = srf_bench.c common.c
+srf_bench_HEADERS = common.h sr_config.h
 
 LIBS = -lpthread

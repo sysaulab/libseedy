@@ -1,7 +1,13 @@
-/*  Copyright 2023, All rights reserved, Sylvain Saucier
-    sylvain@sysau.com
-    Distributed under Affero GNU Public Licence version 3
-    Other licences available upon request */
+/**
+* @file sleepinfo.c
+* @author Sylvain Saucier <sylvain@sysau.com>
+* @version 0.4.0
+* @section LICENSE *
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the Affero GNU Public Licence version 3.
+* Other licences available upon request.
+* @section DESCRIPTION *
+* Program, display statistics on usleep() ans nanosleep() */
 
 #include <stdio.h>
 #include <stdint.h>
@@ -9,8 +15,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
-#include "ftime.h"
-#include "stat.h"
+#include "common.h"
 
 double get_minimum_nanosleep_delay()
 {

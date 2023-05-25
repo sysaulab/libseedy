@@ -8,7 +8,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include "config.h"
+#include "sr_config.h"
+
+#define _PRNG_THREADS 1
 
 inline uint64_t rot64(uint64_t i, int s)
 {
@@ -26,7 +28,7 @@ void* prng(void * raw)
     {
         if(fresh < 1)
         {
-            fresh = 100000000000;
+            fresh = 1099511627776;// 16TB, should be safe. 2^54 possible iterations
             fread( prng_state, sizeof(uint64_t), 4 * 256, stdin);
         }
         for( uint64_t y = 0; y < _SSRNG_BUFLEN; y++ )
@@ -36,9 +38,6 @@ void* prng(void * raw)
             uint64_t c = rot64(prng_state[2][indexes[2]], indexes[6] & 0b00111111);
             uint64_t d = rot64(prng_state[3][indexes[3]], indexes[7] & 0b00111111);
             buffer[y] = a ^ b ^ c ^ d;
-/*          uint64_t a = (prng_state[0][indexes[0]] ^ prng_state[1][indexes[1]]);
-            uint64_t b = (prng_state[2][indexes[2]] ^ prng_state[3][indexes[3]]);
-            buffer[y] = a + b;*/
             index = index + 7776210437768060567ULL;
             fresh--;
         }

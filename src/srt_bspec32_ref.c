@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "config.h"
+#include "sr_config.h"
 
 #ifdef _Float128
 typedef _Float128 curve_t;
