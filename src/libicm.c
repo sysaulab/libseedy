@@ -13,7 +13,6 @@
 #include <stdint.h>
 
 #include "libicm.h"
-#include "sr_config.h"
 
 /**
 * @brief ICM Permutation Algorithm

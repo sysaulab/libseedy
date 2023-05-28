@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
-#include "sr_config.h"
 
 #define _ICM_WARMUP         1000                    // Warmup after init in microseconds
 #define _ICM_WAIT           30                      // Sleeping time in microseconds
