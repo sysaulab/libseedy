@@ -1,8 +1,12 @@
-bin_PROGRAMS = rngsetup srs_icm64 srs_icm64mix srt_bspec32 sr_sleepinfo srf_limitsize srf_bench srf_void srf_hex srg_roxo64-8k srg_roxo64-8kc srt_bspec32_ref
+bin_PROGRAMS = srs_icm64 softrng srs_icm64mix srt_bspec32 sr_sleepinfo srf_limitsize srf_multixor srf_bench srf_void srf_hex srg_roxo64 srg_qxo64 srt_bspec32_ref
 
-rngsetupdir = ./
-rngsetup_SOURCES = rngsetup.c
-rngsetup_HEADERS = 
+etc_DATA = manual.txt
+
+etcdir = ../etc
+
+softrngdir = ./
+softrng_SOURCES = softrng.c
+softrng_HEADERS = 
 
 srs_icm64dir = ./
 srs_icm64_SOURCES = srs_icm64.c libicm.c
@@ -24,13 +28,13 @@ srf_limitsizedir = ./
 srf_limitsize_SOURCES = srf_limitsize.c
 srf_limitsize_HEADERS = sr_config.h
 
-srg_roxo64_8kdir = ./
-srg_roxo64_8k_SOURCES = srg_roxo64-8k.c
-srg_roxo64_8k_HEADERS = sr_config.h
+srg_roxo64dir = ./
+srg_roxo64_SOURCES = srg_roxo64.c
+srg_roxo64_HEADERS = sr_config.h
 
-srg_roxo64_8kcdir = ./
-srg_roxo64_8kc_SOURCES = srg_roxo64-8kc.c
-srg_roxo64_8kc_HEADERS = sr_config.h
+srg_qxo64dir = ./
+srg_qxo64_SOURCES = srg_qxo64.c
+srg_qxo64_HEADERS = sr_config.h
 
 srf_voiddir = ./
 srf_void_SOURCES = srf_void.c
@@ -47,5 +51,9 @@ srt_bspec32_ref_HEADERS = sr_config.h
 srf_benchdir = ./
 srf_bench_SOURCES = srf_bench.c common.c
 srf_bench_HEADERS = common.h sr_config.h
+
+srf_multixordir = ./
+srf_multixor_SOURCES = srf_multixor.c common.c
+srf_multixor_HEADERS = common.h sr_config.h
 
 LIBS = -lpthread

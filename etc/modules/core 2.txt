@@ -27,9 +27,9 @@ srf_sleepinfo
  srf_sleepinfo||srf_sleepinfo|display information about OS sleep timers
 srf_void
  srf_void|IT|srf_void|Portable /dev/null replacement
-srg_roxo64-8k
- srg_roxo64-8k|IOG|srg_roxo64-8k|Rotate-XOR (64 bit, 8K pool)
-srg_roxo64c-8k
+srg_roxo64
+ srg_roxo64|IOG|srg_roxo64-8k|Rotate-XOR (64 bit, 8K pool)
+srg_qxo64
  srg_roxo64c-8k|IOG|srg_roxo64c-8k| (64 bit, 8K pool, cached_rotates)
 srs_icm64
  srs_icm64|OS|srs_icm64|Seedless ICM seed provider

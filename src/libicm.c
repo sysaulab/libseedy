@@ -23,19 +23,24 @@
 * This function contains the processing algorithm
 * run by the icm threads
 */
-int ___libicm_modify( volatile uint64_t* in, volatile uint64_t* out ){
+int ___libicm_modify( volatile uint64_t* in, volatile uint64_t* out )
+{
     if(in == NULL || out == NULL)
         return 1;
+        
     uint64_t acc = 1;                                   /* newvalue : 128 unique prime numbers will be multiplied together in this accumulator */
     uint64_t primes[128] =                              /* primes : list of prime numbers, 256 first prime numbers. */
     #include "primes.large.txt"
-    for( int x = 0; x < 64; x++ ){
+    for( int x = 0; x < 64; x++ )
+    {
         *in = (*in << 13) | (*in >> (64 - 13));         /* source is rotated by 13 bits... */
         acc = (acc << x) | (acc >> (64 - x));           /* smooth out bit distribution in acc */
         acc *= primes[(2 * x)+(1 & *in)];               /* accumulate a unique prime for this run... */
-        *out ^= acc;}                                   /* add uncertainty in the sink too as we go... */
-//    *out ^= acc;                                      /* finally XOR the accumulated product to the sink */
-    return 0;}
+        *out ^= acc;                                    /* add uncertainty in the sink too as we go... */
+    }
+    //*out ^= acc;                                      /* finally XOR the accumulated product to the sink */
+    return 0;
+}
 
 /**
 * @brief stop the ICM chaos engine
@@ -77,29 +82,12 @@ void icm_join(icm_state_t* icm){
 */
 void* ___libicm_threadwork(void* raw){
     icm_thread_t* state = (icm_thread_t*) raw;
-#ifdef ICM_EXPERIMENTAL
-    int is_last_node = state->source > state->sink;
-#endif
     while(state->run){
         ___libicm_modify(state->source, state->sink);
         if(state->pause){
             state->pause = 0;
             pthread_mutex_lock(&state->mutx);               //waiting for restart
             pthread_mutex_unlock(&state->mutx);}            //unlocking the mutex right away...
-#ifdef ICM_EXPERIMENTAL
-        state->fresh++;
-        if(is_last_node){
-            uint64_t val = 0;
-            int ok = 1;
-            for ( int x = 0; x < _SSRNG_THREADS; x++ )
-                if ( _SSRNG_EXP_SKIP > *state->freshes[x] ) 
-                    ok = 0;
-            if(ok){
-                for ( int x = 0; x < _SSRNG_THREADS; x++ ){
-                    *state->freshes[x] = 0;
-                    val ^= state->nodes[x];}
-            fwrite(&val, sizeof(uint64_t), 1, stdout);}}
-#endif
     }return NULL;}
 
 /**
@@ -110,17 +98,8 @@ void* ___libicm_threadwork(void* raw){
 */
 void icm_init(icm_state_t* state)
 {
-#ifdef ICM_EXPERIMENTAL
-    pthread_t threads[_SSRNG_THREADS];
-#endif
     for( int i = 0; i < _ICM_MAX_THREADS; i++ ){
         state->nodes[i] = 0;
-#ifdef ICM_EXPERIMENTAL
-        for(int n = 0; n <_SSRNG_THREADS; n++){
-            state->threads[i].freshes[n] = &state->threads[n].fresh;}
-        state->threads[i].fresh = 0;
-        state->threads[i].nodes = state->nodes;
-#endif
         state->threads[i].source = &(state->nodes[i]);
         state->threads[i].sink = &(state->nodes[(i + 1) % _ICM_MAX_THREADS]);
         state->threads[i].run = 1;
