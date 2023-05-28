@@ -1,9 +1,5 @@
 bin_PROGRAMS = srs_icm64 softrng srs_icm64mix srt_bspec32 sr_sleepinfo srf_limitsize srf_multixor srf_bench srf_void srf_hex srg_roxo64 srg_qxo64 srt_bspec32_ref
 
-etc_DATA = manual.txt
-
-etcdir = ../etc
-
 softrngdir = ./
 softrng_SOURCES = softrng.c
 softrng_HEADERS = 
