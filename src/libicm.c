@@ -65,30 +65,27 @@ void __icm_start(icm_state_t* icm){
         pthread_mutex_unlock(&(icm->threads[x].mutx));}}
 
 /**
-* @brief wait for all ICM threads to return
-* @author Sylvain Saucier
-* @param icm Pointer to an ICM struct
-* This function wait for all ICM threads to be stopped before continuing
-*/
-void icm_join(icm_state_t* icm){
-    for(int x = 0; x < _ICM_MAX_THREADS; x++)
-        pthread_join(icm->threads[x].thr, NULL);}
-
-/**
 * @brief ICM Thread Function
 * @author Sylvain Saucier
 * @param raw void* pointer to an icm_thread_t
 * This function pause all the ICM threads
 */
-void* ___libicm_threadwork(void* raw){
+void* ___libicm_threadwork(void* raw)
+{
     icm_thread_t* state = (icm_thread_t*) raw;
-    while(state->run){
+    while(1)
+    {
         ___libicm_modify(state->source, state->sink);
-        if(state->pause){
+        if(state->pause)
+        {
+            if(!state->run) pthread_exit(NULL);
             state->pause = 0;
             pthread_mutex_lock(&state->mutx);               //waiting for restart
-            pthread_mutex_unlock(&state->mutx);}            //unlocking the mutex right away...
-    }return NULL;}
+            pthread_mutex_unlock(&state->mutx);             //unlocking the mutex right away...
+            }
+    }
+    return NULL;
+}
 
 /**
 * @brief ICM Initialization function
@@ -110,6 +107,19 @@ void icm_init(icm_state_t* state)
     __icm_start(state);
     usleep(_ICM_WARMUP);
     __icm_pause(state);}
+
+/**
+* @brief ICM Stop function, stops all threads
+* @author Sylvain Saucier
+* @param raw void* pointer to an icm_thread_t
+* This function can be called to quit the treads gracefully.
+*/
+void icm_stop(icm_state_t* state)
+{
+    for(int x = 0; x < _ICM_MAX_THREADS; x++) state->threads[x].run = 0;
+    __icm_pause(state);
+    for(int x = 0; x < _ICM_MAX_THREADS; x++) pthread_join(state->threads[x].thr, NULL);
+}
 
 /**
 * @brief ICM Fill Function

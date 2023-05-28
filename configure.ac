@@ -1,4 +1,4 @@
-AC_INIT([icm], [0.4.0], [sylvain@sysau.com])
+AC_INIT([libicm], [0.1.0], [sylvain@sysau.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 CFLAGS="$CFLAGS "

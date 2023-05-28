@@ -24,27 +24,22 @@
 #define _ICM_MAX_THREADS    3                       // number of threads and nodes in ICM (3 recommended)
 
 typedef struct{
-    volatile uint64_t    *source;
-    volatile uint64_t    *sink;
-#ifdef ICM_EXPERIMENTAL
-    uint64_t        fresh;
-    uint64_t        *freshes[NUM_THREADS];
-    uint64_t*       nodes;
-#endif
-    int             pause;
-    int             run;
+    volatile uint64_t *source;
+    volatile uint64_t *sink;
+    int pause;
+    int run;
     pthread_mutex_t mutx;
-    pthread_t       thr;
+    pthread_t thr;
 } icm_thread_t;
 
 typedef struct{
-    volatile uint64_t        nodes[_ICM_MAX_THREADS];
-    icm_thread_t    threads[_ICM_MAX_THREADS];
+    volatile uint64_t nodes[_ICM_MAX_THREADS];
+    icm_thread_t threads[_ICM_MAX_THREADS];
 } icm_state_t;
 
 void icm_init(icm_state_t* state);
 void icm_fill64(icm_state_t* state, uint64_t* buffer, uint64_t count);
 void icm_mix64(icm_state_t* state, uint64_t* buffer, uint64_t count);
-void icm_join(icm_state_t* icm);
+void icm_stop(icm_state_t* icm);
 
 #endif
