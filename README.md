@@ -1,6 +1,9 @@
 # icm
 Official implementation of the ICM algorithm.
 
+ICM algorithm allow efficient entropy gathering from multicore processors 
+by actively creating endless logical chaos.  
+
 Please nothe the tools and tests are now part of softrng. 
 https://github.com/sysaulab/softrng
 
