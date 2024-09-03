@@ -1,13 +1,12 @@
-# icm
-Official implementation of the ICM algorithm.
-ICM algorithm allow efficient entropy gathering from multicore processors 
-by actively creating endless logical chaos.  
+# libicm
+First implementation of the Interdependent Concurrent Multiplications, ICM, "algorithm".
 
-Please note that the tools and tests are now part of softrng. 
-This repo not actively supported at the moment.
-https://github.com/sysaulab/softrng
+ICM allow efficient entropy gathering from multicore processors by creating and observing an unstable complex system from within a program.
 
-All that remains here is the standalone library header and source file. 
-Example of proper usage is provided in softrng.
+This allow a user to bypass traditionnal channels who may be monitored and allow operating systems and applications to access a chaotic entropy source when it was not possible before (iBook G4? Remote equipment?).
 
-Happy randomizing!
+More details and test results in README.md of prandom.
+
+Happy chaos!
+
+sylvain@sysau.com
