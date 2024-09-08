@@ -52,13 +52,13 @@ int icm_modify( volatile uint64_t* in, volatile uint64_t* out )
     while( x < 64 ) {
         *in = (*in << 13) | (*in >> (64 - 13));         /* source is rotated by 13 bits... */
         acc = (acc << x) | (acc >> (64 - x));           /* smooth out bit distribution in acc */
-        acc *= primes[(2 * x)+(1 & *in)];               /* pick the prime[x][set?], do it 64 times (we rotate above) */
+        acc *= primes[(2 * x) + (1 & *in)];               /* pick the prime[x][set?], do it 64 times (we rotate above) */
 
         /* 
-         *   This addition multiply the number of unresolved race conditions / compute.
-         *   Before this addition I had to wait and verify for a change.
-         *   This allow continuous polling.
-         *   Basic dafeguard has been reintroduced for production.
+         *   This addition increase the number of unresolved race conditions / computation cycle.
+         *   Before this addition I had to wait and verify for a change in the state to avoid polling too soon.
+         *   This addition instruction allowed continuous polling during most of the development and testing phases.
+         *   Basic dafeguard has been reintroduced for production before the last round of testing on the iBook G4.
          */
         *out += acc ^ *in;
         x++;
