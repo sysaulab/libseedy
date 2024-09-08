@@ -4,18 +4,35 @@
 
 Portable seedless random number generator formerly known as ICM.
 
-Seedy creates and observe an unstable complex system built with threads and race conditions to create chaotic sequences in software. It works flawlessly on multicore CPU and offers acceptable quality on old platforms.
+Seedy creates and observe an unstable complex system built with 
+threads and race conditions to create chaotic sequences in software. 
+It works flawlessly on multicore CPU and offers acceptable quality 
+on old platforms.
 
-This allow a user to bypass traditionnal channels who may be monitored and allow operating systems and applications to access a chaotic entropy source when it was not possible before.
+This allow a user to bypass traditionnal channels who may be 
+monitored and allow operating systems and applications to access 
+a chaotic entropy source when it was not possible before.
 
 ## History
 
-I was pondering the nature of chaos I saw a bird in the sky. It inspired me to imagine the turbulences behind the wings and 
-theorize about the nature of the interactions that make turbulences unpredictable. Could I replicate it using software? The image that appeared in my head was a system that was interdependent, but loosely coupled.
+I was pondering the nature of chaos I saw a bird in the sky. It 
+inspired me to imagine the turbulences behind the wings and 
+theorize about the nature of the interactions that make turbulences 
+unpredictable. Could I replicate it using software? The image that 
+appeared in my head was a system that was interdependent, 
+but loosely coupled.
 
-I used many hash function as active processes and unmitigated shared memory to provide the “slack” in the coupling. I experimented with different topologies before adopting the obvious choice: a ring. The physical analogy that comes to my mind, is one of a circle in which three balls are launched at high velocity towards the centre. 
+I used many hash function as active processes and unmitigated shared 
+memory to provide the “slack” in the coupling. I experimented with 
+different topologies before adopting the obvious choice: a ring. 
+The physical analogy that comes to my mind, is one of a circle in 
+which three balls are launched at high velocity towards the centre. 
 
-In a perfect universe, we can imagine the balls would hit each other precisely at the same point in space and time when they get to the centre, then rebound back precisely and hit the wall behind them, then go back towards the centre again and repeat the same motions forever. In an imperfect universe, we would observe divergences after a few cycles.
+In a perfect universe, we can imagine the balls would hit each other 
+precisely at the same point in space and time when they get to the 
+centre, then rebound back precisely and hit the wall behind them, then 
+go back towards the centre again and repeat the same motions forever. 
+In an imperfect universe, we would observe divergences after a few cycles.
 
 ## TESTING
 
