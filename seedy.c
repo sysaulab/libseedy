@@ -16,7 +16,7 @@
 
 #endif
 
-typedef struct _poiikjbdhfs{
+typedef struct seed_thread_s{
     volatile uint64_t *source;
     volatile uint64_t *sink;
     int run;
@@ -27,7 +27,7 @@ typedef struct _poiikjbdhfs{
 #endif
 } seed_thread;
 
-typedef struct _iuouuo{
+typedef struct seed_state_s{
     volatile uint64_t nodes[3];
     seed_thread threads[3];
 } seed_state;
@@ -164,7 +164,7 @@ void stop_seeder(seed_state* state)
 #endif
 }
 
-void seed(uint64_t* buffer, uint64_t count)
+void seedy(uint64_t* buffer, uint64_t count)
 {
     int i = 0;
     uint64_t last_pick;

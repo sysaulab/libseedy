@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "seed.h"
+#include "seedy.h"
 
 #if defined(_WIN32) && (_MSC_VER < 1940)
 #include "stdint.h"
@@ -18,13 +18,13 @@ int main(int argc, const char * argv[])
 #if defined(_WIN32) && (_MSC_VER < 1940)
     uint8_t buffer;
     uint64_t newseed;
-    seed(&newseed, 1);
+    seedy(&newseed, 1);
     srand((unsigned int)newseed);
 #else
     uint8_t buffer[buffer_length];
     uint64_t newseed[4];
 	prng_state s;
-    seed(newseed, 4);
+    seedy(newseed, 4);
     prng_init(&s, newseed);
 #endif
 

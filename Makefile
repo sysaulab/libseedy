@@ -2,11 +2,11 @@ CC=cc
 CFLAGS= -O2 -w -lpthread
 prefix=/usr/local
 
-all: seed random
-	ar rcs libseed.a libseed.o
-random: random.c libseed.o
-seed: seed.c libseed.o
-libseed.o: libseed.c
+all: seed random seedy.o
+	ar rcs seedy.a seedy.o
+random: random.c seedy.o
+seed: seed.c seedy.o
+seedy.o: seedy.c
 
 install: all
 	mkdir -p $(DESTDIR)$(prefix)/bin 
@@ -14,9 +14,9 @@ install: all
 	mkdir -p $(DESTDIR)$(prefix)/share/man/man3 
 	mkdir -p $(DESTDIR)$(prefix)/include 
 	mkdir -p $(DESTDIR)$(prefix)/lib
-	install seed.h $(DESTDIR)$(prefix)/include
-	install libseed.a $(DESTDIR)$(prefix)/lib
-	install seed.3 $(DESTDIR)$(prefix)/share/man/man3
+	install seedy.h $(DESTDIR)$(prefix)/include
+	install seedy.a $(DESTDIR)$(prefix)/lib
+	install seedy.3 $(DESTDIR)$(prefix)/share/man/man3
 	install seed $(DESTDIR)$(prefix)/bin
 	install seed.1 $(DESTDIR)$(prefix)/share/man/man1
 	install random $(DESTDIR)$(prefix)/bin

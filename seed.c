@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "seed.h"
+#include "seedy.h"
 
 #if defined(_WIN32) && (_MSC_VER < 1940)
 #include "stdint.h"
@@ -18,7 +18,7 @@ int main(int argc, const char * argv[])
     if ( buffer == NULL ) exit( EXIT_FAILURE );
 
     /* Get the seed */
-    seed( buffer, stop );
+    seedy( buffer, stop );
     
     /* Write seed to output */
     fwrite( buffer, sizeof(uint64_t), stop, stdout );

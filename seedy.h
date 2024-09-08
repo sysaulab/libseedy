@@ -10,4 +10,4 @@
 #include <pthread.h>
 #endif
 
-void seed(uint64_t* buffer, uint64_t count);
+void seedy(uint64_t* buffer, uint64_t count);
