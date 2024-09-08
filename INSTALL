@@ -1,0 +1,13 @@
+1. Install the library
+
+cd libseed
+make
+sudo make install
+
+
+
+2. Make the seed command
+
+cd seed
+make
+sudo make install

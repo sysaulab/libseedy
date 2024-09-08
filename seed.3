@@ -1,0 +1,25 @@
+.Dd 2024/09/07
+.Dt seed 3
+.Os Posix
+.Sh NAME
+.Nm seed,
+.Nd Portable random number generator.
+.Sh SYNOPSIS
+.Nm seed
+.Ar buffer
+.Ar count
+.Sh DESCRIPTION
+#include "seed.h"
+seed(uint64_t* buffer, uint64_t count );
+.Pp
+.Ar buffer 
+Pointer to an array of uint64_t values.
+.Pp
+.Ar count 
+Number of elements to obtain.
+.Pp
+.El
+.Pp
+.Sh SEE ALSO
+.Xr random 1
+.Xr seed 1

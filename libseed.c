@@ -1,11 +1,43 @@
+#ifdef _WIN32
+
+#if (_MSC_VER < 1940)
+#include "stdint.h"
+#else
+#include <stdint.h>
+#endif
+
+#include <windows.h>
+
+#else
+
 #include <stdint.h>
 #include <pthread.h>
 #include <unistd.h>
-#include "libicm.h"
 
-#define read_state(mix, state) mix = 0;int _why = 1;while(_why < 3){mix ^= state->nodes[_why];_why++;}
+#endif
 
-int icm_modify( volatile uint64_t* in, volatile uint64_t* out )
+typedef struct _poiikjbdhfs{
+    volatile uint64_t *source;
+    volatile uint64_t *sink;
+    int run;
+#ifdef _WIN32
+    HANDLE thr;
+#else
+    pthread_t thr;
+#endif
+} seed_thread;
+
+typedef struct _iuouuo{
+    volatile uint64_t nodes[3];
+    seed_thread threads[3];
+} seed_state;
+
+uint64_t read_state(seed_state* state)
+{
+    return state->nodes[0] ^ state->nodes[1] ^ state->nodes[2];
+}
+
+int seed_modify( volatile uint64_t* in, volatile uint64_t* out )
 {
     uint64_t acc = 1;                                   
     /* 
@@ -63,81 +95,93 @@ int icm_modify( volatile uint64_t* in, volatile uint64_t* out )
         *out += acc ^ *in;
         x++;
     }
-    /* 
-     *   Finally, XOR the accumulated product to the output.
-     */
     *out ^= acc;
     return 0;
 }
 
-void* icm_threadwork(void* raw)
+void* seed_thread_main(void* raw)
 {
-    icm_thread* state = (icm_thread*) raw;
+    seed_thread* state = (seed_thread*) raw;
     while(1)
     {
-        icm_modify(state->source, state->sink);
+        seed_modify(state->source, state->sink);
         if(state->run == 0)
         {
-            pthread_exit(NULL);
+            return NULL;
         }
     }
     return NULL;
 }
 
-void start_icm(icm_state_t* state)
+void start_seeder(seed_state* state)
 {
     int i = 0;
+    state->nodes[0] = 0;
+    state->nodes[1] = 0;
+    state->nodes[2] = 0;
+    state->threads[0].source = &(state->nodes[0]);
+    state->threads[1].source = &(state->nodes[1]);
+    state->threads[2].source = &(state->nodes[2]);
+    state->threads[0].sink = &(state->nodes[1]);
+    state->threads[1].sink = &(state->nodes[2]);
+    state->threads[2].sink = &(state->nodes[0]);
+    state->threads[0].run = 1;
+    state->threads[1].run = 1;
+    state->threads[2].run = 1;
+#ifdef _WIN32
+    state->threads[0].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[0]), (DWORD)0, NULL);
+    state->threads[1].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[1]), (DWORD)0, NULL);
+    state->threads[2].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[2]), (DWORD)0, NULL);
+#else
+    pthread_create(&(state->threads[0].thr), NULL, &seed_thread_main, &(state->threads[0]));
+    pthread_create(&(state->threads[1].thr), NULL, &seed_thread_main, &(state->threads[1]));
+    pthread_create(&(state->threads[2].thr), NULL, &seed_thread_main, &(state->threads[2]));
+#endif
+
     while( i < 3 )
     {
         state->nodes[i] = 0;
         state->threads[i].source = &(state->nodes[i]);
         state->threads[i].sink = &(state->nodes[(i + 1) % 3]);
         state->threads[i].run = 1;
-        pthread_create(&(state->threads[i].thr), NULL, &icm_threadwork, &(state->threads[i]));
         i++;
     }
 }
 
-void stop_icm(icm_state_t* state)
+void stop_seeder(seed_state* state)
 {
-    int i = 0;
-    while( i < 3 )
-    {
-        state->threads[i].run = 0;
-        i = i + 1;
-    }
-    i = 0;
-    while( i < 3 )
-    {
-        pthread_join(state->threads[i].thr, NULL);
-        i = i + 1;
-    }
+    state->threads[0].run = 0;
+    state->threads[1].run = 0;
+    state->threads[2].run = 0;
+#ifdef _WIN32
+    WaitForSingleObject(state->threads[0].thr, 2000000000);
+    WaitForSingleObject(state->threads[1].thr, 2000000000);
+    WaitForSingleObject(state->threads[2].thr, 2000000000);
+#else
+    pthread_join(state->threads[0].thr, NULL);
+    pthread_join(state->threads[1].thr, NULL);
+    pthread_join(state->threads[2].thr, NULL);
+#endif
 }
 
-void icm(icm_state_t* state, uint64_t* buffer, uint64_t count)
+void seed(uint64_t* buffer, uint64_t count)
 {
-
-    /*
-     *   Create one unstable complex system.
-     */
-    start_icm(state);
-
-    /*
-     *   Pick a reference number.
-     */
+    int i = 0;
     uint64_t last_pick;
     uint64_t next_pick;
-    read_state(last_pick, state);
+    seed_state state;
+    start_seeder(&state);
 
-    /* 
-     *   Observe the interactions at the junctions of each system
-     *   If the state have changed, return it, otherwise wait again.
-     */
-    int i = 0;
+    last_pick = read_state(&state);
+
     while( i < count )
     {
-        usleep(100);
-        read_state(next_pick, state);
+#ifdef _WIN32
+        Sleep(1);
+#else
+        usleep(1000);
+#endif
+        next_pick = read_state(&state);
         if(next_pick != last_pick)
         {
             buffer[i] = next_pick;
@@ -146,8 +190,5 @@ void icm(icm_state_t* state, uint64_t* buffer, uint64_t count)
         }
     }
 
-    /*
-     *   Stop the unstable complex system.
-     */
-    start_icm(state);
+    stop_seeder(&state);
 }

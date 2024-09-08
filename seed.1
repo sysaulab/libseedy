@@ -1,0 +1,22 @@
+.Dd 2024/09/07
+.Dt seed 1
+.Os Posix
+.Sh NAME
+.Nm seed,
+.Nd Portable seed generator.
+.Sh SYNOPSIS
+.Nm seed
+.Ar bits
+.Sh DESCRIPTION
+Gather entropy from a chaotic generator and return at least n bits in binary.
+The program return 64 bits chunks. If you ask for 1 bit, you get 64. If you ask
+for 65, you get 128. Useful to avoid the possibility of someone auditing the 
+operating system's official entropy source.
+.Pp
+The chaotic generator functions by creating an unstable complex system by using 
+threads and race conditions. Entropy is gathered by observing it at interval.
+.El
+.Pp
+.Sh SEE ALSO
+.Xr random 1
+.Xr seed 3

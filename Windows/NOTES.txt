@@ -1,0 +1,11 @@
+Precompiled libseed DLL and programs for various Windows platforms. 
+
+Vista and more recent
+
+x86	32 bit Intel/AMD
+x64	64 bit Intel/AMD
+ARM64	64 bit ARM
+
+Windows 95 and more recent
+
+win32	32 bit
