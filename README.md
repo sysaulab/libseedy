@@ -1,17 +1,33 @@
 # libSEEDY
 
-## Windows Downloads
+## Install
+
+### Windows
 
 Get programs and a DLL pre-compiled for various Windows platforms.
 
 - [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-x64.zip) ( Vista+ )
-- [Windows 32 bits]() ( Vista+ )
-- [Windows for ARM64](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-ARM64.zip) ( 8+ )
+- [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-x86.zip) ( Vista+ )
+- [Windows for ARM](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-ARM64.zip) ( 8+ )
 - [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-win32.zip) ( 95+ )
+
+## Build
+
+### Windows
+
+Get programs and a DLL pre-compiled for various Windows platforms.
+
+- Visual Studio project is located in VS2022/seedy
+
+### Posix (Linux, MacOS, BSD's, etc.)
+
+1. Download source [seedy-1.0.1](https://github.com/sysaulab/libseedy/archive/refs/tags/libseedy-1.0.1.tar.gz)
+2. make
+3. make install
 
 ## About
 
-Portable seedless random number generator formerly known as ICM.
+Portable seedless random number generator.
 
 Seedy creates and observe an unstable complex system built with 
 threads and race conditions to create chaotic sequences in software. 
@@ -87,10 +103,6 @@ its faulty output using only QXO surprises me. I expected the
 results to be much worse. Generating chaotic streams from user 
 space has been quite an adventure. I hope these results will 
 help alleviate some of the skepticism I encounter.
-
-The prandom program provided here uses the ICM-ROXO-QXO combination 
-which provides additional filtering and requires less initial 
-entropy. I hope this demo was as fun to run as it was fun to write.
 
 I published the results (folder with plenty of stuff) of the tests 
 with the seeds collected from the G4 and old i5. on Github. The G4 
