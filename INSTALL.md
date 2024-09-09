@@ -6,9 +6,17 @@
 2. make
 3. sudo make install
 
-## Windows
+## Windows Modern
 
-1. Open the Visual Studio project in VS2022.
-2. Ajust the platform (x86, ARM)
-3. Build the Solution
-4. Copy the program files (.exe .dll) to the (windows folder?).
+1. Visual Studio 2022 project in VS2022 folder.
+
+## Windows Legacy
+
+1. Visual Studio 6 project in VS6 folder.
+
+## DOS
+
+1. Borland Turbo C++ 4 on DOS 6.22.
+2. Open the DOS_* source files and select compile/compile then compile/link.
+
+

@@ -94,5 +94,4 @@ void main()
 	buffer = genRandLong(&mt);
 	fwrite(&buffer, sizeof(unsigned short), 1, stdout);
     }
-
 }
