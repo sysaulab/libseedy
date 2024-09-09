@@ -1,6 +1,8 @@
 # libSEEDY
 
-## Windows Downloads
+## Install
+
+### Windows
 
 Get programs and a DLL pre-compiled for various Windows platforms.
 
@@ -9,9 +11,23 @@ Get programs and a DLL pre-compiled for various Windows platforms.
 - [Windows for ARM64](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-ARM64.zip) ( 8+ )
 - [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-win32.zip) ( 95+ )
 
+## Build
+
+### Windows
+
+Get programs and a DLL pre-compiled for various Windows platforms.
+
+- Visual Studio project is located in VS2022/seedy
+
+### Posix (Linux, MacOS, BSD's, etc.)
+
+1. Download source [seedy-1.0.1]([https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-x64.zip](https://github.com/sysaulab/libseedy/archive/refs/tags/libseedy-1.0.1.tar.gz))
+2. make
+3. make install
+
 ## About
 
-Portable seedless random number generator formerly known as ICM.
+Portable seedless random number generator.
 
 Seedy creates and observe an unstable complex system built with 
 threads and race conditions to create chaotic sequences in software. 
