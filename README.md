@@ -1,4 +1,13 @@
-# libseedy
+# libSEEDY
+
+## Windows Downloads
+
+Get programs and a DLL pre-compiled for various Windows platforms.
+
+- [Windows 64 bits]()
+- [Windows 32 bits]()
+- [Windows for ARM]()
+- [Older win32]()
 
 ## About
 
@@ -9,9 +18,11 @@ threads and race conditions to create chaotic sequences in software.
 It works flawlessly on multicore CPU and offers acceptable quality 
 on old platforms.
 
-This allow a user to bypass traditionnal channels who may be 
-monitored and allow operating systems and applications to access 
-a chaotic entropy source when it was not possible before.
+For security, this allow a user to bypass or supplement traditionnal 
+channels who might be monitored. In case a flaw is discovered in the 
+hardware generators, this supplement can act as a failsafe. For 
+portability, programs can access entropy on older platforms that 
+otherwise lack the hardware of software capability.
 
 ## History
 
@@ -34,7 +45,7 @@ centre, then rebound back precisely and hit the wall behind them, then
 go back towards the centre again and repeat the same motions forever. 
 In an imperfect universe, we would observe divergences after a few cycles.
 
-## TESTING
+## Testing
 
 PractRand and TestU01 are standard test suites used to measure the 
 statistical "randomness" of PRNG. I use it is verify the 
@@ -61,7 +72,7 @@ tests (FPR FSC) is running the QXO generator and testing 2mb of seed
 at a time, or is ran live from my M1 Mac. The results given is the 
 number of FAST tests with flawless results.
 
-    ICM (pseed)............................
+    ICM....................................
                     M1       G4        i5
     PractRand       PASS     FAIL      PASS
     Test U01        PASS     FAIL      PASS
@@ -86,8 +97,8 @@ with the seeds collected from the G4 and old i5. on Github. The G4
 seed is truncated as it was too large for github (3gb). Look into 
 the seed.txt files for the source URL.
 
-https://github.com/sysaulab/softrng
-https://github.com/sysaulab/softrng-test
+[https://github.com/sysaulab/softrng](https://github.com/sysaulab/softrng)
+[https://github.com/sysaulab/softrng-test](https://github.com/sysaulab/softrng-test)
 
 ## Conclusion
 
@@ -97,7 +108,5 @@ sequences portably and reliably. It can bring quality entropy to
 platforms that lack such features and peace of mind to everyone 
 trying to erase their hard drive using truly-impossible-to-trace-data.
 
-https://www.youtube.com/watch?v=rrr7k4lb8Dg
-
-Latest version available here:
-https://github.com/sysaulab/libseedy
+[https://www.youtube.com/watch?v=rrr7k4lb8Dg](https://www.youtube.com/watch?v=rrr7k4lb8Dg)
+[https://github.com/sysaulab/libseedy](https://github.com/sysaulab/libseedy)

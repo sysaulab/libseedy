@@ -8,14 +8,13 @@
 .Nm seed
 .Ar bits
 .Sh DESCRIPTION
-Gather entropy from a chaotic generator and return at least n bits in binary.
-The program return 64 bits chunks. If you ask for 1 bit, you get 64. If you ask
-for 65, you get 128. Useful to avoid the possibility of someone auditing the 
-operating system's official entropy source.
+Gather entropy from a chaotic generator and return n 
+bytes in headecimal. Ideal to supplement your entropy 
+easily on all platforms.
 .Pp
-The chaotic generator creates an unstable complex system by using 
-threads and race conditions. Entropy is gathered by observing it at interval.
-.El
+The chaotic generator creates an unstable complex 
+system by using threads and race conditions. Entropy is 
+gathered by observing the unstable system at interval.
 .Pp
 .Sh SEE ALSO
 .Xr random 1
