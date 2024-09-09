@@ -4,8 +4,6 @@
 
 ### Windows
 
-Get programs and a DLL pre-compiled for various Windows platforms.
-
 - [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x64.zip) ( Vista+ )
 - [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x86.zip) ( Vista+ )
 - [Windows for ARM](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-ARM64.zip) ( 8+ )
