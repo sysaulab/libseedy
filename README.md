@@ -104,10 +104,6 @@ results to be much worse. Generating chaotic streams from user
 space has been quite an adventure. I hope these results will 
 help alleviate some of the skepticism I encounter.
 
-The prandom program provided here uses the ICM-ROXO-QXO combination 
-which provides additional filtering and requires less initial 
-entropy. I hope this demo was as fun to run as it was fun to write.
-
 I published the results (folder with plenty of stuff) of the tests 
 with the seeds collected from the G4 and old i5. on Github. The G4 
 seed is truncated as it was too large for github (3gb). Look into 
