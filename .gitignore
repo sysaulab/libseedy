@@ -77,3 +77,4 @@ libseedy.a
 *.a
 random
 seed
+/Windows
