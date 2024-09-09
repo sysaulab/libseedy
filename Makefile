@@ -4,9 +4,10 @@ prefix=/usr/local
 
 all: seed random seedy.o
 	ar rcs libseedy.a seedy.o
-random: random.c seedy.o
+random: random.c seedy.o mtwist.o
 seed: seed.c seedy.o
 seedy.o: seedy.c
+mtwist.o: mtwist.c
 
 install: all
 	mkdir -p $(DESTDIR)$(prefix)/bin 

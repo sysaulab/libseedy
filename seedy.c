@@ -1,24 +1,4 @@
-#ifdef _WIN32
-
-#if (_MSC_VER < 1930)
-#include "stdint.h"
-#else
-#include <stdint.h>
-#endif
-
-#include <windows.h>
-
-#else
-
-#include <pthread.h>
-#include <unistd.h>
-
-#endif
-
 #include "seedy.h"
-
-#define WIDTH SEEDY_WIDTH
-
 
 typedef struct seed_thread_s{
     volatile seedy_t *source;
@@ -52,20 +32,24 @@ int seed_modify( volatile seedy_t* in, volatile seedy_t* out )
      *   No other sets has been tested by the original author. Please modify this comment if you do.
      */
     seedy_t primes[] = 
-#if (SEEDY_WIDTH > 4)
-#include "primes64.inc"
-#elif (SEEDY_WIDTH > 2)
-#include "primes32.inc"
-#elif (SEEDY_WIDTH > 1)
-#include "primes16.inc"
-#else
-#include "primes8.inc"
-#endif
+    #if (SEEDY_WIDTH > 4)
+        #include "primes64.inc"
+
+    #elif (SEEDY_WIDTH > 2)
+        #include "primes32.inc"
+
+    #elif (SEEDY_WIDTH > 1)
+        #include "primes16.inc"
+
+    #else
+        #include "primes8.inc"
+        
+    #endif
     ;
 
     int x = 0;
     while( x < SEEDY_WIDTH * 8 ) {
-        *in = (*in << 7) | (*in >> ((SEEDY_WIDTH * 8) - 7));         /* source is rotated by 13 bits... now 7 to accomodate potential 8 bit fundamentals */
+        *in = (*in << 7) | (*in >> ((SEEDY_WIDTH * 8) - 7));           /* source is rotated by 13 bits... now 7 to accomodate potential 8 bit fundamentals */
         acc = (acc << x) | (acc >> ((SEEDY_WIDTH * 8) - x));           /* smooth out bit distribution in acc */
         acc *= primes[(2 * x) + (1 & *in)];                            /* pick the prime[x][set?], do it 64 times (we rotate above) */
 
@@ -147,6 +131,45 @@ void stop_seeder(seed_state* state)
 #endif
 }
 
+unsigned long get_tick()
+{
+    unsigned long start = clock();
+    wait_ms(1);
+    return clock() - start;
+}
+
+
+
+#if defined(_SEEDY_PASSIVE)
+
+void seedy(uint8_t* buffer, size_t bytes)
+{
+    int i = 0;
+    unsigned long last_tick;
+    unsigned long diff_tick;
+    unsigned long current_tick;
+
+    last_tick = get_tick();
+
+    while(i < bytes)
+    {
+        uint8_t h = 0;
+        int j = 0;
+        while(j < 8)
+        {
+            h = (h<<1)|(h>>7);
+            h = h ^ get_tick();
+            j = j + 1;
+        }
+        buffer[i] = h;
+        i = i + 1;
+    }
+
+
+}
+
+#else
+
 void seedy(uint8_t* buffer, size_t bytes)
 {
     int i = 0;
@@ -164,11 +187,7 @@ void seedy(uint8_t* buffer, size_t bytes)
 
     while( i < (SEEDY_WIDTH * blocks) )
     {
-#ifdef _WIN32
-        Sleep(1);
-#else
-        usleep(1000);
-#endif
+        wait_ms(1);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {
@@ -177,13 +196,10 @@ void seedy(uint8_t* buffer, size_t bytes)
             i = i + (int)SEEDY_WIDTH;
         }
     }
+
     while( i < bytes )
     {
-#ifdef _WIN32
-        Sleep(1);
-#else
-        usleep(1000);
-#endif
+        wait_ms(1);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {
@@ -194,3 +210,15 @@ void seedy(uint8_t* buffer, size_t bytes)
 
     stop_seeder(&state);
 }
+
+#endif
+
+
+
+
+
+
+
+
+
+
