@@ -72,3 +72,4 @@ src/sleepinfo
 *.zip
 testfile
 >>>>>>> c138e5a30b227ac438919d55a4b06b4e4d600e4e
+libseedy.a
