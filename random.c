@@ -64,10 +64,11 @@ int main(int argc, const char * argv[])
 
     #elif (PRNG == MTWISTER)
 
-        uint32_t buffer;
+        MTRand mt;
+		uint32_t buffer;
         uint32_t newseed;
         seedy((uint8_t*)&newseed, sizeof(newseed));
-        MTRand mt = seedRand(newseed);
+        mt = seedRand(newseed);
         while(1)
         {
             buffer = genRandLong(&mt);

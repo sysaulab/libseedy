@@ -1,4 +1,5 @@
 #include "seedy.h"
+#include <time.h>
 
 typedef struct seed_thread_s{
     volatile seedy_t *source;
@@ -138,47 +139,15 @@ unsigned long get_tick()
     return clock() - start;
 }
 
-
-
-#if defined(_SEEDY_PASSIVE)
-
 void seedy(uint8_t* buffer, size_t bytes)
 {
-    int i = 0;
-    unsigned long last_tick;
-    unsigned long diff_tick;
-    unsigned long current_tick;
-
-    last_tick = get_tick();
-
-    while(i < bytes)
-    {
-        uint8_t h = 0;
-        int j = 0;
-        while(j < 8)
-        {
-            h = (h<<1)|(h>>7);
-            h = h ^ get_tick();
-            j = j + 1;
-        }
-        buffer[i] = h;
-        i = i + 1;
-    }
-
-
-}
-
-#else
-
-void seedy(uint8_t* buffer, size_t bytes)
-{
-    int i = 0;
+    size_t i = 0;
     int j = 0;
     seedy_t last_pick;
     seedy_t next_pick;
     seed_state state;
-    int blocks; 
-    int partial; 
+    size_t blocks; 
+    size_t partial; 
     blocks = bytes / SEEDY_WIDTH;
     partial = bytes % SEEDY_WIDTH;
 
@@ -211,7 +180,7 @@ void seedy(uint8_t* buffer, size_t bytes)
     stop_seeder(&state);
 }
 
-#endif
+
 
 
 

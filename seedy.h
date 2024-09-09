@@ -1,7 +1,7 @@
 #ifndef _SEEDY_H
 #define _SEEDY_H
 
-#define _SEEDY_PASSIVE
+
 /*
  *  INITIATING TYPES ACCORDING TO COMPILER TYPE
  */
@@ -13,7 +13,6 @@
         #define SEEDY_WIDTH 2
         typedef unsigned short seedy_t;
         typedef unsigned char uint8_t;
-        #define _SEEDY_PASSIVE
 
     /* NO LONG LONG, ASSUMING WIN32 TARGET */
     #elif (_MSC_VER < 1310)
