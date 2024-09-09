@@ -1,15 +1,23 @@
 # libSEEDY
 
-## Install
+## Downloads
 
 ### Windows
 
 Get programs and a DLL pre-compiled for various Windows platforms.
 
-- [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-x64.zip) ( Vista+ )
-- [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-x86.zip) ( Vista+ )
-- [Windows for ARM](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-ARM64.zip) ( 8+ )
-- [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.1/seedy-windows-win32.zip) ( 95+ )
+- [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x64.zip) ( Vista+ )
+- [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x86.zip) ( Vista+ )
+- [Windows for ARM](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-ARM64.zip) ( 8+ )
+- [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-win32.zip) ( 95+ )
+
+### DOS
+
+- [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-DOS.zip)
+
+### Source code
+
+- [Source Code](https://github.com/sysaulab/libseedy/archive/refs/tags/libseedy-1.0.2.zip)
 
 ## Build
 
