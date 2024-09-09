@@ -6,7 +6,7 @@
 2. make
 3. sudo make install
 
-## Windows : build from Source
+## Windows
 
 1. Open the Visual Studio project in VS2022. Use VS6 for legacy builds (Windows 95+).
 2. Ajust the platform (x86, ARM)
