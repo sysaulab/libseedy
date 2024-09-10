@@ -11,6 +11,8 @@
 
 ### DOS
 
+The DOS port uses a timer-based entropy collection method. This generator has not been tested with serious statistical suites. However, it provides a good enough seed to initialize a Marsenne Twister generator and provide a cryptographic quality backport to DOS. It is very slow (32 bits per second).
+
 - [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-DOS.zip)
 
 ### Source code
