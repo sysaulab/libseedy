@@ -4,16 +4,27 @@
 
 ### Windows
 
+These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html). Compiled vith Visual Studio 2022. Should be compatible with Vista and up.  
+
 - [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x64.zip) ( Vista+ )
 - [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x86.zip) ( Vista+ )
 - [Windows for ARM](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-ARM64.zip) ( 8+ )
+
+### Window Legacy
+
+These binaries implements a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister). Refactoring shishua.h to be "ancient C" compliant is not something I want to do. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
+
+Compiled vith Visual C++ 6. Should be compatible with Windows 95 and up.
+
 - [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-win32.zip) ( 95+ )
 
 ### DOS
 
 The DOS port uses a timer-based entropy collection method. The seed generator itself has not been tested with serious statistical suites. It is very slow (32 bits per second) but provide a reliable method to initialize a generator.
 
-The Marsenne Twister generator provides a cryptographic quality generator to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with (Compaq) Dos 2.11 on 86box.
+The Mersenne Twister generator provides a cryptographic quality generator to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with (Compaq) Dos 2.11 on 86box.
+
+A bug in my ANSI port of the MT algorithm has been fixed since the source code listed in this release. The corrected version is distributed with the programs and has been merged to the main branch.
 
 - [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-DOS.zip)
 
@@ -21,9 +32,9 @@ The Marsenne Twister generator provides a cryptographic quality generator to DOS
 
 - [Source Code](https://github.com/sysaulab/libseedy/archive/refs/tags/libseedy-1.0.2.zip)
 
-## Build
+## Build instructions
 
-Build instructions in [INSTALL.md](INSTALL.md)
+You can read the build instructions in [INSTALL.md](INSTALL.md).
 
 ## About
 
