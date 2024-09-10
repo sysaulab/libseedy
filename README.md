@@ -4,7 +4,7 @@
 
 ### Windows
 
-These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html). Compiled vith Visual Studio 2022. Should be compatible with Vista and up.  
+These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html) initiated with seedy(). Compiled vith Visual Studio 2022. Should be compatible with Vista and up.  
 
 - [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x64.zip) ( Vista+ )
 - [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x86.zip) ( Vista+ )
@@ -12,7 +12,7 @@ These binaries implements the fast [Shishua algorithm](https://espadrine.github.
 
 ### Window Legacy
 
-These binaries implements a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister). Refactoring shishua.h to be "ancient C" compliant is not something I want to do. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
+These binaries implements a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister) initiated with seedy(). Refactoring shishua.h to be "ancient C" compatible would require adapting the algorithm to 32 bits or reimplement using a software 64 bit library. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
 
 Compiled vith Visual C++ 6. Should be compatible with Windows 95 and up.
 
@@ -57,20 +57,12 @@ I was pondering the nature of chaos I saw a bird in the sky. It
 inspired me to imagine the turbulences behind the wings and 
 theorize about the nature of the interactions that make turbulences 
 unpredictable. Could I replicate it using software? The image that 
-appeared in my head was a system that was interdependent, 
-but loosely coupled.
+appeared in my head was a system that was interdependent and 
+loosely coupled.
 
 I used many hash function as active processes and unmitigated shared 
 memory to provide the “slack” in the coupling. I experimented with 
-different topologies before adopting the obvious choice: a ring. 
-The physical analogy that comes to my mind, is one of a circle in 
-which three balls are launched at high velocity towards the centre. 
-
-In a perfect universe, we can imagine the balls would hit each other 
-precisely at the same point in space and time when they get to the 
-centre, then rebound back precisely and hit the wall behind them, then 
-go back towards the centre again and repeat the same motions forever. 
-In an imperfect universe, we would observe divergences after a few cycles.
+different topologies before adopting the obvious choice: a ring.
 
 ## Testing
 
