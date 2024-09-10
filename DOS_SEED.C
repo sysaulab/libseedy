@@ -8,9 +8,9 @@ unsigned long int seedy()
     int j = 0;
     while(j++ < 192)
     {
-	delay(13);
-	h = ( h << 1 ) | ( h >> 31 );
-	h ^= (unsigned long int)clock();
+        delay(13);
+        h = ( h << 1 ) | ( h >> 31 );
+        h ^= (unsigned long int)clock();
     }
     return h;
 }

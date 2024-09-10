@@ -38,7 +38,7 @@ MTRand seedRand(unsigned long int seed) {
 /**
  * Generates a pseudo-randomly generated long.
  */
-unsigned int genRandLong(MTRand* rand) {
+unsigned long int genRandLong(MTRand* rand) {
   unsigned long int y;
   static unsigned long int mag[2] = {0x0, 0x9908b0df}; /* mag[x] = x * 0x9908b0df for x = 0,1 */
   if(rand->index >= STATE_VECTOR_LENGTH || rand->index < 0) {
@@ -68,16 +68,15 @@ unsigned int genRandLong(MTRand* rand) {
   return y;
 }
 
-
-unsigned long int seedy()
+unsigned long int seedy_dos()
 {
     unsigned long int h = 0;
     int j = 0;
     while(j++ < 192)
     {
-	delay(13);
-	h = ( h << 1 ) | ( h >> 31 );
-	h ^= (unsigned long int)clock();
+        delay(13);
+        h = ( h << 1 ) | ( h >> 31 );
+        h ^= (unsigned long int)clock();
     }
     return h;
 }
@@ -86,12 +85,12 @@ void main()
 {
     MTRand mt;
     unsigned long int buffer;
-    unsigned long int newseed = seedy();
+    unsigned long int newseed = seedy_dos();
 
     mt = seedRand(newseed);
     while(1)
     {
-	buffer = genRandLong(&mt);
-	fwrite(&buffer, sizeof(unsigned short), 1, stdout);
+        buffer = genRandLong(&mt);
+        fwrite(&buffer, sizeof(unsigned long int), 1, stdout);
     }
 }
