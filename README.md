@@ -11,7 +11,7 @@
 
 ### DOS
 
-- [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-DOS.zip)
+- [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-DOS.zip)
 
 ### Source code
 
