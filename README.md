@@ -12,7 +12,7 @@ These binaries implements the fast [Shishua algorithm](https://espadrine.github.
 
 ### Window Legacy
 
-These binaries implement a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister) initiated with seedy(). Refactoring shishua.h to be "ancient C" compatible would require adapting the algorithm to 32 bits or reimplement using a software 64 bit library. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
+These binaries implement a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister) initiated with seedy() 32 bits. Refactoring shishua.h to be "ancient C" compatible would require adapting the algorithm to 32 bits or reimplement using a software 64 bit library. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
 
 Compiled with Visual C++ 6.
 
