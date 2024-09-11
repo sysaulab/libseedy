@@ -54,9 +54,6 @@ Makefile
 *.log
 *.bin
 *.o
-src/icmgen
-src/icmstat
-src/icmgen
 *.log
 *.bin
 *.log
@@ -69,7 +66,6 @@ src/prng
 src/seed
 src/sleepinfo
 *.tar.gz
-*.zip
 testfile
 >>>>>>> c138e5a30b227ac438919d55a4b06b4e4d600e4e
 libseedy.a
@@ -77,4 +73,3 @@ libseedy.a
 *.a
 random
 seed
-/Windows
