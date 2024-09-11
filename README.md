@@ -6,9 +6,9 @@
 
 These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html) initiated with seedy() 64 bit. Compiled vith Visual Studio 2022. 
 
-- [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x64.zip) ( Vista+ )
-- [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x86.zip) ( Vista+ )
-- [Windows for ARM](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-ARM64.zip) ( 8+ )
+- [Windows 64 bits](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-x64.zip) ( Vista+ )
+- [Windows 32 bits](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-x86.zip) ( Vista+ )
+- [Windows for ARM](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-ARM64.zip) ( 8+ )
 
 ### Window Legacy
 
@@ -16,7 +16,7 @@ These binaries implement a portable [Mersenne Twister algorithm](https://github.
 
 Compiled with Visual C++ 6.
 
-- [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-win32.zip) ( 95+ )
+- [win32](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-win32.zip) ( 95+ )
 
 ### DOS
 
@@ -24,7 +24,7 @@ The DOS port uses a timer-based entropy collection method. The seed generator it
 
 The Mersenne Twister generator provides a cryptographic quality generator to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with (Compaq) Dos 2.11 on 86box.
 
-- [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-DOS.zip)
+- [DOS](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-DOS.zip)
 
 ### Source code
 
