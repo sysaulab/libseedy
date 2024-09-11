@@ -4,7 +4,7 @@
 
 ### Windows
 
-These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html) initiated with seedy(). Compiled vith Visual Studio 2022. Should be compatible with Vista and up.  
+These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html) initiated with seedy() 64 bit. Compiled vith Visual Studio 2022. 
 
 - [Windows 64 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x64.zip) ( Vista+ )
 - [Windows 32 bits](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-x86.zip) ( Vista+ )
@@ -12,9 +12,9 @@ These binaries implements the fast [Shishua algorithm](https://espadrine.github.
 
 ### Window Legacy
 
-These binaries implements a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister) initiated with seedy(). Refactoring shishua.h to be "ancient C" compatible would require adapting the algorithm to 32 bits or reimplement using a software 64 bit library. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
+These binaries implement a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister) initiated with seedy(). Refactoring shishua.h to be "ancient C" compatible would require adapting the algorithm to 32 bits or reimplement using a software 64 bit library. Replacing it with the more conservative Mersenne Twister makes much more sense. Aside from replacing uin32_t with "unsigned long" only one declaration followed an instructions and needed be declared at the top of the function first.
 
-Compiled vith Visual C++ 6. Should be compatible with Windows 95 and up.
+Compiled with Visual C++ 6.
 
 - [win32](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-windows-win32.zip) ( 95+ )
 
@@ -24,13 +24,11 @@ The DOS port uses a timer-based entropy collection method. The seed generator it
 
 The Mersenne Twister generator provides a cryptographic quality generator to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with (Compaq) Dos 2.11 on 86box.
 
-A bug in my ANSI port of the MT algorithm has been fixed since the source code listed in this release. The corrected version is distributed with the programs and has been merged to the main branch.
-
 - [DOS](https://github.com/sysaulab/libseedy/releases/download/libseedy-1.0.2/seedy-DOS.zip)
 
 ### Source code
 
-- [Source Code](https://github.com/sysaulab/libseedy/archive/refs/tags/libseedy-1.0.2.zip)
+- [Source Code](https://github.com/sysaulab/libseedy/archive/refs/heads/main.zip)
 
 ## Build instructions
 
