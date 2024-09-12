@@ -1,4 +1,7 @@
 #include "seedy.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 typedef struct seed_thread_s{
@@ -132,11 +135,29 @@ void stop_seeder(seed_state* state)
 #endif
 }
 
-unsigned long get_tick()
+/*
+ *   AJUST FOR PORTS...
+ */
+void* parseinput(char* arg)
 {
-    unsigned long start = clock();
-    wait_ms(1);
-    return clock() - start;
+
+#ifdef _WIN32
+#else
+    if(strcmp(arg, "arc4") == 0)
+        return arc4random;
+#endif
+    if(strcmp(arg, "stdin") == 0)
+        return stdinput;
+    
+    if(strcmp(arg, "seedy") == 0)
+        return seedy;
+
+    return seedy;
+}
+
+void stdinput(uint8_t* buffer, size_t bytes)
+{
+    fread(buffer, bytes, sizeof(uint8_t), stdin);
 }
 
 void seedy(uint8_t* buffer, size_t bytes)
@@ -168,7 +189,7 @@ void seedy(uint8_t* buffer, size_t bytes)
 
     while( i < bytes )
     {
-        wait_ms(1);
+        wait_us(5);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {

@@ -13,9 +13,11 @@
 #define TEMPERING_MASK_B	0x9d2c5680
 #define TEMPERING_MASK_C	0xefc60000
 
-#include "mtwist.h"
+#include "mt32.h"
 
-static void m_seedRand(MTRand* rand, uint32_t seed) {
+
+
+ void mt32_init(MT32* rand, mt_t seed) {
   /* set initial seeds to mt[STATE_VECTOR_LENGTH] using the generator
    * from Line 25 of Table 1 in: Donald Knuth, "The Art of Computer
    * Programming," Vol. 2 (2nd Ed.) pp.102.
@@ -27,26 +29,17 @@ static void m_seedRand(MTRand* rand, uint32_t seed) {
 }
 
 /**
-* Creates a new random number generator from a given seed.
-*/
-MTRand seedRand(uint32_t seed) {
-  MTRand rand;
-  m_seedRand(&rand, seed);
-  return rand;
-}
-
-/**
  * Generates a pseudo-randomly generated long.
  */
-uint32_t genRandLong(MTRand* rand) {
+mt_t mt32_next(MT32* rand) {
 
-  uint32_t y;
-  static uint32_t mag[2] = {0x0, 0x9908b0df}; /* mag[x] = x * 0x9908b0df for x = 0,1 */
+  mt_t y;
+  static mt_t mag[2] = {0x0, 0x9908b0df}; /* mag[x] = x * 0x9908b0df for x = 0,1 */
   if(rand->index >= STATE_VECTOR_LENGTH || rand->index < 0) {
     /* generate STATE_VECTOR_LENGTH words at a time */
     int32_t kk;
     if(rand->index >= STATE_VECTOR_LENGTH+1 || rand->index < 0) {
-      m_seedRand(rand, 4357);
+      mt32_init(rand, 4357);
     }
     for(kk=0; kk<STATE_VECTOR_LENGTH-STATE_VECTOR_M; kk++) {
       y = (rand->mt[kk] & UPPER_MASK) | (rand->mt[kk+1] & LOWER_MASK);
@@ -68,9 +61,3 @@ uint32_t genRandLong(MTRand* rand) {
   return y;
 }
 
-/**
- * Generates a pseudo-randomly generated double in the range [0..1].
- */
-double genRand(MTRand* rand) {
-  return((double)genRandLong(rand) / (uint32_t)0xffffffff);
-}

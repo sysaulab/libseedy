@@ -10,6 +10,7 @@
 
     /* NO LONG LONG, ANCIENT WIN16 COMPILER ASSUMING WIN16 TARGET */
     #if (_MSC_VER < 1200)
+
         #define SEEDY_WIDTH 2
         typedef unsigned short seedy_t;
         typedef unsigned char uint8_t;
@@ -28,7 +29,7 @@
         #define SEEDY_WIDTH 8
         typedef uint64_t seedy_t;
 
-    /* STDINT is available... modern compiler */
+    /* STDINT is available... modern ms compiler. */
     #else
 
         #include <stdint.h>
@@ -48,16 +49,18 @@
 
 
 /*
- *  SLEEP AND THREADS
+ *  SLEEP AND THREADS. TODO: FIND BETTER TIMER FOR WINDOWS
  */
 
 #if defined(_WIN32)
     #include <windows.h>
     #define wait_ms(ms) Sleep(ms)
+    #define wait_us(ms) Sleep(ms)
 #else
     #include <pthread.h>
     #include <unistd.h>
     #define wait_ms(ms) usleep(ms*1000)
+    #define wait_us(us) usleep(us)
 #endif
 
 
@@ -67,7 +70,7 @@
  */
 
 void seedy(uint8_t* buffer, size_t bytes);
-
+void stdinput(uint8_t* buffer, size_t bytes);
 
 
 #endif

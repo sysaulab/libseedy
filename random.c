@@ -27,14 +27,14 @@
 
 /* POSIX */
 #else
-    #define PRNG SHISHUA
+    #define PRNG MTWISTER
 #endif
 
 #if (PRNG == SHISHUA)
     #include "shishua.h"
 
 #elif (PRNG == MTWISTER)
-    #include "mtwist.h"
+    #include "mt32.h"
 
 #elif (PRNG == RAND)
     #include "shishua.h"
@@ -64,14 +64,14 @@ int main(int argc, const char * argv[])
 
     #elif (PRNG == MTWISTER)
 
-        MTRand mt;
+        MT32 mt;
 		uint32_t buffer;
         uint32_t newseed;
         seedy((uint8_t*)&newseed, sizeof(newseed));
-        mt = seedRand(newseed);
+        mt32_init(&mt, newseed);
         while(1)
         {
-            buffer = genRandLong(&mt);
+            buffer = mt32_next(&mt);
             fwrite(&buffer, sizeof(uint32_t), 1, stdout);
         }
 
