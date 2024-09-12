@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "seedy.h"
-#include "qxo64.h"
 
 #define SHISHUA 1
 #define MT32 2
@@ -33,15 +30,9 @@
     #define PRNG SHISHUA
 #endif
 
-#if (PRNG == SHISHUA)
-    #include "shishua.h"
 
-#elif (PRNG == MT32)
-    #include "mt32.h"
 
-#elif (PRNG == RAND)
 /* Lib C */
-#endif
 
 
 
@@ -49,13 +40,12 @@ int main(int argc, char **argv)
 {
     #if (PRNG == SHISHUA)
 
+        SS64 ss;
         uint8_t buffer[buffer_length];
-        uint64_t newseed[4];
-        prng_state s;
-        prng_init(&s, parseinputgen(argc, argv));
+        ss64_init(&ss, parseinputgen(argc, argv));
         while(1)
         {
-            prng_gen(&s, buffer, buffer_length);
+            ss64_fill(&ss, buffer, sizeof(buffer));
             fwrite(buffer, sizeof(char), buffer_length, stdout);
         }
 

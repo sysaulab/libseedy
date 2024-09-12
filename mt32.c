@@ -13,44 +13,45 @@
 #define TEMPERING_MASK_B	0x9d2c5680
 #define TEMPERING_MASK_C	0xefc60000
 
-#include "mt32.h"
 #include "seedy.h"
 
-void insert4357(uint8_t* b, size_t n){ 
+void insert_32_4357(uint8_t* b, size_t n)
+{ 
     *(uint32_t*)b = 4357;
 }
 
-void mt32_init(MT32* rand, void* f) {
-    /* set initial seeds to mt[STATE_VECTOR_LENGTH] using the generator
-    * from Line 25 of Table 1 in: Donald Knuth, "The Art of Computer
-    * Programming," Vol. 2 (2nd Ed.) pp.102.
-    */
-    mt_t seed;
+void mt32_init(MT32* rand, void* f)
+{
+    uint32_t seed;
+
+    /* This is the active seeding function, the framework expect to continously feed some chaotic amplifiers. */
     ((void(*)(uint8_t* b, size_t n))f)((uint8_t*)&seed, sizeof(seed));
+
     rand->mt[0] = seed & 0xffffffff;
-    for(rand->index=1; rand->index<STATE_VECTOR_LENGTH; rand->index++) {
+    for(rand->index=1; rand->index<STATE_VECTOR_LENGTH; rand->index++)
+    {
         rand->mt[rand->index] = (6069 * rand->mt[rand->index-1]) & 0xffffffff;
     }
 }
 
-/**
- * Generates a pseudo-randomly generated long.
- */
-mt_t mt32_next(MT32* rand) {
+uint32_t mt32_next(MT32* rand) {
+uint32_t y;
 
-mt_t y;
-static mt_t mag[2] = {0x0, 0x9908b0df}; /* mag[x] = x * 0x9908b0df for x = 0,1 */
-if(rand->index >= STATE_VECTOR_LENGTH || rand->index < 0) {
-    /* generate STATE_VECTOR_LENGTH words at a time */
+static uint32_t mag[2] = {0x0, 0x9908b0df};
+if(rand->index >= STATE_VECTOR_LENGTH || rand->index < 0)
+{
     int32_t kk;
-    if(rand->index >= STATE_VECTOR_LENGTH+1 || rand->index < 0) {
-        mt32_init(rand, insert4357);
+    if(rand->index >= STATE_VECTOR_LENGTH+1 || rand->index < 0)
+    {
+        mt32_init(rand, insert_32_4357);
     }
-    for(kk=0; kk<STATE_VECTOR_LENGTH-STATE_VECTOR_M; kk++) {
+    for(kk=0; kk<STATE_VECTOR_LENGTH-STATE_VECTOR_M; kk++)
+    {
         y = (rand->mt[kk] & UPPER_MASK) | (rand->mt[kk+1] & LOWER_MASK);
         rand->mt[kk] = rand->mt[kk+STATE_VECTOR_M] ^ (y >> 1) ^ mag[y & 0x1];
       }
-    for(; kk<STATE_VECTOR_LENGTH-1; kk++) {
+    for(; kk<STATE_VECTOR_LENGTH-1; kk++)
+    {
         y = (rand->mt[kk] & UPPER_MASK) | (rand->mt[kk+1] & LOWER_MASK);
         rand->mt[kk] = rand->mt[kk+(STATE_VECTOR_M-STATE_VECTOR_LENGTH)] ^ (y >> 1) ^ mag[y & 0x1];
     }

@@ -1,8 +1,4 @@
 #include "seedy.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 
 typedef struct seed_thread_s{
     volatile seedy_t *source;
@@ -99,15 +95,16 @@ void start_seeder(seed_state* state)
     state->threads[0].run = 1;
     state->threads[1].run = 1;
     state->threads[2].run = 1;
-#ifdef _WIN32
-    state->threads[0].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[0]), (DWORD)0, NULL);
-    state->threads[1].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[1]), (DWORD)0, NULL);
-    state->threads[2].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[2]), (DWORD)0, NULL);
-#else
-    pthread_create(&(state->threads[0].thr), NULL, &seed_thread_main, &(state->threads[0]));
-    pthread_create(&(state->threads[1].thr), NULL, &seed_thread_main, &(state->threads[1]));
-    pthread_create(&(state->threads[2].thr), NULL, &seed_thread_main, &(state->threads[2]));
-#endif
+
+    #ifdef _WIN32
+        state->threads[0].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[0]), (DWORD)0, NULL);
+        state->threads[1].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[1]), (DWORD)0, NULL);
+        state->threads[2].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main, &(state->threads[2]), (DWORD)0, NULL);
+    #else
+        pthread_create(&(state->threads[0].thr), NULL, &seed_thread_main, &(state->threads[0]));
+        pthread_create(&(state->threads[1].thr), NULL, &seed_thread_main, &(state->threads[1]));
+        pthread_create(&(state->threads[2].thr), NULL, &seed_thread_main, &(state->threads[2]));
+    #endif
 
     while( i < 3 )
     {
@@ -124,15 +121,15 @@ void stop_seeder(seed_state* state)
     state->threads[0].run = 0;
     state->threads[1].run = 0;
     state->threads[2].run = 0;
-#ifdef _WIN32
-    WaitForSingleObject(state->threads[0].thr, 2000000000);
-    WaitForSingleObject(state->threads[1].thr, 2000000000);
-    WaitForSingleObject(state->threads[2].thr, 2000000000);
-#else
-    pthread_join(state->threads[0].thr, NULL);
-    pthread_join(state->threads[1].thr, NULL);
-    pthread_join(state->threads[2].thr, NULL);
-#endif
+    #ifdef _WIN32
+        WaitForSingleObject(state->threads[0].thr, 2000000000);
+        WaitForSingleObject(state->threads[1].thr, 2000000000);
+        WaitForSingleObject(state->threads[2].thr, 2000000000);
+    #else
+        pthread_join(state->threads[0].thr, NULL);
+        pthread_join(state->threads[1].thr, NULL);
+        pthread_join(state->threads[2].thr, NULL);
+    #endif
 }
 
 /*
@@ -142,16 +139,16 @@ void* parseinputgen(int argc, char** argv)
 {
     if(argc > 1)
     {
-    #ifdef _WIN32
+        #ifdef _WIN32
 
-        TODO Windows Crypto here BREAK BUIULD ON PURPOSE
+            TODO Windows Crypto here BREAK BUIULD ON PURPOSE TO REMIND ME
 
-    #else
+        #else
 
-        if(strcmp(argv[1], "arc4") == 0)
-            return arc4random;
+            if(strcmp(argv[1], "arc4") == 0)
+                return arc4random_buf;
 
-    #endif
+        #endif
 
         if(strcmp(argv[1], "stdin") == 0)
             return stdinput;

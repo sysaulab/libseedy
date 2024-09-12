@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "seedy.h"
 
 int main(int argc, const char * argv[])

@@ -1,7 +1,4 @@
-#include "qxo64.h"
-#include "prime.h"
 #include "seedy.h"
-#include <string.h>
 
 void qxo64_init(QXO64* q, void* f)
 {
@@ -12,9 +9,9 @@ void qxo64_init(QXO64* q, void* f)
     q->feeder = f;
 }
 
-qxo_t qxo64_at(QXO64* q, qxo_t i)
+uint64_t qxo64_at(QXO64* q, uint64_t i)
 {
-    qxo_t pos64;
+    uint64_t pos64;
     uint16_t* pos16 = (uint16_t*)&pos64;
     pos64 = i * q->iter;
 
@@ -24,14 +21,14 @@ qxo_t qxo64_at(QXO64* q, qxo_t i)
             ( q->pool[3][pos16[3]] ) ;
 }
 
-qxo_t qxo64_next(QXO64* q)
+uint64_t qxo64_next(QXO64* q)
 {
-    qxo_t next, pos64;
+    uint64_t next, pos64;
     uint16_t* pos16 = (uint16_t*)&pos64;
 
     if( q->step == 0 )
     {
-        ((void(*)(uint8_t* b, qxo_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
+        ((void(*)(uint8_t* b, uint64_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
         q->step++;
     }
     next = qxo64_at(q, q->step);

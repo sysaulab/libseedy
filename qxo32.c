@@ -1,9 +1,6 @@
-#include "qxo32.h"
 #include "seedy.h"
-#include "prime.h"
-#include <string.h>
 
-#define rot32(n,i) ((n<<(i%32))|(n>>(32-(i%32))))
+
 
 void qxo32_init(QXO32* q, void* f)
 {
@@ -14,9 +11,9 @@ void qxo32_init(QXO32* q, void* f)
     q->feeder = f;
 }
 
-qxo_t qxo32_at(QXO32* q, qxo_t i)
+uint32_t qxo32_at(QXO32* q, uint32_t i)
 {
-    qxo_t pos32;
+    uint32_t pos32;
     uint16_t* pos16 = (uint16_t*)&pos32;
     uint8_t* pos8   = (uint8_t*) &pos32;
     uint16_t* mid = (uint16_t*)&pos8[1];
@@ -28,14 +25,14 @@ qxo_t qxo32_at(QXO32* q, qxo_t i)
             q->pool[1][pos16[1]] ;
 }
 
-qxo_t qxo32_next(QXO32* q)
+uint32_t qxo32_next(QXO32* q)
 {
-    qxo_t next, pos32;
+    uint32_t next, pos32;
     uint16_t* pos16 = (uint16_t*)&pos32;
 
     if( q->step == 0 )
     {
-        ((void(*)(uint8_t* b, qxo_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
+        ((void(*)(uint8_t* b, uint32_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
         q->step++;
     }
     next = qxo32_at(q, q->step);
