@@ -18,6 +18,6 @@ typedef struct tagMTRand {
 } MT16;
 
 mt_t mt16_next(MT16* rand);
-void mt16_init(MT16* rand, mt_t seed);
+void mt16_init(MT16* rand, void* f);
 
 #endif /* #ifndef __MT16_H */

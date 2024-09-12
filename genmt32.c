@@ -2,14 +2,13 @@
 #include <stdio.h>
 
 #include "mt32.h"
+#include "seedy.h"
 
 int main(int argc, char** argv)
 {
     mt_t seed;
-    arc4random_buf(&seed, sizeof(seed));
     MT32 prng;
-
-    mt32_init(&prng, seed);
+    mt32_init(&prng, parseinputgen(argc, argv));
     
     while (1)
     {

@@ -1,3 +1,4 @@
+#include "seedy.h"
 #include "mt16.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -5,10 +6,9 @@
 int main(int argc, char** argv)
 {
     mt_t seed;
-    arc4random_buf(&seed, sizeof(seed));
     MT16 prng;
-    mt16_init(&prng, seed);
-    
+    mt16_init(&prng, parseinputgen(argc, argv));
+
     while (1)
     {
         mt_t buf[1024];

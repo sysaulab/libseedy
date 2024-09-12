@@ -5,7 +5,7 @@ int main(int argc, char** argv)
 {
     qxo_t seed[65536*4];
     QXO16 prng;
-    qxo16_init(&prng);
+    qxo16_init(&prng, parseinputgen(argc, argv));
     
     while (1)
     {

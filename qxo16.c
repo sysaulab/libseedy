@@ -6,12 +6,13 @@
 
 #define rot16(n,i) ((n<<(i%16))|(n>>(16-(i%16))))
 
-void qxo16_init(QXO16* q)
+void qxo16_init(QXO16* q, void* f)
 {
     int x = 0;
     int y = 0;
     q->iter = 12347;
     q->step = 0;
+    q->feeder = f;
 }
 
 qxo_t qxo16_at(QXO16* q, qxo_t i)
@@ -35,7 +36,7 @@ qxo_t qxo16_next(QXO16* q)
     uint16_t* pos16 = (uint16_t*)&pos;
     if( q->step == 0 )
     {
-        seedy((uint8_t*)&q->pool, sizeof(q->pool));
+        ((void(*)(uint8_t* b, qxo_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
         q->step++;/* Skip z */
     }
     next = qxo16_at(q, q->step);

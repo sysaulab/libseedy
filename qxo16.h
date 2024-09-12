@@ -14,7 +14,7 @@ typedef struct QXO16_s {
     qxo_t pool[2][256];//2kb
 } QXO16;
 
-void  qxo16_init(QXO16* q);
+void  qxo16_init(QXO16* q, void* f);
 qxo_t qxo16_next(QXO16* q);
 qxo_t qxo16_at  (QXO16* q, qxo_t i);
 

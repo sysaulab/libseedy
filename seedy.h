@@ -38,7 +38,7 @@
 
     #endif
 
-#else /* C99 */
+#else /* ASSUMING MODERN COMPILER */
 
     #include <stdint.h>
     #define SEEDY_WIDTH 8
@@ -59,6 +59,8 @@
 #else
     #include <pthread.h>
     #include <unistd.h>
+    #include <stdlib.h>
+    #include <sys/random.h>
     #define wait_ms(ms) usleep(ms*1000)
     #define wait_us(us) usleep(us)
 #endif
@@ -71,6 +73,7 @@
 
 void seedy(uint8_t* buffer, size_t bytes);
 void stdinput(uint8_t* buffer, size_t bytes);
+void* parseinputgen(int argc, char** argv);
 
 
 #endif

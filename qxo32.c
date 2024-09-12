@@ -5,13 +5,13 @@
 
 #define rot32(n,i) ((n<<(i%32))|(n>>(32-(i%32))))
 
-void qxo32_init(QXO32* q)
+void qxo32_init(QXO32* q, void* f)
 {
     int x = 0;
     int y = 0;
     q->iter = 1234567907;
     q->step = 0;
-    arc4random_buf(&q->pool, sizeof(q->pool));
+    q->feeder = f;
 }
 
 qxo_t qxo32_at(QXO32* q, qxo_t i)

@@ -5,8 +5,9 @@ int main(int argc, char** argv)
 {
     qxo_t seed[65536*4];
     QXO64 prng;
-    qxo64_init(&prng, seedy);
-    
+
+    qxo64_init(&prng, parseinputgen(argc, argv));
+
     while (1)
     {
         qxo_t buf[1024];

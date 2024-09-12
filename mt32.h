@@ -13,7 +13,7 @@ typedef struct tagMTRand {
   size_t index;
 } MT32;
 
-void mt32_init(MT32* rand, mt_t seed);
+void mt32_init(MT32* rand, void* f);
 mt_t mt32_next(MT32* rand);
 
 

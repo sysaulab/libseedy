@@ -138,19 +138,28 @@ void stop_seeder(seed_state* state)
 /*
  *   AJUST FOR PORTS...
  */
-void* parseinput(char* arg)
+void* parseinputgen(int argc, char** argv)
 {
+    if(argc > 1)
+    {
+    #ifdef _WIN32
 
-#ifdef _WIN32
-#else
-    if(strcmp(arg, "arc4") == 0)
-        return arc4random;
-#endif
-    if(strcmp(arg, "stdin") == 0)
-        return stdinput;
-    
-    if(strcmp(arg, "seedy") == 0)
-        return seedy;
+        TODO Windows Crypto here BREAK BUIULD ON PURPOSE
+
+    #else
+
+        if(strcmp(argv[1], "arc4") == 0)
+            return arc4random;
+
+    #endif
+
+        if(strcmp(argv[1], "stdin") == 0)
+            return stdinput;
+        
+        if(strcmp(argv[1], "seedy") == 0)
+            return seedy;
+
+    }
 
     return seedy;
 }
@@ -177,7 +186,7 @@ void seedy(uint8_t* buffer, size_t bytes)
 
     while( i < (SEEDY_WIDTH * blocks) )
     {
-        wait_ms(1);
+        wait_us(500);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {
@@ -189,7 +198,7 @@ void seedy(uint8_t* buffer, size_t bytes)
 
     while( i < bytes )
     {
-        wait_us(5);
+        wait_us(500);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {

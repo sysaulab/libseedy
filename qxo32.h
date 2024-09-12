@@ -18,7 +18,7 @@ typedef struct QXO32_s {
     qxo_t pool[2][65536];
 } QXO32;
 
-void qxo32_init(QXO32* q);
+void qxo32_init(QXO32* q, void* f);
 qxo_t qxo32_next(QXO32* q);
 qxo_t qxo32_at(QXO32* q, qxo_t i);
 

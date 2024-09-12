@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "seedy.h"
+#include "qxo64.h"
 
 #define SHISHUA 1
-#define MTWISTER 2
+#define MT32 2
 #define RAND 3
+#define buffer_length (1024*16)
 
 #if defined(_MSC_VER)
 
@@ -13,11 +16,11 @@
 
     /* NO LONG LONG, ASSUMING WIN32 TARGET */
     #elif (_MSC_VER < 1310)
-        #define PRNG MTWISTER
+        #define PRNG MT32
 
     /* NO STDINT but LONG LONG is available */
     #elif (_MSC_VER < 1930) 
-        #define PRNG MTWISTER
+        #define PRNG MT32
 
     /* STDINT is available... modern compiler */
     #else
@@ -27,48 +30,40 @@
 
 /* POSIX */
 #else
-    #define PRNG MTWISTER
+    #define PRNG SHISHUA
 #endif
 
 #if (PRNG == SHISHUA)
     #include "shishua.h"
 
-#elif (PRNG == MTWISTER)
+#elif (PRNG == MT32)
     #include "mt32.h"
 
 #elif (PRNG == RAND)
-    #include "shishua.h"
-
+/* Lib C */
 #endif
 
 
 
-#include "seedy.h"
-
-#define buffer_length (1024*16)
-
-int main(int argc, const char * argv[])
+int main(int argc, char **argv)
 {
     #if (PRNG == SHISHUA)
 
         uint8_t buffer[buffer_length];
         uint64_t newseed[4];
         prng_state s;
-        seedy((uint8_t*)newseed, 4 * sizeof(uint64_t));
-        prng_init(&s, newseed);
+        prng_init(&s, parseinputgen(argc, argv));
         while(1)
         {
             prng_gen(&s, buffer, buffer_length);
             fwrite(buffer, sizeof(char), buffer_length, stdout);
         }
 
-    #elif (PRNG == MTWISTER)
+    #elif (PRNG == MT32)
 
         MT32 mt;
 		uint32_t buffer;
-        uint32_t newseed;
-        seedy((uint8_t*)&newseed, sizeof(newseed));
-        mt32_init(&mt, newseed);
+        mt32_init(&mt, parseinputgen(argc, argv));
         while(1)
         {
             buffer = mt32_next(&mt);
@@ -77,15 +72,36 @@ int main(int argc, const char * argv[])
 
     #elif (PRNG == RAND)
 
-        uint8_t buffer;
+        int next;
+        uint16_t out[16];
         unsigned int newseed;
-        seedy((uint8_t*)&newseed, sizeof(newseed));
+        void* f = parseinputgen(argc, argv);
+        ((void(*)(uint8_t* b, qxo_t n))f)((uint8_t*)&newseed, sizeof(newseed));
         srand((unsigned int)newseed);
+
         while(1)
         {
-            buffer = (char)rand();
-            fwrite(&buffer, sizeof(char), 1, stdout);
+            int index = 0;
+            int nindex = 1;
+            int mask = 1;
+            out[index] = rand() << 1; 
+            while(index < 15)
+            {
+                nindex = index + 1;
+                out[nindex] = rand();               
+                out[index] |= (out[nindex] >> (14 - index)) & mask;
+                mask = (mask << 1) + 1;
+                index = nindex;
+            }
+            index = 0;
+            while(index < 16)
+            {
+                index = index + 1;
+            }
+            fwrite(out, sizeof(out), 1, stdout);
         }
+        
+        
 
     #endif
 
