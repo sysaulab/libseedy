@@ -25,14 +25,14 @@ src/genmt32: src/genmt32.c src/mt32.o src/seedy.o
 src/genmt16: src/genmt16.c src/mt16.o src/seedy.o
 src/prime: src/next_prime.c src/prime.o
 
-src/src/seedy.o: src/seedy.c 
-src/src/prime.o: src/prime.c
-src/src/qx64.o: src/qx64.c
-src/src/qx32.o: src/qx32.c
-src/src/qx16.o: src/qx16.c
-src/src/mt32.o: src/mt32.c
-src/src/mt16.o: src/mt16.c
-src/src/ss64.o: src/ss64.c
+src/seedy.o: src/seedy.c 
+src/prime.o: src/prime.c
+src/qx64.o: src/qx64.c
+src/qx32.o: src/qx32.c
+src/qx16.o: src/qx16.c
+src/mt32.o: src/mt32.c
+src/mt16.o: src/mt16.c
+src/ss64.o: src/ss64.c
 
 install: all
 	mkdir -p $(DESTDIR)$(prefix)/bin 

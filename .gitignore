@@ -73,3 +73,6 @@ libseedy.a
 *.a
 random
 seed
+/bin
+/include
+/lib
