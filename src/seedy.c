@@ -179,11 +179,13 @@ void seedy(uint8_t* buffer, size_t bytes)
     partial = bytes % SEEDY_WIDTH;
 
     start_seeder(&state);
+    wait_ms(1);
+
     last_pick = read_state(&state);
 
     while( i < (SEEDY_WIDTH * blocks) )
     {
-        wait_us(500);
+        wait_us(50);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {
@@ -195,7 +197,7 @@ void seedy(uint8_t* buffer, size_t bytes)
 
     while( i < bytes )
     {
-        wait_us(500);
+        wait_us(50);
         next_pick = read_state(&state);
         if(next_pick != last_pick)
         {

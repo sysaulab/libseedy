@@ -1,8 +1,6 @@
 #include "seedy.h"
 
-
-
-void qxo32_init(QXO32* q, void* f)
+void qx32_init(QX32* q, void* f)
 {
     int x = 0;
     int y = 0;
@@ -11,7 +9,7 @@ void qxo32_init(QXO32* q, void* f)
     q->feeder = f;
 }
 
-uint32_t qxo32_at(QXO32* q, uint32_t i)
+uint32_t qx32_at(QX32* q, uint32_t i)
 {
     uint32_t pos32;
     uint16_t* pos16 = (uint16_t*)&pos32;
@@ -25,7 +23,7 @@ uint32_t qxo32_at(QXO32* q, uint32_t i)
             q->pool[1][pos16[1]] ;
 }
 
-uint32_t qxo32_next(QXO32* q)
+uint32_t qx32_next(QX32* q)
 {
     uint32_t next, pos32;
     uint16_t* pos16 = (uint16_t*)&pos32;
@@ -35,7 +33,7 @@ uint32_t qxo32_next(QXO32* q)
         ((void(*)(uint8_t* b, uint32_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
         q->step++;
     }
-    next = qxo32_at(q, q->step);
+    next = qx32_at(q, q->step);
     q->step++;
 
     return next;

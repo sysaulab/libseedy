@@ -2,38 +2,37 @@ CC=cc
 CFLAGS= -O2 -w -lpthread
 prefix=/usr/local
 
-all: seed random genqxo64 genqxo32 genqxo16 genmt32 genmt16 prime
+all: src/seed src/random src/genqx64 src/genqx32 src/genqx16 src/genmt32 src/genmt16 src/genss64 src/gensy64 src/prime
 	mkdir -p ./bin
 	mkdir -p ./lib
 	mkdir -p ./include
-	ar rcs libseedy.a seedy.o prime.o qxo16.o qxo32.o qxo64.o mt32.o mt16.o ss64.o 
-	cc -Wno-implicit-int -I. -dynamiclib -o libseedy.dylib seedy.o prime.o qxo16.o qxo32.o qxo64.o mt32.o mt16.o ss64.o 
-	cc -o seedo.so -shared seedy.o prime.o qxo16.o qxo32.o qxo64.o mt32.o mt16.o ss64.o 
-	mv random seed genqxo64 genqxo32 genqxo16 genmt32 genmt16 prime bin
+	ar rcs libseedy.a src/seedy.o src/prime.o src/qx16.o src/qx32.o src/qx64.o src/mt32.o src/mt16.o src/ss64.o 
+	cc -Wno-implicit-int -I. -dynamiclib -o libseedy.dylib src/seedy.o src/prime.o src/qx16.o src/qx32.o src/qx64.o src/mt32.o src/mt16.o src/ss64.o 
+	cc -o libseedy.so -shared src/seedy.o src/prime.o src/qx16.o src/qx32.o src/qx64.o src/mt32.o src/mt16.o src/ss64.o 
+	mv src/genss64 src/gensy64 src/random src/seed src/genqx64 src/genqx32 src/genqx16 src/genmt32 src/genmt16 src/prime bin
 	mv *.a *.so *.dylib lib
-	cp -rf seedy.h shishua include
-	rm *.o
+	cp -rf src/seedy.h include
 
-random: random.c seedy.o mt32.o ss64.o
-seed: seed.c seedy.o
+src/random: src/random.c src/seedy.o src/mt32.o src/ss64.o
+src/seed: src/seed.c src/seedy.o
 
-genqxo64: genqxo64.c qxo64.o prime.o seedy.o
-genqxo32: genqxo32.c qxo32.o prime.o seedy.o
-genqxo16: genqxo16.c qxo16.o prime.o seedy.o
+src/gensy64: src/gensy64.c src/seedy.o
+src/genss64: src/genss64.c src/ss64.o src/seedy.o
+src/genqx64: src/genqx64.c src/qx64.o src/seedy.o
+src/genqx32: src/genqx32.c src/qx32.o src/seedy.o
+src/genqx16: src/genqx16.c src/qx16.o src/seedy.o
+src/genmt32: src/genmt32.c src/mt32.o src/seedy.o
+src/genmt16: src/genmt16.c src/mt16.o src/seedy.o
+src/prime: src/next_prime.c src/prime.o
 
-genmt32: genmt32.c mt32.o prime.o seedy.o
-genmt16: genmt16.c mt16.o prime.o seedy.o
-
-prime: next_prime.c prime.o
-
-seedy.o: seedy.c 
-prime.o: prime.c
-qxo64.o: qxo64.c
-qxo32.o: qxo32.c
-qxo16.o: qxo16.c
-mt32.o: mt32.c
-mt16.o: mt16.c
-ss64.o: ss64.c
+src/src/seedy.o: src/seedy.c 
+src/src/prime.o: src/prime.c
+src/src/qx64.o: src/qx64.c
+src/src/qx32.o: src/qx32.c
+src/src/qx16.o: src/qx16.c
+src/src/mt32.o: src/mt32.c
+src/src/mt16.o: src/mt16.c
+src/src/ss64.o: src/ss64.c
 
 install: all
 	mkdir -p $(DESTDIR)$(prefix)/bin 
@@ -43,20 +42,28 @@ install: all
 	mkdir -p $(DESTDIR)$(prefix)/lib
 	install include/* $(DESTDIR)$(prefix)/include
 	install lib/* $(DESTDIR)$(prefix)/lib
-	install man3/* $(DESTDIR)$(prefix)/share/man/man3
-	install man1/* $(DESTDIR)$(prefix)/share/man/man1
+	install src/man3/* $(DESTDIR)$(prefix)/share/man/man3
+	install src/man1/* $(DESTDIR)$(prefix)/share/man/man1
 	install bin/* $(DESTDIR)$(prefix)/bin
 
 uninstall:
 	rm -f $(DESTDIR)$(prefix)/bin/seed
-	rm -f $(DESTDIR)$(prefix)/include/seed.h
-	rm -f $(DESTDIR)$(prefix)/lib/libseed.so
+	rm -f $(DESTDIR)$(prefix)/bin/random
+	rm -f $(DESTDIR)$(prefix)/bin/prime
+	rm -f $(DESTDIR)$(prefix)/bin/gensy64
+	rm -f $(DESTDIR)$(prefix)/bin/genss64
+	rm -f $(DESTDIR)$(prefix)/bin/genmt32
+	rm -f $(DESTDIR)$(prefix)/bin/genmt16
+	rm -f $(DESTDIR)$(prefix)/bin/genqx16
+	rm -f $(DESTDIR)$(prefix)/bin/genqx32
+	rm -f $(DESTDIR)$(prefix)/bin/genqx64
+	rm -f $(DESTDIR)$(prefix)/include/seedy.h
+	rm -f $(DESTDIR)$(prefix)/lib/libseedy.*
+	rm -f $(DESTDIR)$(prefix)/share/man/man3/seedy.3
 	rm -f $(DESTDIR)$(prefix)/share/man/man1/seed.1
+	rm -f $(DESTDIR)$(prefix)/share/man/man1/random.1
 
 clean:
-	rm -fr bin lib include
-
-
-
+	rm -fr bin lib include src/*.o
 
 

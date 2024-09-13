@@ -1,6 +1,6 @@
 #include "seedy.h"
 
-void qxo64_init(QXO64* q, void* f)
+void qx64_init(QX64* q, void* f)
 {
     int x = 0;
     int y = 0;
@@ -9,7 +9,7 @@ void qxo64_init(QXO64* q, void* f)
     q->feeder = f;
 }
 
-uint64_t qxo64_at(QXO64* q, uint64_t i)
+uint64_t qx64_at(QX64* q, uint64_t i)
 {
     uint64_t pos64;
     uint16_t* pos16 = (uint16_t*)&pos64;
@@ -21,7 +21,7 @@ uint64_t qxo64_at(QXO64* q, uint64_t i)
             ( q->pool[3][pos16[3]] ) ;
 }
 
-uint64_t qxo64_next(QXO64* q)
+uint64_t qx64_next(QX64* q)
 {
     uint64_t next, pos64;
     uint16_t* pos16 = (uint16_t*)&pos64;
@@ -31,7 +31,7 @@ uint64_t qxo64_next(QXO64* q)
         ((void(*)(uint8_t* b, uint64_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
         q->step++;
     }
-    next = qxo64_at(q, q->step);
+    next = qx64_at(q, q->step);
     q->step++;
 
     return next;

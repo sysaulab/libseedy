@@ -3,45 +3,58 @@
 
 /*****************************************************************************
  *                                                                           *
- *   STANDARD INT SUPPORT AND SHIMS.                                         *
+ *   stdint.h STANDARD INT SUPPORT AND SHIMS.                                *
  *                                                                           *
  *****************************************************************************/
 
+
+
+
+
 /*
- *  MISCROSOFT COMPILERS EXCEPTIONS APPLIED FIRST, THEN C99 IS ASSUMED.
+ *    Turbo C for DOS ...
  */
 
-#if defined(_MSC_VER) /* MICROSOFT COMPILER */
+#if defined(__TURBOC__)
+
+    typedef unsigned char  uint8_t;
+    typedef unsigned short uint16_t;
+    typedef unsigned long  uint32_t;
+
+/*
+ *    MISCROSOFT COMPILERS EXCEPTIONS APPLIED FIRST, THEN C99 IS ASSUMED.
+ */
+#elif defined(_MSC_VER) /* MICROSOFT COMPILER */
 
     /* NO LONG LONG, ANCIENT WIN16 COMPILER ASSUMING WIN16 TARGET */
-    #if (_MSC_VER < 1200)
+#if (_MSC_VER < 1200)
 
         #define SEEDY_WIDTH 2
         typedef unsigned short seedy_t;
         typedef unsigned char uint8_t;
 
-    /* NO LONG LONG, ASSUMING WIN32 TARGET */
-    #elif (_MSC_VER < 1310)
+/* NO LONG LONG, ASSUMING WIN32 TARGET */
+#elif (_MSC_VER < 1310)
 
         #include "stdintms.h"
         #define SEEDY_WIDTH 4
         typedef uint32_t seedy_t;
 
-    /* NO STDINT but LONG LONG is available */
-    #elif (_MSC_VER < 1930) 
+/* NO STDINT but LONG LONG is available */
+#elif (_MSC_VER < 1930) 
 
         #include "stdintms.h"
         #define SEEDY_WIDTH 8
         typedef uint64_t seedy_t;
 
-    /* STDINT is available... no shim needed. */
-    #else
+/* STDINT is available... no shim needed. */
+#else
 
         #include <stdint.h>
         #define SEEDY_WIDTH 8
         typedef uint64_t seedy_t;
 
-    #endif
+#endif
 
 #else /* ASSUMING MODERN COMPILER */
 
@@ -107,52 +120,52 @@ uint16_t prime16(uint16_t start);
 
 
 /*
- *   QXO64 (Quad XOR, 64 bits)
+ *   QX64 (Quad XOR, 64 bits)
  */
 
-typedef struct QXO64_s 
+typedef struct QX64_s 
 {
     void* feeder;
     uint64_t step;
     uint64_t iter;
     uint64_t pool[4][65536];
-} QXO64;
-void qxo64_init(QXO64* q, void* f);
-uint64_t qxo64_next(QXO64* q);
-uint64_t qxo64_at(QXO64* q, uint64_t i);
+} QX64;
+void qx64_init(QX64* q, void* f);
+uint64_t qx64_next(QX64* q);
+uint64_t qx64_at(QX64* q, uint64_t i);
 
 
 
 /*
- *   QXO32 (Quad XOR, 32 bit port)
+ *   QX32 (Quad XOR, 32 bit port)
  */
 
-typedef struct QXO32_s
+typedef struct QX32_s
 {
     void* feeder;
     uint32_t step;
     uint32_t iter;
     uint32_t pool[2][65536];
-} QXO32;
-void qxo32_init(QXO32* q, void* f);
-uint32_t qxo32_next(QXO32* q);
-uint32_t qxo32_at(QXO32* q, uint32_t i);
+} QX32;
+void qx32_init(QX32* q, void* f);
+uint32_t qx32_next(QX32* q);
+uint32_t qx32_at(QX32* q, uint32_t i);
 
 
 /*
- *   QXO16 (Quad XOR, 16 bit port)
+ *   QX16 (Quad XOR, 16 bit port)
  */
 
-typedef struct QXO16_s
+typedef struct QX16_s
 {
     void* feeder;
     uint16_t step;
     uint16_t iter;
     uint16_t pool[2][256];//2kb
-} QXO16;
-void  qxo16_init(QXO16* q, void* f);
-uint16_t qxo16_next(QXO16* q);
-uint16_t qxo16_at  (QXO16* q, uint16_t i);
+} QX16;
+void  qx16_init(QX16* q, void* f);
+uint16_t qx16_next(QX16* q);
+uint16_t qx16_at  (QX16* q, uint16_t i);
 
 
 
@@ -207,5 +220,6 @@ typedef struct SS64_s {
 } SS64;
 void ss64_init(SS64* s, void* f);
 void ss64_fill(SS64* s, uint8_t* b, size_t n);
+
 
 #endif // _SEEDY_H
