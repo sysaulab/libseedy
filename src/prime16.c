@@ -15,9 +15,10 @@ int isPrime16(uint16_t n)
 
 uint16_t prime16(uint16_t N)
 {
+	uint16_t prime, found;
     if (N <= 1) return 2;
-    uint16_t prime = N;
-    int found = 0;
+    prime = N;
+    found = 0;
      while (found == 0)
      {
         prime++;

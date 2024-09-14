@@ -1,23 +1,24 @@
 #include "seedy.h"
 
-#define SHISHUA 1
-#define MT32 2
-#define RAND 3
+#define __SHISHUA 1
+#define __MT32 2
+#define __QX32 4
+#define __RAND 3
 #define buffer_length (1024*16)
 
 #if defined(_MSC_VER)
 
     /* NO LONG LONG, ANCIENT WIN16 COMPILER ASSUMING WIN16 TARGET */
     #if (_MSC_VER < 1200)
-        #define PRNG RAND
+        #define PRNG __RAND
 
     /* NO LONG LONG, ASSUMING WIN32 TARGET */
     #elif (_MSC_VER < 1310)
-        #define PRNG MT32
+        #define PRNG __MT32
 
     /* NO STDINT but LONG LONG is available */
     #elif (_MSC_VER < 1930) 
-        #define PRNG MT32
+        #define PRNG __MT32
 
     /* STDINT is available... modern compiler */
     #else
@@ -38,7 +39,8 @@
 
 int main(int argc, char **argv)
 {
-    #if (PRNG == SHISHUA)
+
+#   if (PRNG == __SHISHUA)
 
         SS64 ss;
         uint8_t buffer[buffer_length];
@@ -49,8 +51,7 @@ int main(int argc, char **argv)
             fwrite(buffer, sizeof(char), buffer_length, stdout);
         }
 
-    #elif (PRNG == MT32)
-
+#   elif (PRNG == __MT32)
         MT32 mt;
 		uint32_t buffer;
         mt32_init(&mt, parseinputgen(argc, argv));
@@ -60,7 +61,17 @@ int main(int argc, char **argv)
             fwrite(&buffer, sizeof(uint32_t), 1, stdout);
         }
 
-    #elif (PRNG == RAND)
+#   elif (PRNG == __QX32)
+        QX32 mt;
+		uint32_t buffer;
+        qx32_init(&mt, parseinputgen(argc, argv));
+        while(1)
+        {
+            buffer = qx32_next(&mt);
+            fwrite(&buffer, sizeof(uint32_t), 1, stdout);
+        }
+
+#   elif (PRNG == __RAND)
 
         int next;
         uint16_t out[16];
@@ -93,7 +104,7 @@ int main(int argc, char **argv)
         
         
 
-    #endif
+#   endif
 
     return 1;
 }

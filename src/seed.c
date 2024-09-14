@@ -1,6 +1,6 @@
 #include "seedy.h"
 
-int main(int argc, const char * argv[])
+int main(int argc, char ** argv)
 {
     int i = 0;
     uint8_t* buffer = NULL;

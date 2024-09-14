@@ -10,7 +10,7 @@ unsigned long int seedy()
     {
         delay(13);
         h = ( h << 1 ) | ( h >> 31 );
-        h ^= (unsigned long int)clock();
+        h ^= (unsigned long int)clock()&1;
     }
     return h;
 }

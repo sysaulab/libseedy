@@ -15,9 +15,10 @@ int isPrime32(uint32_t n)
 
 uint32_t prime32(uint32_t N)
 {
+	uint32_t prime, found;
     if (N <= 1) return 2;
-    uint32_t prime = N;
-    int found = 0;
+    prime = N;
+    found = 0;
      while (found == 0)
      {
         prime++;

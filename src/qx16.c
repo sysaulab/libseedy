@@ -14,11 +14,12 @@ void qx16_init(QX16* q, void* f)
 uint16_t qx16_at(QX16* q, uint16_t i)
 {
     uint16_t pos;
+	uint8_t pos0, pos1, pos2, pos3;
     pos = i * q->iter;
-    uint8_t pos0 = (uint8_t)pos;
-    uint8_t pos1 = (uint8_t)pos >> 3;
-    uint8_t pos2 = (uint8_t)pos >> 5;
-    uint8_t pos3 = (uint8_t)pos >> 8;
+    pos0 = (uint8_t)pos;
+    pos1 = (uint8_t)pos >> 3;
+    pos2 = (uint8_t)pos >> 5;
+    pos3 = (uint8_t)pos >> 8;
 
     return  ( q->pool[0][pos0] ) ^
             ( q->pool[0][pos2] >> 1 ) ^
