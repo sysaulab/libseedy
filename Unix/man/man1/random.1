@@ -1,0 +1,18 @@
+.Dd 2024/09/07
+.Dt random 1
+.Os Posix
+.Sh NAME
+.Nm random,
+.Nd Portable random number generator.
+.Sh SYNOPSIS
+.Nm random
+.Sh DESCRIPTION
+Shishua generator initiated with libseed. 
+When built on old MSVC compilers, the historical rand() 
+system function is used instead of the Shishua algorithm
+to provide some functionality on old versions of Windows.
+.El
+.Pp
+.Sh SEE ALSO
+.Xr seed 1
+.Xr seedy 3

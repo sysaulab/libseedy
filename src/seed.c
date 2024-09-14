@@ -11,7 +11,15 @@ int main(int argc, const char * argv[])
     if ( buffer == NULL ) exit( EXIT_FAILURE );
 
     /* Get the seed */
-    seedy( buffer, stop );
+#   if defined(_OPT64)
+        seedy64( buffer, stop );
+#   endif
+#   if defined(_OPT32)      
+        seedy32( buffer, stop );
+#   endif
+#   if defined(_OPT16) 
+        seedy16( buffer, stop );
+#   endif
     
     /* Write seed to output */
     while(i < stop)

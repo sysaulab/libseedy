@@ -46,7 +46,7 @@
 #include <assert.h>
 
 // Note: While it is an array, a "lane" refers to 4 consecutive uint64_t.
-static typedef struct prng_state {
+typedef struct prng_state {
   uint64_t state[16];  // 4 lanes
   uint64_t output[16]; // 4 lanes, 2 parts
   uint64_t counter[4]; // 1 lane

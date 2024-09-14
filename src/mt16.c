@@ -63,9 +63,9 @@ uint16_t mt16_next(MT16* rand)
         rand->index = 0;
     }
     y = rand->mt[rand->index++];
-    y ^= (y >> 11);
-    y ^= (y << 7) & TEMPERING_MASK_B;
-    y ^= (y << 15) & TEMPERING_MASK_C;
-    y ^= (y >> 18);
+    y ^= (y >> 5);
+    y ^= (y << 1) & TEMPERING_MASK_B;
+    y ^= (y << 9) & TEMPERING_MASK_C;
+    y ^= (y >> 12);
     return y;
 }

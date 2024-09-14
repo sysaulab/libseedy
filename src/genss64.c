@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 
     while (1)
     {
-        ss64_fill(&prng, buf, sizeof(buf));
+        ss64_fill(&prng, (uint8_t*)buf, sizeof(buf));
         fwrite(buf, sizeof(buf), 1, stdout);
     }
     return 0;

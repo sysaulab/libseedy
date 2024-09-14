@@ -2,57 +2,59 @@
 
 Portable seedless random number generator.
 
-## Applications
+## Why?
 
 1. Bring secret entropy to spies and hackers.
 2. Provide entropy to devices lacking the capability.
-3. Provide entropy to an operating system that lack such capability.
+3. Provide entropy to operating systems lacking such capability.
 4. Supplement entropy in case of hardware generators failure or vulnerability.
+5. Learn to code C in a portable way.
 
-### Source code
-
-- [Source Code](https://github.com/sysaulab/libseedy/archive/refs/heads/main.zip)
-
-## Build instructions
-
-You can read the build instructions in [INSTALL.md](INSTALL.md).
+## Latest version
+You can download the latest stable version of this packages from [github](https://github.com/sysaulab/libseedy).
 
 ## Downloads
 
 ### Windows
 
-These binaries implements the fast [Shishua algorithm](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html) initiated with seedy() 64 bit. Compiled vith Visual Studio 2022. 
+Modern windows build.
 
-- [Windows 64 bits](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-x64.zip) ( Vista+ )
-- [Windows 32 bits](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-x86.zip) ( Vista+ )
-- [Windows for ARM](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-ARM64.zip) ( 8+ )
+- [Windows 64 bits](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-x64.zip) ( Vista+ )
+- [Windows 32 bits](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-x86.zip) ( Vista+ )
+- [Windows for ARM](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-ARM64.zip) ( 8+ )
 
 ### Window Legacy
 
-These binaries implement a portable [Mersenne Twister algorithm](https://github.com/ESultanik/mtwister) 
-initiated with seedy(). Refactoring shishua.h to be "ancient C" compatible 
-would require adapting the algorithm to 32 bits or reimplement using a 
-software 64 bit library. Replacing it with the more conservative Mersenne 
-Twister made much more sense. Aside from replacing uin32_t with "unsigned 
-long" only one declaration followed an instructions and needed be declared 
-at the top of the function first.
+Legacy Windows for compatibility.
 
-Compiled with Visual C++ 6.
-
-- [win32](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-windows-win32.zip) ( 95+ )
+- [win32](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-win32.zip) ( 95+ )
 
 ### DOS
 
 The DOS port uses a crude timer-based entropy collection method. 
 The seed generator itself has not been tested with serious statistical 
 suites. It is very slow (32 bits per second) but provide a reliable method 
-to initialize a generator.
-
-The Mersenne Twister generator provides a cryptographic quality generator 
+to initialize a generator. The Mersenne Twister generator provides a cryptographic quality generator 
 to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with 
 (Compaq) Dos 2.11 on 86box.
 
-- [DOS](https://github.com/sysaulab/libseedy/blob/main/Platforms/seedy-DOS.zip)
+- [DOS](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-DOS.zip)
+
+### Unix/Posix
+
+Build from the source using the terminal.
+The source code is located in [Unix/](Unix/)
+
+- make
+- make install (sudo)
+
+## Visual Studio
+
+The solutions used to compile the Windows binaries. Visual Studio 6 is used to produce the legacy binaries. Visual Studio 2022 is used to produce the modern Windows binaries.
+
+Visual Studio 2022 Solution: [Windows/](Windows/libseedy/libseedy.sln).
+
+Visual Studio 6 Solution: [Win95/](Win95/seedy/seedy.dsw).
 
 ## About
 

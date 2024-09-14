@@ -15,10 +15,10 @@ uint16_t qx16_at(QX16* q, uint16_t i)
 {
     uint16_t pos;
     pos = i * q->iter;
-    uint8_t pos0 = pos;
-    uint8_t pos1 = pos >> 3;
-    uint8_t pos2 = pos >> 5;
-    uint8_t pos3 = pos >> 8;
+    uint8_t pos0 = (uint8_t)pos;
+    uint8_t pos1 = (uint8_t)pos >> 3;
+    uint8_t pos2 = (uint8_t)pos >> 5;
+    uint8_t pos3 = (uint8_t)pos >> 8;
 
     return  ( q->pool[0][pos0] ) ^
             ( q->pool[0][pos2] >> 1 ) ^
