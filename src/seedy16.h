@@ -51,10 +51,11 @@ typedef struct QX16_s
     void* feeder;
     uint16_t step;
     uint16_t iter;
-    uint16_t pool[2][256];//2kb
+    uint16_t pool[2][4096];//16kb
 } QX16;
 void  qx16_init(QX16* q, void* f);
 uint16_t qx16_next(QX16* q);
+void qx16_fill(QX16* q, uint8_t* b, size_t n);
 uint16_t qx16_at  (QX16* q, uint16_t i);
 
 
@@ -71,6 +72,7 @@ typedef struct tagMTRand16
   size_t index;
 } MT16;
 uint16_t mt16_next(MT16* rand);
+void mt16_fill(MT16* q, uint8_t* b, size_t n);
 void mt16_init(MT16* rand, void* f);
 
 

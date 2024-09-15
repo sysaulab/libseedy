@@ -59,6 +59,7 @@ typedef struct QX64_s
 } QX64;
 void qx64_init(QX64* q, void* f);
 uint64_t qx64_next(QX64* q);
+void qx64_fill(QX64* q, uint8_t* b, size_t n);
 uint64_t qx64_at(QX64* q, uint64_t i);
 
 

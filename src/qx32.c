@@ -12,15 +12,15 @@ void qx32_init(QX32* q, void* f)
 uint32_t qx32_at(QX32* q, uint32_t i)
 {
     uint32_t pos32;
-    uint16_t* pos16 = (uint16_t*)&pos32;
-    uint8_t* pos8   = (uint8_t*) &pos32;
-    uint16_t* mid = (uint16_t*)&pos8[1];
+    uint16_t pos1, pos2, pos3;
     pos32 = i * q->iter;
+    pos1 = (uint16_t)pos32;
+    pos2 = (uint16_t)(pos32 >> 8);
+    pos3 = (uint16_t)(pos32 >> 16);
 
-    return  q->pool[0][pos16[0]] ^
-            q->pool[0][*mid]>>3  ^  /* This deviation from QXO64 makes it pass practrand to 32GB. */
-            q->pool[1][*mid]<<5  ^  /* The goal is to offer a fast supplement to the MT on win32. */
-            q->pool[1][pos16[1]] ;
+    return  q->pool[0][pos1] ^
+            q->pool[1][pos2] ^
+            q->pool[2][pos3] ;
 }
 
 uint32_t qx32_next(QX32* q)
@@ -39,3 +39,26 @@ uint32_t qx32_next(QX32* q)
     return next;
 }
 
+void qx32_fill(QX32* rand, uint8_t* b, size_t n)
+{
+    size_t pos = 0;
+    size_t blocks = n / 4;
+    size_t bytes = n % 4;
+    uint32_t next;
+    while(pos < blocks)
+    {
+        next = qx32_next(rand);
+        ((uint32_t*)b)[pos] = next;
+        pos = pos + 1;
+    }
+    if(bytes)
+    {
+        next = qx32_next(rand);
+        pos = 0;
+        while(pos < blocks)
+        {
+            b[(blocks * 4) + pos] = ((uint8_t*)&next)[pos];
+            pos = pos + 1;
+        }
+    }
+}

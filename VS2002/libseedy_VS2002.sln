@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genqx32", "genqx32\genqx32.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gensy32", "gensy32\gensy32.vcproj", "{06FE3102-131F-4D20-9895-670CF787B479}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "symtqx32", "symtqx32\symtqx32.vcproj", "{C29684DB-0C4E-4964-A32B-9117B6420054}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -31,6 +33,10 @@ Global
 		{06FE3102-131F-4D20-9895-670CF787B479}.Debug.Build.0 = Debug|Win32
 		{06FE3102-131F-4D20-9895-670CF787B479}.Release.ActiveCfg = Release|Win32
 		{06FE3102-131F-4D20-9895-670CF787B479}.Release.Build.0 = Release|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Debug.ActiveCfg = Debug|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Debug.Build.0 = Debug|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Release.ActiveCfg = Release|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

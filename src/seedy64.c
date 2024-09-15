@@ -112,6 +112,8 @@ void seedy64(uint8_t* buffer, size_t bytes)
     int j = 0;
     uint64_t last_pick;
     uint64_t next_pick;
+    clock_t old_report;
+    clock_t new_report;
     SEEDY64 state;
     size_t blocks; 
     size_t partial; 
@@ -119,13 +121,14 @@ void seedy64(uint8_t* buffer, size_t bytes)
     partial = bytes % 8;
 
     start_seeder_64(&state);
-    wait_ms(1);
+    wait_ms(SEEDY_INIT_MS_);
 
     last_pick = read_state_64(&state);
+    old_report = NOW();
 
     while( i < (8 * blocks) )
     {
-        wait_us(50);
+        wait_us(SEEDY_INTERVAL_US_);
         next_pick = read_state_64(&state);
         if(next_pick != last_pick)
         {
@@ -133,11 +136,17 @@ void seedy64(uint8_t* buffer, size_t bytes)
             last_pick = next_pick;
             i = i + (int)8;
         }
+        new_report = NOW();
+        if(new_report > old_report)
+        {
+            old_report = new_report;
+            fprintf(stderr, "\b\b\b\b\b\b%zu %% ", (i*100)/((8 * blocks)));
+        }
     }
 
     while( i < bytes )
     {
-        wait_us(50);
+        wait_us(SEEDY_INTERVAL_US_);
         next_pick = read_state_64(&state);
         if(next_pick != last_pick)
         {

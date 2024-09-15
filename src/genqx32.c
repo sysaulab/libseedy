@@ -2,18 +2,13 @@
 
 int main(int argc, char** argv)
 {
-    int x = 0;
-    uint32_t buf[1024];
+    uint8_t buf[10240];
     QX32 prng;
     qx32_init(&prng, parseinputgen(argc, argv));
     
     while (1)
     {
-        while ( x < 1024 )
-        {
-            buf[x] = qx32_next(&prng);
-            x++;
-        }
+        qx32_fill(&prng, buf, sizeof(buf));
         fwrite(buf, sizeof(buf), 1, stdout);
     }
     return 0;

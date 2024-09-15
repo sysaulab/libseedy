@@ -12,7 +12,8 @@
  
  
  
- typedef struct seed_thread32_s{
+
+typedef struct seed_thread32_s{
     volatile uint32_t *source;
     volatile uint32_t *sink;
     int run;
@@ -52,9 +53,10 @@ typedef struct QX32_s
     void* feeder;
     uint32_t step;
     uint32_t iter;
-    uint32_t pool[2][65536];
+    uint32_t pool[3][65536];
 } QX32;
 void qx32_init(QX32* q, void* f);
+void qx32_fill(QX32* q, uint8_t* b, size_t n);
 uint32_t qx32_next(QX32* q);
 uint32_t qx32_at(QX32* q, uint32_t i);
 
@@ -63,16 +65,17 @@ uint32_t qx32_at(QX32* q, uint32_t i);
 /*
  *   MT32 (Mersenne Twister - 32 Bits)
  */
-
-#define STATE_VECTOR_LENGTH 624
-#define STATE_VECTOR_M      397 /* changes to STATE_VECTOR_LENGTH also require changes to this */
-typedef struct tagMTRand
-{
-  uint32_t mt[STATE_VECTOR_LENGTH];
-  size_t index;
+#include "mtwister/mtwister.h"
+typedef struct MT32_s {
+    void* feeder;
+    uint32_t pool;
+    MTRand gen_mt32;
+    size_t index;
 } MT32;
+
 void mt32_init(MT32* rand, void* f);
 uint32_t mt32_next(MT32* rand);
+void mt32_fill(MT32* rand, uint8_t* b, size_t n);
 
 
 

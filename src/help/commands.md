@@ -2,7 +2,7 @@
 
 ## Generator commands usage
 
-All commands uses the seedy internal seed generator by default. You can override the default by passing the name of the source as an argument like so:
+Generator commands implement a single algorithm seeded internally with seedy or from an outside source. I created them as debugging, quality control and testing tools. All commands uses the seedy internal seed generator by default. You can override the default by passing the name of the source as an argument like so:
 
 - genqxo64 _stdin_ < /dev/urandom
 - genqxo64 _arc4_
@@ -25,3 +25,11 @@ _seedy_ uses the built-in seedless generator provided by libseedy.
 **genqxo32** Quad XOR - 32 bit - experimental
 
 **genqxo64** Quad XOR - 64 bit - reference
+
+**genss64** Shishua - 64 bit - reference
+
+**gensy16** seedy16() raw output - 16 bit - tested
+
+**gensy32** seedy32() raw output - 32 bit - tested
+
+**gensy64** seedy64() raw output - 64 bit - tested

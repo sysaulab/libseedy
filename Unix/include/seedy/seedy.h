@@ -1,6 +1,22 @@
+/*
+https://api.haiku.nz/kits/kernel/threads-and-teams.html#_CPPv412spawn_thread11thread_funcPKc5int32Pv
+
+HAIKU THREAD MODEL
+*/
+
+
+
 #ifndef _SEEDY_H
 #define _SEEDY_H
 
+#define SEEDY_INIT_MS_ 1
+#define SEEDY_INTERVAL_US_ 5
+#define NOW() (clock()/(CLOCKS_PER_SEC))
+#define MIN(a,b) (a<b?a:b)
+#define MAX(a,b) (a>b?a:b)
+#define ROT16(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
+#define ROT32(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
+#define ROT64(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
 
 /*****************************************************************************
  *                                                                           *
@@ -8,9 +24,8 @@
  *                                                                           *
  *****************************************************************************/
 
-
 /*
- *    Turbo C for DOS ...
+ *    BORLAND TURBO C DOS ...
  */
 
 #if defined(__TURBOC__)
@@ -18,26 +33,41 @@
     typedef unsigned char  uint8_t;
     typedef unsigned short uint16_t;
     typedef unsigned long  uint32_t;
-    typedef char  int8_t;
-    typedef short int16_t;
-    typedef long  int32_t;
+    typedef char           int8_t;
+    typedef short          int16_t;
+    typedef long           int32_t;
+#   define _OPT16
+#   define _OPT32
 
 /*
- *    MISCROSOFT COMPILERS EXCEPTIONS APPLIED FIRST, THEN C99 IS ASSUMED.
+ *    MICROSOFT COMPILERS
  */
+
 #elif defined(_MSC_VER) /* MICROSOFT COMPILER */
+#define MSVS_1 800
+#define MSVS_2 900
+#define MSVS_4 1000
+#define MSVS_6 1200
+#define MSVS_2002 1300 /* wincrypt.h is available v */
+#define MSVS_2003 1310 /* long long v */
+#define MSVS_2005 1400
+#define MSVS_2008 1500
+#define MSVS_2010 1600
+#define MSVS_2012 1700
+#define MSVS_2013 1800
+#define MSVS_2015 1900 /* <stdint.h> v */
+#define MSVS_2017 1910
+#define MSVS_2019 1920
+#define MSVS_2022 1930
 
-    /* NO LONG LONG, ANCIENT WIN16 COMPILER ASSUMING WIN16 TARGET */
-#   if (_MSC_VER < 1200)
+/* NO LONG LONG, ANCIENT WIN16 COMPILER ASSUMING 16 bit TARGET */
+#   if (_MSC_VER < MSVS_6)
         #define SEEDY_WIDTH 2
-        typedef unsigned long uint32_t;
-        typedef unsigned short uint16_t;
-        typedef unsigned char uint8_t;
+        #include "stdintms.h"
 #       define _OPT16
-#       define _OPT32
 
-/* NO LONG LONG, ASSUMING WIN32 TARGET */
-#   elif (_MSC_VER < 1310)
+/* NO LONG LONG */
+#   elif (_MSC_VER < MSVS_2003) 
         #include "stdintms.h"
         #define SEEDY_WIDTH 4
         typedef uint32_t seedy_t;
@@ -45,7 +75,7 @@
 #       define _OPT32
 
 /* NO STDINT but LONG LONG is available */
-#   elif (_MSC_VER < 1930) 
+#   elif (_MSC_VER < MSVS_2015) 
 #       include "stdintms.h"
 #       define SEEDY_WIDTH 8
         typedef uint64_t seedy_t;
@@ -80,9 +110,12 @@
 
 #if defined(_WIN32)
 #   include <windows.h>
+#   if (_MSC_VER >= 1300) 
 #   include <wincrypt.h>
+#   define _OPTWINCRYPT
+#   endif
 #   define wait_ms(ms) Sleep(ms)
-#   define wait_us(ms) Sleep(ms)
+#   define wait_us(ms) Sleep(1)
 #else
 #   include <pthread.h>
 #   include <unistd.h>
@@ -102,10 +135,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-void stdinput(uint8_t* buffer, size_t bytes);
 void* parseinputgen(int argc, char** argv);
-
 
 /* OVERRIDE
 #define _OPT64

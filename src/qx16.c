@@ -13,18 +13,16 @@ void qx16_init(QX16* q, void* f)
 
 uint16_t qx16_at(QX16* q, uint16_t i)
 {
-    uint16_t pos;
-	uint8_t pos0, pos1, pos2, pos3;
+    uint16_t pos, pos1, pos2;
+	uint16_t rot1, rot2;
     pos = i * q->iter;
-    pos0 = (uint8_t)pos;
-    pos1 = (uint8_t)pos >> 3;
-    pos2 = (uint8_t)pos >> 5;
-    pos3 = (uint8_t)pos >> 8;
+    rot1 = pos & 0x000f;
+    pos1 = pos >> 4;
+    rot2 = pos >> 12;
+    pos2 = pos & 0x0fff;
 
-    return  ( q->pool[0][pos0] ) ^
-            ( q->pool[0][pos2] >> 1 ) ^
-            ( q->pool[1][pos1] << 3 ) ^
-            ( q->pool[1][pos3] ) ;
+    return  ( ROT16(q->pool[0][pos1],rot1) ) ^
+            ( ROT16(q->pool[1][pos2],rot2) ) ;
 }
 
 uint16_t qx16_next(QX16* q)
@@ -40,4 +38,29 @@ uint16_t qx16_next(QX16* q)
     q->step++;
 
     return next;
+}
+
+void qx16_fill(QX16* rand, uint8_t* b, size_t n)
+{
+    size_t pos = 0;
+    size_t blocks = n / 2;
+    size_t bytes = n % 2;
+    uint16_t last;
+    uint16_t next;
+    while(pos < blocks)
+    {
+        next = qx16_next(rand);
+        ((uint16_t*)b)[pos] = next;
+        pos = pos + 1;
+    }
+    if(bytes)
+    {
+        next = qx16_next(rand);
+        pos = 0;
+        while(pos < blocks)
+        {
+            b[(blocks * 2) + pos] = ((uint8_t*)&next)[pos];
+            pos = pos + 1;
+        }
+    }
 }

@@ -1,4 +1,6 @@
 #include "seedy.h"
+#include <stdio.h>
+#include <time.h>
 
 uint32_t read_state_32(SEEDY32* state)
 {
@@ -101,17 +103,20 @@ void seedy32(uint8_t* buffer, size_t bytes)
     SEEDY32 state;
     size_t blocks; 
     size_t partial; 
+    clock_t old_report;
+    clock_t new_report;
     blocks = bytes / 4;
     partial = bytes % 4;
 
     start_seeder_32(&state);
-    wait_ms(1);
+    wait_ms(SEEDY_INIT_MS_);
 
     last_pick = read_state_32(&state);
+    old_report = NOW();
 
     while( i < (4 * blocks) )
     {
-        wait_us(50);
+        wait_us(SEEDY_INTERVAL_US_);
         next_pick = read_state_32(&state);
         if(next_pick != last_pick)
         {
@@ -119,11 +124,17 @@ void seedy32(uint8_t* buffer, size_t bytes)
             last_pick = next_pick;
             i = i + (int)4;
         }
+        new_report = NOW();
+        if(new_report > old_report)
+        {
+            old_report = new_report;
+            printf( "\r%u %%", (unsigned int)( (i*100)/((4 * blocks)) ) );
+        }
     }
 
     while( i < bytes )
     {
-        wait_us(50);
+        wait_us(SEEDY_INTERVAL_US_);
         next_pick = read_state_32(&state);
         if(next_pick != last_pick)
         {

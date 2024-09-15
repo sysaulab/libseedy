@@ -1,15 +1,28 @@
+/*
+https://api.haiku.nz/kits/kernel/threads-and-teams.html#_CPPv412spawn_thread11thread_funcPKc5int32Pv
+
+HAIKU THREAD MODEL
+*/
+
+
+
 #ifndef _SEEDY_H
 #define _SEEDY_H
 
+#define SEEDY_INIT_MS_ 1
+#define SEEDY_INTERVAL_US_ 5
+#define NOW() (clock()/(CLOCKS_PER_SEC))
+#define MIN(a,b) (a<b?a:b)
+#define MAX(a,b) (a>b?a:b)
+#define ROT16(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
+#define ROT32(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
+#define ROT64(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
 
 /*****************************************************************************
  *                                                                           *
  *   stdint.h STANDARD INT SUPPORT AND SHIMS.                                *
  *                                                                           *
  *****************************************************************************/
-
-
-
 
 /*
  *    BORLAND TURBO C DOS ...
@@ -34,15 +47,15 @@
 #define MSVS_1 800
 #define MSVS_2 900
 #define MSVS_4 1000
-#define MSVS_6 1200 /* wincrypt.h is not available */
-#define MSVS_2002 1300 
-#define MSVS_2003 1310 /* long long */
+#define MSVS_6 1200
+#define MSVS_2002 1300 /* wincrypt.h is available v */
+#define MSVS_2003 1310 /* long long v */
 #define MSVS_2005 1400
 #define MSVS_2008 1500
 #define MSVS_2010 1600
 #define MSVS_2012 1700
 #define MSVS_2013 1800
-#define MSVS_2015 1900 /* <stdint.h> */
+#define MSVS_2015 1900 /* <stdint.h> v */
 #define MSVS_2017 1910
 #define MSVS_2019 1920
 #define MSVS_2022 1930
@@ -102,7 +115,7 @@
 #   define _OPTWINCRYPT
 #   endif
 #   define wait_ms(ms) Sleep(ms)
-#   define wait_us(ms) Sleep(ms)
+#   define wait_us(ms) Sleep(1)
 #else
 #   include <pthread.h>
 #   include <unistd.h>

@@ -1,0 +1,36 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: genqx32 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\TEMP\RSP4A.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/genqx32.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ  /c 
+"S:\src\seedy32.c"
+]
+Creating command line "cl.exe @C:\TEMP\RSP4A.tmp" 
+Creating temporary file "C:\TEMP\RSP4B.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/genqx32.pdb" /debug /machine:I386 /out:"Debug/genqx32.exe" /pdbtype:sept 
+.\Debug\seedy16.obj
+.\Debug\qx32.obj
+.\Debug\seedy.obj
+.\Debug\genqx32.obj
+.\Debug\seedy32.obj
+]
+Creating command line "link.exe @C:\TEMP\RSP4B.tmp"
+<h3>Output Window</h3>
+Compiling...
+seedy32.c
+Linking...
+
+
+
+<h3>Results</h3>
+genqx32.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
