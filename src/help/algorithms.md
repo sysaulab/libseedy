@@ -45,7 +45,9 @@ Each process is deterministic but the overall configuration is highly unstable. 
 
 The noise map (pool) allow for direct indexing of the entire sequence (128EiB 64 bit, 16GiB 32 bit). This allow unlimited parallel processing. Unless you need to "amplify" a small sample or encode at TB/s speed with DSPs, use [shishua](shishua.md)
 
-I created a 32 bit version to offer the fastest algorithm on 32 bit platforms. The latest incarnation uses less operations and passes practrand, at first glance anyway and fed with arc4random_buf in macos 14.6.1. I This will be the exposed alrogithm for the 32 bit platforms by amplifying a MT32 generator seeded with seedy32. This combination allows for platforms with slow timers (anything but a recent modern desktops OS) to get numbers immediatly. This is done specifically to avoid the perception of stalling when ICM'S bandwidth is limited by coarse timers, such as Windows 95.
+Two variations
+
+I created a 32 bit version to offer the fastest algorithm on 32 bit platforms. The latest incarnation uses less operations and passes practrand, at first glance anyway and fed with arc4random_buf in macos 14.6.1. This combination allows for platforms with slow timers (anything but a recent modern desktops OS) to get numbers immediatly. This is done specifically to avoid the perception of stalling when ICM'S bandwidth is limited by coarse timers, such as Windows 95.
 
 The 16 bit variation also passes practrand but the performance is not great and requires constant reseed. Also the 768kb state makes it too large for DOS. I do forsee see any practical application, but if anyone needs to "amplify data" in 16 bits, this can a 8x expander that passes practrand.
 
