@@ -23,8 +23,8 @@ The chaotic generator is capable of providing original entropy reliably on any p
 - Accountant B (AB) read from cabinet 1 (C1) and write to cabinet 2 (C2).
 - Accountant C (AC) read from cabinet 2 (C2) and write to cabinet 3 (C3).
 
-    AA -> C1 -> AB -> C2 -> AC -> C3 -> AA
-    \_______________ <- _________________/
+    AA -> C1 -> AB -> C2 -> AC -> C3
+    \____________ <- ______________/
 
 The job of accountant A is:
 
