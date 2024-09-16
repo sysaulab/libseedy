@@ -16,7 +16,11 @@ _seedy_ uses the built-in seedless generator provided by libseedy.
 
 ### List of generator commands
 
-**genmt16:** Mersenne Twister - 16 bit - experimental
+**symtqx32** seedy32 > MT32 > QX32 - Ideal combination for old 32 bit systems like Windows 95. 
+
+**syss64** seedy32 > SS64 - Fastest generator self-initialized with seedy. 
+
+**genmt16:** Mersenne Twister - 16 bit - removed (it was no good)
 
 **genmt32:** Mersenne Twister - 32 bit - reference
 
@@ -24,7 +28,7 @@ _seedy_ uses the built-in seedless generator provided by libseedy.
 
 **genqxo32** Quad XOR - 32 bit - experimental
 
-**genqxo64** Quad XOR - 64 bit - reference
+**genqxo64** Quad XOR - 64 bit - texted extensively
 
 **genss64** Shishua - 64 bit - reference
 
@@ -32,7 +36,6 @@ _seedy_ uses the built-in seedless generator provided by libseedy.
 
 **gensy32** seedy32() raw output - 32 bit - tested
 
-**gensy64** seedy64() raw output - 64 bit - tested
+**gensy64** seedy64() raw output - 64 bit - tested extensively
 
-**symtqx32** seedy32 > MT32 > QX32 raw output - 64 bit - Ideal combination for old Windows.
-
+**nprime__** Returns the next prime number equal or higher than: nprime64 10 -> 11. Included to test a basic function used to get the next prime number. In case I want to create a generator that iterates through different a different prime instead of reseeding data. Maybe using the iterator gap as a nonce when using QXO to encrypt communications.
