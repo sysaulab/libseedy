@@ -1,4 +1,7 @@
-#include "seedy.h"
+#include <libseedy/libseedy32.h>
+#include "algos/mt32.h"
+#include "algos/qx64.h"
+#include <stdlib.h>
 
 MT32* MTprng;
 QX64* QXprng;

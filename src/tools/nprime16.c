@@ -1,4 +1,4 @@
-#include "prime16.h"
+#include "algos/prime16.h"
 #include <stdlib.h>
 
 int main(int argc, char** argv)

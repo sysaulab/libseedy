@@ -1,5 +1,5 @@
 #include "tools.h"
-#include "qx32.h"
+#include "algos/qx32.h"
 
 int main(int argc, char** argv)
 {

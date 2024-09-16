@@ -1,5 +1,5 @@
 #include "tools.h"
-#include "ss64.h"
+#include "algos/ss64.h"
 
 int main(int argc, char** argv)
 {

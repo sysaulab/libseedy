@@ -1,4 +1,6 @@
-#include "seedy.h"
+#include <libseedy/libseedy32.h>
+#include "algos/mt32.h"
+#include "algos/qx32.h"
 
 MT32 MTprng;
 void (mt_seeder)(uint8_t* b, size_t n)

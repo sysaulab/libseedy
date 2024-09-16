@@ -1,5 +1,5 @@
 #include "tools.h"
-#include "mt32.h"
+#include "algos/mt32.h"
 
 int main(int argc, char** argv)
 {

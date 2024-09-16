@@ -1,4 +1,5 @@
-#include "seedy.h"
+#include <libseedy/libseedy64.h>
+#include "algos/qx64.h"
 
 int main(int argc, char** argv)
 {

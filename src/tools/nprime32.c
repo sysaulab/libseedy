@@ -1,4 +1,4 @@
-#include "prime32.h"
+#include "algos/prime32.h"
 #include <stdlib.h>
 
 int main(int argc, char** argv)

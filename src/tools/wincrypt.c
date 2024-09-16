@@ -1,3 +1,5 @@
+/* Demonstrator of the old wincrypt.h API */
+
 #include "windows.h"
 #include "wincrypt.h"
 #include <stdio.h> 

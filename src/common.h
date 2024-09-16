@@ -20,6 +20,7 @@
 /* #define LIBSEEDY_OPT16 */
 
 #define LIBSEEDY_OPT32
+#define LIBSEEDY_OPT_PROGRESS
 
 #if defined(UINT64_MAX)
 #   define LIBSEEDY_OPT64
