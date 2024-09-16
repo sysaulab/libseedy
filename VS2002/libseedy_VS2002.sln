@@ -1,0 +1,45 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libseedy", "libseedy\libseedy.vcproj", "{8DD6FD1B-E762-4495-A789-FFE2F7984B1E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genmt32", "genmt32\genmt32.vcproj", "{E69552DD-4E29-4DA1-908B-9C51B5B082D0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genqx32", "genqx32\genqx32.vcproj", "{F3DFCD38-F245-4BCB-8B0D-718D2AFC9DBB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gensy32", "gensy32\gensy32.vcproj", "{06FE3102-131F-4D20-9895-670CF787B479}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "symtqx32", "symtqx32\symtqx32.vcproj", "{C29684DB-0C4E-4964-A32B-9117B6420054}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{8DD6FD1B-E762-4495-A789-FFE2F7984B1E}.Debug.ActiveCfg = Debug|Win32
+		{8DD6FD1B-E762-4495-A789-FFE2F7984B1E}.Debug.Build.0 = Debug|Win32
+		{8DD6FD1B-E762-4495-A789-FFE2F7984B1E}.Release.ActiveCfg = Release|Win32
+		{8DD6FD1B-E762-4495-A789-FFE2F7984B1E}.Release.Build.0 = Release|Win32
+		{E69552DD-4E29-4DA1-908B-9C51B5B082D0}.Debug.ActiveCfg = Debug|Win32
+		{E69552DD-4E29-4DA1-908B-9C51B5B082D0}.Debug.Build.0 = Debug|Win32
+		{E69552DD-4E29-4DA1-908B-9C51B5B082D0}.Release.ActiveCfg = Release|Win32
+		{E69552DD-4E29-4DA1-908B-9C51B5B082D0}.Release.Build.0 = Release|Win32
+		{F3DFCD38-F245-4BCB-8B0D-718D2AFC9DBB}.Debug.ActiveCfg = Debug|Win32
+		{F3DFCD38-F245-4BCB-8B0D-718D2AFC9DBB}.Debug.Build.0 = Debug|Win32
+		{F3DFCD38-F245-4BCB-8B0D-718D2AFC9DBB}.Release.ActiveCfg = Release|Win32
+		{F3DFCD38-F245-4BCB-8B0D-718D2AFC9DBB}.Release.Build.0 = Release|Win32
+		{06FE3102-131F-4D20-9895-670CF787B479}.Debug.ActiveCfg = Debug|Win32
+		{06FE3102-131F-4D20-9895-670CF787B479}.Debug.Build.0 = Debug|Win32
+		{06FE3102-131F-4D20-9895-670CF787B479}.Release.ActiveCfg = Release|Win32
+		{06FE3102-131F-4D20-9895-670CF787B479}.Release.Build.0 = Release|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Debug.ActiveCfg = Debug|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Debug.Build.0 = Debug|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Release.ActiveCfg = Release|Win32
+		{C29684DB-0C4E-4964-A32B-9117B6420054}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

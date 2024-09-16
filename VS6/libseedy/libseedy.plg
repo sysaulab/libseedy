@@ -1,0 +1,62 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: libseedy - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\TEMP\RSP1E.tmp" with contents
+[
+/nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBSEEDY_EXPORTS" /Fp"Debug/libseedy.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ  /c 
+"S:\src\mt16.c"
+"S:\src\mt32.c"
+"S:\src\prime16.c"
+"S:\src\prime32.c"
+"S:\src\qx16.c"
+"S:\src\qx32.c"
+"S:\src\seedy16.c"
+"S:\src\seedy32.c"
+]
+Creating command line "cl.exe @C:\TEMP\RSP1E.tmp" 
+Creating temporary file "C:\TEMP\RSP1F.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"Debug/libseedy.pdb" /debug /machine:I386 /out:"Debug/libseedy.dll" /implib:"Debug/libseedy.lib" /pdbtype:sept 
+.\Debug\mt16.obj
+.\Debug\mt32.obj
+.\Debug\prime16.obj
+.\Debug\prime32.obj
+.\Debug\qx16.obj
+.\Debug\qx32.obj
+.\Debug\seedy16.obj
+.\Debug\seedy32.obj
+]
+Creating command line "link.exe @C:\TEMP\RSP1F.tmp"
+<h3>Output Window</h3>
+Compiling...
+mt16.c
+s:\src\mt16.c(72) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+mt32.c
+s:\src\mt32.c(70) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+prime16.c
+s:\src\prime16.c(31) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+prime32.c
+s:\src\prime32.c(31) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+qx16.c
+s:\src\qx16.c(44) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+qx32.c
+s:\src\qx32.c(42) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+seedy16.c
+s:\src\seedy16.c(147) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+seedy32.c
+s:\src\seedy32.c(149) : fatal error C1010: unexpected end of file while looking for precompiled header directive
+Generating Code...
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+libseedy.dll - 8 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
