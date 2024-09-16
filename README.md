@@ -19,7 +19,7 @@ You can download the latest stable version of this packages from [github](https:
 
 I prepared two commands to demonstrate the effectiveness of libseedy: seedy and fastrand. Seedy exposes a seedy generator directly to the user while fastrand uses it to initiate a fast prng.
 
-Prebuilt programs are kept in the [Programs/](Programs/readme.md) folder.
+Prebuilt programs are kept in the [Programs/](Programs/README.md) folder.
 
 ## Build from source
 
