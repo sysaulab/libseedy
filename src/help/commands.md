@@ -34,5 +34,5 @@ _seedy_ uses the built-in seedless generator provided by libseedy.
 
 **gensy64** seedy64() raw output - 64 bit - tested
 
-**symtqx32** seedy32() -> MT32 -> QX32 raw output - 64 bit - Ideal combination for old Windows.
+**symtqx32** seedy32 > MT32 > QX32 raw output - 64 bit - Ideal combination for old Windows.
 

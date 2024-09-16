@@ -10,6 +10,8 @@ Portable seedless random number generator.
 4. Supplement entropy in case of hardware generators failure or vulnerability.
 5. Learn to code C in a portable way.
 
+Read more about the [algorithms](src/help/algorithms.md), [commands](src/help/commands.md) and some of the [tests](src/help/testing.md) I conducted in the [src/help](src/help) folder.
+
 ## Latest version
 You can download the latest stable version of this packages from [github](https://github.com/sysaulab/libseedy).
 
@@ -21,7 +23,7 @@ Modern windows build.
 
 - [Windows 64 bits](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-x64.zip) ( Vista+ )
 - [Windows 32 bits](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-x86.zip) ( Vista+ )
-- [Windows for ARM](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-ARM64.zip) ( 8+ )
+- [Windows for ARM64](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-ARM64.zip) ( 8+ )
 
 ### Window Legacy
 
@@ -43,10 +45,7 @@ to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with
 ### Unix/Posix
 
 Build from the source using the terminal.
-The source code is located in [Unix/](Unix/)
-
-- make
-- make install (sudo)
+The Makefile and readme are located in [Unix/](Unix/)
 
 ## Visual Studio
 
@@ -75,20 +74,12 @@ otherwise lack the hardware of software capability.
 
 ## History
 
-I was pondering the nature of chaos I saw a bird in the sky. It 
-inspired me to imagine the turbulences behind the wings and 
-theorize about the nature of the interactions that make turbulences 
-unpredictable. Could I replicate it using software? The image that 
-appeared in my head was a system that was interdependent and 
-loosely coupled. 
-
-I used many hash functions as active processes, 
-and unmitigated shared memory to provide the “slack” in the coupling. 
-I experimented with different topologies before adopting the obvious 
-choice: a ring. 
-
-The result is three threads constantly accessing 
-each other's memory with asking for permission. The configuration
-makes it extremely unstable when the threads operate consurrently.
-
-
+It was new year's eve and I was returning from Yellowknife. 
+I was listening to a podcast about cryptography. 
+A bird flying in the sky inspired me to theorize 
+about the nature of unpredictability ny imagining 
+the turbulences behind the wings. It seemed to me that loose 
+concurrency would be key to achieve my goal. Could I replicate 
+it using software? The image that appeared in my head was one 
+of a system that was interdependent and loosely coupled.
+Un-coordinated race conditions offers the possibility of loose coupling.
