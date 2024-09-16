@@ -1,0 +1,1 @@
+https://api.haiku.nz/kits/kernel/threads-and-teams.html#_CPPv412spawn_thread11thread_funcPKc5int32Pv

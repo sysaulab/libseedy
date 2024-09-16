@@ -14,8 +14,6 @@ Read more about the [algorithms](src/help/algorithms.md), [commands](src/help/co
 
 ## Prebuilt programs
 
-I prepared two commands to demonstrate the effectiveness of libseedy: seedy and fastrand. Seedy exposes a seedy generator directly to the user while fastrand uses it to initiate a fast prng.
-
 Prebuilt programs are kept in the [Programs/](Programs/README.md) folder.
 
 ## Build from source
