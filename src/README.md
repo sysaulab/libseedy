@@ -25,7 +25,7 @@ The chaotic generator is capable of providing original entropy reliably on any p
 
 	AA -> C1 -> AB -> C2 -> AC -> C3
 	
-  	\\_____________ <- _____________/
+  	\\............. <- ............./
 
 The job of accountant A is:
 
