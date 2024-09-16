@@ -3,10 +3,10 @@
 Some descriptions of the PRNG algorithm distributed with libseedy.
 
 ## Seedy (SY)
-- 64 bit (2M pool -> 128EiB period) 70,368,744,177,664x  ( 2^67 / 2^21 = 2^46 )
-- 32 bit (768K pool -> 16GiB period) 22357x ()
+- 64 bit (2M pool -> 128EiB period) 70,368,744,177,664x ( 2^46 )
+- 32 bit (768K pool -> 16GiB period) 21,845x
 - 16 bit (16K pool -> 128K period) 8x
-- Slow algorithm ( MB/sec at best)
+- Slow algorithm ( speed dependends on timer's resolution )
 - Chaotic generator, not a sequence
 
 The chaotic generator is capable of providing original entropy reliably on any platform capable of concurrent multithreading. It creates 3 threads, each running a hash function. To better understand it's inner working I will explain the algorithm step by step as if it was performed by people in an office. The hashing functions will be represented by three accountants. The shared memory that connect the ring can be represented by three filing cabinets. 
@@ -47,7 +47,7 @@ The noise map (pool) allow for direct indexing of the entire sequence (128EiB 64
 
 I created a 32 bit version to offer the fastest algorithm on 32 bit platforms. The latest incarnation uses less operations and passes practrand, at first glance anyway and fed with arc4random_buf in macos 14.6.1. I This will be the exposed alrogithm for the 32 bit platforms by amplifying a MT32 generator seeded with seedy32. This combination allows for platforms with slow timers (anything but a recent modern desktops OS) to get numbers immediatly. This is done specifically to avoid the perception of stalling when ICM'S bandwidth is limited by coarse timers, such as Windows 95.
 
-The 16 bit variation also passes practrand but the performance is not great and requires constant reseed. I do not see any practical application myself, but I maintain it in case it could help someone someday.
+The 16 bit variation also passes practrand but the performance is not great and requires constant reseed. Also the 768kb state makes it too large for DOS. I do forsee see any practical application, but if anyone needs to "amplify data" in 16 bits, this can a 8x expander that passes practrand.
 
 ## Mersenne Twister (MT)
 
