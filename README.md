@@ -21,8 +21,6 @@ Portable seedless random number generator.
 
 Read more about the algorithm in the [source code](src/)'s [README](src/README.md).
 
-Many [tools](src/tools) and some of the [tests](src/help/testing.md) I conducted in the [src/help](src/help) folder.
-
 ## Prebuilt programs
 
 Prebuilt programs are kept in 
