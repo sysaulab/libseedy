@@ -9,9 +9,7 @@ Some descriptions of the PRNG algorithm distributed with libseedy.
 - Slow algorithm ( MB/sec at best)
 - Chaotic generator, not a sequence
 
-The chaotic generator capable of providing original entropy portably and reliably. It creates 3 identical threads, each running a specialized hashing algorithm. 
-
-To better understand it's inner working I will explain the algorithm step by step as if it was performed by people in an office. The hashing functions will be represented by three accountants. The shared memory that connect the ring can be represented by three filing cabinets. 
+The chaotic generator is capable of providing original entropy reliably on any platform capable of concurrent multithreading. It creates 3 threads, each running a hash function. To better understand it's inner working I will explain the algorithm step by step as if it was performed by people in an office. The hashing functions will be represented by three accountants. The shared memory that connect the ring can be represented by three filing cabinets. 
 
 - Accountant A (AA) uses read from cabinet 3 (C3) and write results in cabinet 1 (C1).
 - Accountant B (AB) uses read from cabinet 1 (C1) and write results in cabinet 2 (C2).
