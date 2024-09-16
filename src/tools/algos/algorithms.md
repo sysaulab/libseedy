@@ -30,7 +30,7 @@ AB and AC are also doing the same thing with their own respective cabinets. The 
 
 Each accountant's work in itself is very predictable. When three accountants do this continously, the number they generate will vary wildly according to the order each of them arrive to each cabinet first. When all accountants are not working at the same time, the numbers being calculated are not as chaotic. This is why I describe the behaviour in single core environments as pseudo chaotic. When that happens, the work of each accountant is predictable and only the moment at which they stop and start again contributes to the deviation from the expected norm.
 
-Each process is deterministic but the overall configuration is highly unstable. This is what I call "synthetic chaos".
+While each process is deterministic in itself, the overall configuration makes it an unstable, divergent, complex system. This is what I call "synthetic chaos".
 
 ## Quad XOR (QX)
 
