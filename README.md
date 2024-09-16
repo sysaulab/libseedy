@@ -23,7 +23,7 @@ Prebuilt programs are kept in the [Programs/](Programs/README.md) folder.
 
 ## Build from source
 
-Makefile in [Unix/](Unix/readme.md).
+Makefile in [Unix/](Unix/).
 
 Visual Studio 2022: [VS2022/](VS2022/).
 
