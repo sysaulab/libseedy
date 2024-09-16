@@ -17,26 +17,41 @@ You can download the latest stable version of this packages from [github](https:
 
 ## Downloads
 
+I prepared two commands to demonstrate the effectiveness of libseedy: seedy and fastrand. Seedy exposes a seedy generator directly to the user while fastrand uses it to initiate a fast prng.
+
 ### Windows
 
-Modern windows build.
+Windows Vista and up.
 
-- [Windows 64 bits](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-x64.zip) ( Vista+ )
-- [Windows 32 bits](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-x86.zip) ( Vista+ )
-- [Windows for ARM64](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-ARM64.zip) ( 8+ )
+**ARM64** ( ARM 64 bit )
+
+- [seedy.exe](Programs/Windows/ARM64/seedy.exe)
+- [fastrand.exe](Programs/Windows/ARM64/fastrand.exe)
+
+**x64** ( Intel 64 bit )
+
+- [seedy.exe](Programs/Windows/x64/seedy.exe)
+- [fastrand.exe](Programs/Windows/x64/fastrand.exe)
+
+**x86** ( Intel 32 bit )
+
+- [seedy.exe](Programs/Windows/x86/seedy.exe)
+- [fastrand.exe](Programs/Windows/x86/fastrand.exe)
 
 ### Window Legacy
 
-Legacy Windows for compatibility.
+Windows 95 and up.
 
-- [win32](https://github.com/sysaulab/libseedy/blob/main/Programs/seedy-windows-win32.zip) ( 95+ )
+- [seedy.exe](Programs/DOS/seedy.exe)
+- [fastrand.exe](Programs/DOS/fastrand.exe)
 
 ### DOS
 
 The DOS port uses a crude timer-based entropy collection method. 
 The seed generator itself has not been tested with serious statistical 
-suites. It is very slow (32 bits per second) but provide a reliable method 
-to initialize a generator. The Mersenne Twister generator provides a cryptographic quality generator 
+suites. It is very slow (~32 bits per second) but provides a 
+seemingly reliable method to initialize a generator. 
+The Mersenne Twister generator provides a proof of concept of a port
 to DOS. Copy to c:\dev\random.exe if you want to be fancy! Tested with 
 (Compaq) Dos 2.11 on 86box.
 
