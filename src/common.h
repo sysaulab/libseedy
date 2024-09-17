@@ -41,7 +41,7 @@
 #endif
 
 #define SEEDY_INIT_MS_ 1
-#define SEEDY_INTERVAL_US_ 1000
+#define SEEDY_INTERVAL_US_ 10
 #define NOW() (clock()/(CLOCKS_PER_SEC))
 #define MIN(a,b) (a<b?a:b)
 #define MAX(a,b) (a>b?a:b)

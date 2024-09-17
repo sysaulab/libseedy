@@ -178,7 +178,7 @@ void seedy16(uint8_t* buffer, size_t bytes)
         if(new_report > old_report)
         {
             old_report = new_report;
-            fprintf(stderr, "\b\b\b\b\b\b%zu %% ", (i*100)/((2 * blocks)));
+            fprintf(stderr, "\r%zu %% ", (i*100)/((2 * blocks)));
         }
     }
 

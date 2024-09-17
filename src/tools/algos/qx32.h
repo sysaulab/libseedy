@@ -9,10 +9,10 @@
 
 typedef struct QX32_s
 {
-    volatile void* feeder;
-    volatile uint32_t step;
-    volatile uint32_t iter;
-    volatile uint32_t pool[3][65536];
+    void* feeder;
+    uint32_t step;
+    uint32_t iter;
+    uint32_t pool[2][0x10000];
 }
 QX32;
 
@@ -27,15 +27,18 @@ int qx32_init(QX32* q, void* f)
 uint32_t qx32_at(QX32* q, uint32_t i)
 {
     uint32_t pos32;
-    uint16_t pos1, pos2, pos3;
+    uint16_t pos1, pos2;
+    uint8_t rot1, rot2;
     pos32 = i * q->iter;
-    pos1 = (uint16_t)pos32;
-    pos2 = (uint16_t)(pos32 >> 8);
-    pos3 = (uint16_t)(pos32 >> 16);
 
-    return  q->pool[0][pos1] ^
-            q->pool[1][pos2] ^
-            q->pool[2][pos3] ;
+    pos1 = (uint16_t)(pos32);
+    rot2 = (uint8_t)(pos32) & 0x1f;
+
+    pos2 = (uint16_t)(pos32 >> (16));
+    rot1 = (uint8_t)(pos32 >> 16) & 0x1f;
+
+    return  ROT32(q->pool[0][pos1],rot1) ^
+            ROT32(q->pool[1][pos2],rot2) ;
 }
 
 uint32_t qx32_next(QX32* q)
