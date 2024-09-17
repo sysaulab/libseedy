@@ -1,13 +1,21 @@
 # libseedy's source code
 
-- common.h: Defines common macros, detect features and provides portable-ish stdint.h.
+- common.h: Defines common macros, detect features and provides a 
+portable stdint.h definitions.
 - libseedy16.h: 16 bit header 
 
 ## History
 
-It was new year's eve and I was returning from Yellowknife. I was listening to a podcast about cryptography. A bird flying in the sky inspired me to theorize about the nature of unpredictability ny imagining the turbulences behind the wings.
+It was new year's eve and I was returning from Yellowknife. I was listening 
+to a podcast about cryptography. A bird flying in the sky inspired me to 
+theorize about the nature of unpredictability ny imagining the turbulences 
+behind the wings.
 
-It seemed to me that loose concurrency would be key to achieve my goal. Could I replicate it using software? The image that appeared in my head was one of a system that was interdependent and loosely coupled. Un-coordinated race conditions offers the possibility of loose coupling by intersecting each thread's input with another's output through a shared pointer.
+It seemed to me that loose concurrency would be key to achieve my goal. Could 
+I replicate it using software? The image that appeared in my head was one of a 
+system that was interdependent and loosely coupled. Un-coordinated race 
+conditions offers the possibility of loose coupling by intersecting each 
+thread's input with another's output through a shared pointer.
 
 ## Algorithm and characteristics
 
@@ -17,7 +25,12 @@ It seemed to me that loose concurrency would be key to achieve my goal. Could I 
 - Uses 2MiB of noise data
 - Create a randomly accessible 128EiB pseudo-noise map.
 
-The chaotic generator is capable of providing original entropy reliably on any platform capable of concurrent multithreading. It creates 3 threads, each running a hash function. To better understand it's inner working I will explain the algorithm step by step as if it was performed by people in an office. The hashing functions will be represented by three accountants. The shared memory that connect the ring can be represented by three filing cabinets. 
+The chaotic generator is capable of providing original entropy reliably 
+on any platform capable of concurrent multithreading. It creates 3 threads, 
+each running a hash function. To better understand it's inner working I will 
+explain the algorithm step by step as if it was performed by people in an 
+office. The hashing functions will be represented by three accountants. The 
+shared memory that connect the ring can be represented by three filing cabinets. 
 
 - Accountant A (AA) read from cabinet 3 (C3) and write to cabinet 1 (C1).
 - Accountant B (AB) read from cabinet 1 (C1) and write to cabinet 2 (C2).
@@ -32,17 +45,45 @@ The job of accountant A is:
 1. Write the number 1 on a sheet that remains on his desk.
 2. Do the following 64 times:
     1. Look if the number in C3 is odd or even.
-    2. According to step 1, pick the first number from the next pair on the list. If even use the first number, if odd use the second number.
+    2. According to step 1, pick the first number from the next pair on the 
+	list. If even use the first number, if odd use the second number.
     3. Multiply the number picked with the number on your sheet of paper.
-    4. Go look again at the number in C3 and do a binary xor to combine it with the number currently of your sheet of paper.
-    5. Take the number obtained at the last step and add it to the number in C1, replacing the number in C1.
-3. Use the number on your sheet of paper and combining it with C1 using binary xor.
+    4. Go look again at the number in C3 and do a binary xor to combine it 
+	with the number currently of your sheet of paper.
+    5. Take the number obtained at the last step and add it to the number in 
+	C1, replacing the number in C1.
+3. Use the number on your sheet of paper and combining it with C1 using 
+binary xor.
 
-AB and AC are also doing the same thing with their own respective cabinets. This means that the order each of then access a cabinet to read or write something in it influences the next number of everyone. Since everyone is influencing everyone in a closed ring, no single actor can know its future with certainty without coordinating everyone's actions. The supervisor, who makes a point not to coordinates anything, uses an alarm to periodically go read the number in cabinets C1, C2 and C3, combine them using binary xor and add them to the list...
+AB and AC are also doing the same thing with their own respective 
+cabinets. This means that the order each of then access a cabinet 
+to read or write something in it influences the next number of everyone. 
 
-Each accountant's work in itself is very predictable. When three accountants do this continously, the number they generate will vary wildly according to the order each of them arrive to each cabinet first. When all accountants are not working at the same time, the numbers being calculated are not as chaotic. This is why I describe the behaviour in single core environments as pseudo chaotic. When that happens, the work of each accountant is predictable and only the moment at which they stop and start again contributes to the deviation from the expected norm.
+Since everyone is influencing everyone else in a closed ring, no single 
+actor can know its future with certainty without coordinating everyone's 
+actions. The supervisor, who makes a point not to coordinates anything, 
+uses an alarm to periodically go read the number in cabinets C1, C2 and C3, 
+combine them using binary xor and add them to the list...
 
-While each process is deterministic in itself, the overall configuration makes it an unstable, divergent, complex system. This is what I call "synthetic chaos".
+Each time one of the accountant access the cabinets, it creates an 
+opportunity for divergence. By repeating the process 64 times to compute 
+a 64 bit integer we ensure the number is computed with a sufficient amount 
+of uncertainty to guarantee complete decorrelation after each generation.
+
+Each accountant's work in itself is very predictable. When three 
+accountants do this continously, the number they generate will 
+vary wildly according to the order each of them arrive to each 
+cabinet first. When all accountants are not working at the same 
+time, the numbers being calculated are not as chaotic. 
+
+This is why I describe the behaviour in single core environments 
+as pseudo chaotic. When that happens, the work of each accountant 
+is predictable and only the moment at which they stop and start 
+again contributes to the deviation from the expected norm.
+
+While each process is deterministic when it operates on its own, 
+the overall configuration creates an unstable, divergent, complex 
+system. I call that configuration "synthetic chaos".
 
 ## Testing and observations
 
