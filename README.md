@@ -2,7 +2,9 @@
 
 Portable seedless random number generator.
 
-## Files
+## Directories
+
+Look for README.md in each directories for more information.
 
 - [src/](src/): Source files of the library itself
 - [src/tools/](src/tools/): Source files of optional tools and prngs
@@ -20,19 +22,5 @@ Portable seedless random number generator.
 5. Learn to code C in a portable way.
 
 Read more about the algorithm in the [source code](src/)'s [README](src/README.md).
-
-## Prebuilt programs
-
-Prebuilt programs are kept in 
-
-## Build from source
-
-Makefile in [Unix/](Unix/).
-
-Visual Studio 2022: [VS2022/](VS2022/).
-
-Visual Studio 6: [VS6/](VS6/).
-
-## Gitgub
 
 [sysaulab/libseedy](https://github.com/sysaulab/libseedy).
