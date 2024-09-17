@@ -21,7 +21,7 @@ typedef struct CC832_s
 }
 CC832;
 
-void cc32_init(CC832* s, void* f)
+void cc832_init(CC832* s, void* f)
 {
     s->feeder = f;
     ((void(*)(uint8_t*,size_t))f) ( (uint8_t*)&s->pool, sizeof(s->pool) );
@@ -30,7 +30,7 @@ void cc32_init(CC832* s, void* f)
 	memset(&s->text, 0, 64);
 }
 
-void cc32_refill(CC832* q)
+void cc832_refill(CC832* q)
 {
     if( (q->step&0xffffFFFFffffFFFF) == 0 ) /* reseed at the end of the period, 2^70 bytes - 2^6 bytes according to a comment in line #1006. The mask is there to prevent machines with >64bit word length to repeat the sequence */
     {
@@ -42,26 +42,25 @@ void cc32_refill(CC832* q)
     q->step++;
 }
 
-void cc32_fill(CC832* s, uint8_t* b, size_t n)
+void cc832_fill(CC832* s, uint8_t* b, size_t n)
 {
-	size_t written;
 	size_t requested = n;
-	size_t chunk;
-    size_t pos = 0;
-
-    while(pos < requested) /* There is work to do */
+	size_t chunk_size;
+    size_t written = 0;
+    size_t available = 0;
+    size_t needed = 0;
+    while(written < requested) /* There is work to do */
     {
-		if(s->used < 64) /* There is data available */
+        available = sizeof(s->next) - s->used;
+        needed = n - written;
+        if ( available == 0 )
 		{
-			chunk = MIN(64 - s->used, requested - pos); /* How many bytes are available? How many do I need? Return the smallest. */
-			memcpy(&b[pos], &s->next[s->used], chunk); /* copy what we need for now */
-			pos = pos + chunk; /* Increase our position by the amount written */
-			s->used = s->used + chunk; /* Increase our consumption by the amount written */
+			cc832_refill(s);
 		}
-		else /* There is no data, refill */
-		{
-			cc32_refill(s);
-		}
+        chunk_size = MIN(available, needed); /* How many bytes are available? How many do I need? Return the smallest. It is the size we can copy now...*/
+        memcpy(&b[written], &s->next[s->used], chunk_size); /* copy what we need for now */
+        written += chunk_size; /* Increase our position by the amount written */
+        s->used += chunk_size; /* Increase our consumption by the amount written */
     }
 }
 

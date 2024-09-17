@@ -15,7 +15,6 @@ typedef struct CC2032_s
     void* feeder;
     ChaCha20_Ctx ctx;
 	size_t step;
-	uint8_t text[64];
 	uint8_t next[64];
 	int used;
 }
@@ -23,7 +22,8 @@ CC2032;
 
 void cc2032_init(CC2032* s, void* f)
 {
-    s->feeder = (void*)&f;
+    s->feeder = f;
+    s->used = 64;
 }
 
 void cc2032_refill(CC2032* q)
@@ -45,24 +45,23 @@ void cc2032_refill(CC2032* q)
 
 void cc2032_fill(CC2032* s, uint8_t* b, size_t n)
 {
-	size_t written;
 	size_t requested = n;
-	size_t chunk;
-    size_t pos = 0;
-
-    while(pos < requested) /* There is work to do */
+	size_t chunk_size;
+    size_t written = 0;
+    size_t available = 0;
+    size_t needed = 0;
+    while(written < requested) /* There is work to do */
     {
-		if(s->used < 64) /* There is data available */
-		{
-			chunk = MIN(64 - s->used, requested - pos); /* How many bytes are available? How many do I need? Return the smallest. */
-			memcpy(&b[pos], &s->next[s->used], chunk); /* copy what we need for now */
-			pos = pos + chunk; /* Increase our position by the amount written */
-			s->used = s->used + chunk; /* Increase our consumption by the amount written */
-		}
-		else /* There is no data, refill */
+        available = sizeof(s->next) - s->used;
+        needed = n - written;
+        if ( available == 0 )
 		{
 			cc2032_refill(s);
 		}
+        chunk_size = MIN(available, needed); /* How many bytes are available? How many do I need? Return the smallest. It is the size we can copy now...*/
+        memcpy(&b[written], &s->next[s->used], chunk_size); /* copy what we need for now */
+        written += chunk_size; /* Increase our position by the amount written */
+        s->used += chunk_size; /* Increase our consumption by the amount written */
     }
 }
 

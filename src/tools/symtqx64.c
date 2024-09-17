@@ -3,12 +3,12 @@
 #include "algos/qx64.h"
 #include <stdlib.h>
 
-MT32* MTprng;
+MT32* CCprng;
 QX64* QXprng;
 
 void mt_seeder(uint8_t* b, size_t n)
 {
-    mt32_fill(MTprng, b, n);
+    mt32_fill(CCprng, b, n);
 }
 
 int main(int argc, char** argv)
@@ -16,9 +16,9 @@ int main(int argc, char** argv)
     uint8_t buf[1024];
     int x = 0;
 
-    MTprng = malloc(sizeof(MT32));
+    CCprng = malloc(sizeof(MT32));
     QXprng = malloc(sizeof(QX64));
-    mt32_init(MTprng, &seedy32);
+    mt32_init(CCprng, &seedy32);
     qx64_init(QXprng, &mt_seeder);
     
     while (1)
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
         fwrite(buf, sizeof(buf), 1, stdout);
     }
     return 0;
-    free(MTprng);
+    free(CCprng);
     free(QXprng);
 }
 

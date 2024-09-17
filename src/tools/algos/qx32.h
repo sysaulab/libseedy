@@ -9,25 +9,19 @@
 
 typedef struct QX32_s
 {
-    void* feeder;
-    uint32_t step;
-    uint32_t iter;
-    uint32_t pool[3][65536];
-} QX32;
-void qx32_init(QX32* q, void* f);
-void qx32_fill(QX32* q, uint8_t* b, size_t n);
-uint32_t qx32_next(QX32* q);
-uint32_t qx32_at(QX32* q, uint32_t i);
+    volatile void* feeder;
+    volatile uint32_t step;
+    volatile uint32_t iter;
+    volatile uint32_t pool[3][65536];
+}
+QX32;
 
-
-
-void qx32_init(QX32* q, void* f)
+int qx32_init(QX32* q, void* f)
 {
-    int x = 0;
-    int y = 0;
     q->iter = 1234567907;
     q->step = 0;
     q->feeder = f;
+    return 1;
 }
 
 uint32_t qx32_at(QX32* q, uint32_t i)
