@@ -11,8 +11,9 @@ void mt_seeder(uint8_t* b, size_t n)
 
 int main(int argc, char** argv)
 {
-    uint8_t buf[10240];
     QX64 QXprng;
+    uint8_t buf[10240];
+
     cc2032_init(&CCprng, seedy64);
     qx64_init(&QXprng, (void*)&mt_seeder);
 

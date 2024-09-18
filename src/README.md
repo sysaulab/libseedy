@@ -1,8 +1,14 @@
-# libseedy's source code
+# libseedy, The Code
+
+## Files
 
 - common.h: Defines common macros, detect features and provides a 
-portable stdint.h definitions.
-- libseedy16.h: 16 bit header 
+portable stdint.h definitions to help with portability.
+- libseedy16.h: 16 bit implementation
+- libseedy16.h: 32 bit implementation
+- libseedy16.h: 64 bit implementation
+- pstdint.h: Portable replacement for <stdint.h>
+- seedy.c: demo program, display random hexadecimal sequences
 
 ## History
 

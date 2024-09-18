@@ -32,8 +32,25 @@ Original package here : [mtwister/](mtwister/)
 - **Not cryptographically safe.**
 - 32 bit
 - Excellent bit distribution quality
-- Fast (1.0GiB/s M1).
 - Website [github.io](https://github.com/ESultanik/mtwister).
+- Fill function drop unused bytes.[^1] 
+
+## ChaCha-8 (CC8)
+
+ChaCha-8 reference implementation.
+
+- **Not cryptographically safe.**
+- 32 bit
+- Website [https://cr.yp.to/](https://cr.yp.to/).
+- Fill function drop unused bytes.[^1] 
+
+## ChaCha-20 (CC20)
+
+ChaCha-20 reference implementation.
+
+- **Cryptographically safe.**
+- 32 bit
+- Website [https://cr.yp.to/](https://cr.yp.to/).
 - Fill function drop unused bytes.[^1] 
 
 ## Shishua (SS)
@@ -44,7 +61,7 @@ Original package here : [shishua/](shishua/)
 
 - **Not cryptographically safe.**
 - 64 bit
-- Fastest (2.7GiB/s on M1).
+- Fastest.
 - Website [github.io](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html).
 - Fill function is native.
 
