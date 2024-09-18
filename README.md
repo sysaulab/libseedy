@@ -16,7 +16,7 @@ Look for README.md in each directories for more information.
 - [Make/](Make/): Makefile folder to build the program in Linux, MacOS, *BSD, etc...
 - [Extras/](Extras/): Makefile folder to build the optional tools.
 - [Programs/](Programs/): Prebuilt programs for DOS and Windows
-- VS.zip: Some Visual Studio Project files.
+- VS.zip: Visual Studio Project files.
 
 Website: [sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 
