@@ -114,3 +114,5 @@ Unix/tools/bin/genqx16
 Unix/tools/bin/genmt32
 Unix/tools/bin/gencc832
 Unix/tools/bin/gencc2032
+/Make/include
+/Make/bin

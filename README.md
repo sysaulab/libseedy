@@ -1,16 +1,18 @@
 # libSEEDY
 
-Portable seedless random number generator.
+## What?
 
-## Directories
+A portable seedless random number generator.
 
+## Where?
+
+[sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 Look for README.md in each directories for more information.
 
 - [src/](src/): Source files of the library itself
 - [src/tools/](src/tools/): Source files of optional tools and prngs
-- [Unix/](Unix/): Makefile folder to build the program in Linux, MacOS, *BSD, etc...
-- [Unix/tools/](Unix/tools/): Makefile folder to build the optional tools.
-- [Windows/](Windows/): Folder containing various Visual Studio projects.
+- [Make/](Make/): Makefile folder to build the program in Linux, MacOS, *BSD, etc...
+- [Make/tools/](Make/tools/): Makefile folder to build the optional tools.
 - [Programs/](Programs/): Prebuilt programs for DOS and Windows
 
 ## Why?
@@ -21,6 +23,10 @@ Look for README.md in each directories for more information.
 4. Supplement entropy in case of hardware generators failure or vulnerability.
 5. Learn to code C in a portable way.
 
-Read more about the algorithm in the [source code](src/)'s [README](src/README.md).
+## How?
 
-[sysaulab/libseedy](https://github.com/sysaulab/libseedy).
+By creating an unstable system and measuring its state at interval. Details in a [README](src/README.md) file.
+
+## When?
+
+Now!
