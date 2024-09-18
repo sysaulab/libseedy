@@ -5,6 +5,7 @@
 - [DOS/](DOS/): DOS Port
 - [libseedy/](libseedy/): The library, only headers are needed.
 - [tools/](tools/): Various programs I wrote to test libseedy, including 3rd party algorithms.
+- [seedy.c]: A demo program that display a random hexadecimal sequence computed by libseedy.
 
 ## History
 

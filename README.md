@@ -32,8 +32,18 @@ Website: [sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 
 By creating an unstable system and measuring its internal state at intervals.
 
-More details in a [README](src/README.md) file.
+More details in a [README](src/libseedy/README.md).
+
+## When?
+
+1. I had the idea December 31st 2022.
+2. Coded a bad proof of concept in early january.
+3. Sent my bad code to Professor Brown of Dieharder in early January.
+4. Received a brilliant lecture about entropy from Professor Brown in early January.
+5. I improved the algorithm until April using practrand as reference benchmark.
+6. Validated "32 bit completeness" on first pick using a modified version of the library and in may 2022. The slow nature of the generator tested my own patience.
+7. Major rehaul and cleanup of the code in September 2024, including native a port to Windows.
 
 ## Who?
 
-sylvain@sysau.com
+sylvain AT sysau DOT com
