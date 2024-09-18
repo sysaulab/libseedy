@@ -2,9 +2,13 @@
 
 ## Files
 
-- [DOS/](DOS/): DOS Port
-- [libseedy/](libseedy/): The library, only headers are needed.
-- [tools/](tools/): Various programs I wrote to test libseedy, including 3rd party algorithms.
+- common.h: Defines common macros, detect features and provides a 
+portable stdint.h definitions to help with portability.
+- libseedy16.h: 16 bit implementation
+- libseedy32.h: 32 bit implementation
+- libseedy64.h: 64 bit implementation
+- pstdint.h: Portable replacement for <stdint.h>
+- seedy.c: demo program, display random hexadecimal sequences
 
 ## History
 
