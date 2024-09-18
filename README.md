@@ -1,5 +1,7 @@
 # libSEEDY
 
+[Windows downloads](Programs/Windows/)
+
 ## What?
 
 A portable seedless random number generator.
@@ -14,6 +16,7 @@ Look for README.md in each directories for more information.
 - [Make/](Make/): Makefile folder to build the program in Linux, MacOS, *BSD, etc...
 - [Make/tools/](Make/tools/): Makefile folder to build the optional tools.
 - [Programs/](Programs/): Prebuilt programs for DOS and Windows
+- Windows.zip: Visual Studio Project files.
 
 ## Why?
 
@@ -27,6 +30,6 @@ Look for README.md in each directories for more information.
 
 By creating an unstable system and measuring its state at interval. Details in a [README](src/README.md) file.
 
-## When?
+## Who?
 
-Now!
+sylvain@sysau.com

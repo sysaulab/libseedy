@@ -1,9 +1,10 @@
 # Prebuilt programs
 
-I prepared two commands to demonstrate the effectiveness of libseedy:
+I prepared three commands to demonstrate the effectiveness of libseedy:
 
-- seedy: libseedy is sent to output unfiltered.
-- fastrand: libseedy initiate a fast prng that is sent to the output.
+- seedy: libseedy unfiltered.
+- fastrand: libseedy with Shishua.
+- saferand: libseedy with ChaCha-20.
 
 ## Windows
 
