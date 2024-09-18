@@ -20,8 +20,6 @@ QX64;
 
 void qx64_init(QX64* q, void* f)
 {
-    int x = 0;
-    int y = 0;
     q->iter = 12345678912345678943ULL;
     q->step = 0;
     q->feeder = f;
@@ -41,8 +39,7 @@ uint64_t qx64_at(QX64* q, uint64_t i)
 
 uint64_t qx64_next(QX64* q)
 {
-    uint64_t next, pos64;
-    uint16_t* pos16 = (uint16_t*)&pos64;
+    uint64_t next;
 
     if( q->step == 0 )
     {

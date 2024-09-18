@@ -14,7 +14,6 @@ void mt_seeder(uint8_t* b, size_t n)
 int main(int argc, char** argv)
 {
     uint8_t buf[1024];
-    int x = 0;
 
     CCprng = malloc(sizeof(MT32));
     QXprng = malloc(sizeof(QX64));

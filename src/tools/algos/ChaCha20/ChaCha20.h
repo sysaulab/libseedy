@@ -125,7 +125,8 @@ static uint32_t pack4(const uint8_t* a)
 
 static void ChaCha20_block_next(const uint32_t in[16], uint32_t out[16], uint8_t** keystream)
 {
-	for(int i = 0; i < 4*4; i++)
+	int i;
+	for(i = 0; i < 4*4; i++)
 		out[i] = in[i];
 
 	// Round 1/10
@@ -228,7 +229,7 @@ static void ChaCha20_block_next(const uint32_t in[16], uint32_t out[16], uint8_t
 	CHACHA20_QR(out[2], out[7], out[ 8], out[13]);
 	CHACHA20_QR(out[3], out[4], out[ 9], out[14]);
 
-	for(int i = 0; i < 4*4; i++)
+	for(i = 0; i < 4*4; i++)
 		out[i] += in[i];
 
 	if(keystream != NULL)
@@ -257,10 +258,11 @@ void ChaCha20_init(ChaCha20_Ctx* ctx, const key256_t key, const nonce96_t nonce,
 
 void ChaCha20_xor(ChaCha20_Ctx* ctx, uint8_t* buffer, size_t bufflen)
 {
+	size_t i, j;
 	uint32_t tmp[4*4];
 	uint8_t* keystream = NULL;
 
-	for(size_t i = 0; i < bufflen; i += 64)
+	for(i = 0; i < bufflen; i += 64)
 	{
 		ChaCha20_block_next(ctx->state, tmp, &keystream);
 		ctx->state[12]++;
@@ -271,7 +273,7 @@ void ChaCha20_xor(ChaCha20_Ctx* ctx, uint8_t* buffer, size_t bufflen)
 			assert(ctx->state[13] != 0);
 		}
 
-		for(size_t j = i; j < i + 64; j++)
+		for(j = i; j < i + 64; j++)
 		{
 			if(j >= bufflen)
 				break;

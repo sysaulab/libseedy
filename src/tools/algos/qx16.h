@@ -18,8 +18,6 @@ QX16;
 
 void qx16_init(QX16* q, void* f)
 {
-    int x = 0;
-    int y = 0;
     q->iter = 12347;
     q->step = 0;
     q->feeder = f;
@@ -41,8 +39,7 @@ uint16_t qx16_at(QX16* q, uint16_t i)
 
 uint16_t qx16_next(QX16* q)
 {
-    uint16_t next, pos;
-    uint16_t* pos16 = (uint16_t*)&pos;
+    uint16_t next;
     if( q->step == 0 )
     {
         ((void(*)(uint8_t* b, uint16_t n))q->feeder)((uint8_t*)&q->pool, sizeof(q->pool));
@@ -59,7 +56,6 @@ void qx16_fill(QX16* rand, uint8_t* b, size_t n)
     size_t pos = 0;
     size_t blocks = n / 2;
     size_t bytes = n % 2;
-    uint16_t last;
     uint16_t next;
     while(pos < blocks)
     {

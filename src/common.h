@@ -22,7 +22,7 @@
 #define LIBSEEDY_OPT32
 #define LIBSEEDY_OPT_PROGRESS
 
-#if defined(UINT64_MAX)
+#if defined(UINT64_MAX0)
 #   define LIBSEEDY_OPT64
 #endif
 
@@ -34,10 +34,13 @@
 #   include <pthread.h>
 #   include <unistd.h>
 #   include <sys/random.h>
-#   include <stdio.h>       /* For reporting progress when fill takes long time */
-#   include <time.h>        /* For reporting progress when fill takes long time */
 #   define wait_ms(ms) usleep(ms * 1000)
 #   define wait_us(us) usleep(us)
+#endif
+
+#if defined(LIBSEEDY_OPT_PROGRESS)
+#   include <stdio.h>       /* For reporting progress when fill takes long time */
+#   include <time.h>        /* For reporting progress when fill takes long time */
 #endif
 
 #define SEEDY_INIT_MS_ 1
@@ -50,3 +53,4 @@
 #define ROT64(a,n) ((a<<(n%64))|(a>>(64-(n%64))))
 
 #endif
+

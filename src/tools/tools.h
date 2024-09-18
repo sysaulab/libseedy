@@ -27,20 +27,20 @@ void* parseinputgen(int argc, char** argv)
     {
 
         if(strcmp(argv[1], "stdin") == 0)
-            return (void*)&stdinput;
+            return (void*)stdinput;
                     /*
                     The "&" removes a warning in old MS compilers,
                     The "(void*)" removes an error the & introduced in modern compilers.
                     */
     }
 #   if defined(LIBSEEDY_OPT64)
-        return (void*)&seedy64;
+        return (void*)seedy64;
 #   elif defined(LIBSEEDY_OPT32)
-        return (void*)&seedy32;
+        return (void*)seedy32;
 #   elif defined(LIBSEEDY_OPT16)
-        return (void*)&seedy16;
+        return (void*)seedy16;
 #   else
-        return (void*)&stdinput;
+        return stdinput;
 #   endif
 }
 

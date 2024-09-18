@@ -182,11 +182,9 @@ void seedy32(uint8_t* buffer, size_t bytes)
     uint32_t next_pick;
     SEEDY32 state;
     size_t blocks; 
-    size_t partial; 
     clock_t old_report;
     clock_t new_report;
     blocks = bytes / 4;
-    partial = bytes % 4;
 
     start_seeder_32(&state);
     wait_ms(SEEDY_INIT_MS_);
@@ -227,3 +225,4 @@ void seedy32(uint8_t* buffer, size_t bytes)
 }
 
 #endif
+

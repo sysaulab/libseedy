@@ -154,9 +154,7 @@ void seedy16(uint8_t* buffer, size_t bytes)
     clock_t new_report;
     SEEDY16 state;
     size_t blocks; 
-    size_t partial; 
     blocks = bytes / 2;
-    partial = bytes % 2;
 
     start_seeder_16(&state);
     wait_ms(SEEDY_INIT_MS_);

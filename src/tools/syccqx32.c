@@ -10,7 +10,6 @@ void mt_seeder(uint8_t* b, size_t n)
 
 int main(int argc, char** argv)
 {
-    int x = 0;
     uint8_t buf[10240];
 
     cc2032_init(&CCprng, seedy32);

@@ -1,5 +1,6 @@
 #include "algos/prime64.h"
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char** argv)
 {

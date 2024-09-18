@@ -275,9 +275,7 @@ void seedy64(uint8_t* buffer, size_t bytes)
 #endif
     SEEDY64 state;
     size_t blocks; 
-    size_t partial; 
     blocks = bytes / 8;
-    partial = bytes % 8;
 
     start_seeder_64(&state);
     wait_ms(SEEDY_INIT_MS_);

@@ -43,8 +43,7 @@ uint32_t qx32_at(QX32* q, uint32_t i)
 
 uint32_t qx32_next(QX32* q)
 {
-    uint32_t next, pos32;
-    uint16_t* pos16 = (uint16_t*)&pos32;
+    uint32_t next;
 
     if( q->step == 0 )
     {

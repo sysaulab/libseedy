@@ -112,3 +112,4 @@ void ECRYPT_keystream_bytes(ECRYPT_ctx *x,u8 *stream,u32 bytes)
   for (i = 0;i < bytes;++i) stream[i] = 0;
   ECRYPT_encrypt_bytes(x,stream,stream,bytes);
 }
+
