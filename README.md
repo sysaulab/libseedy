@@ -8,15 +8,17 @@ A portable seedless random number generator.
 
 ## Where?
 
-[sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 Look for README.md in each directories for more information.
 
 - [src/](src/): Source files of the library itself
 - [src/tools/](src/tools/): Source files of optional tools and prngs
+- [src/DOS/](src/DOS/): DOS Port, Turbo-C.
 - [Make/](Make/): Makefile folder to build the program in Linux, MacOS, *BSD, etc...
-- [Make/tools/](Make/tools/): Makefile folder to build the optional tools.
+- [Extras/](Extras/): Makefile folder to build the optional tools.
 - [Programs/](Programs/): Prebuilt programs for DOS and Windows
-- Windows.zip: Visual Studio Project files.
+- VS.zip: Some Visual Studio Project files.
+
+Website: [sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 
 ## Why?
 
@@ -28,7 +30,9 @@ Look for README.md in each directories for more information.
 
 ## How?
 
-By creating an unstable system and measuring its state at interval. Details in a [README](src/README.md) file.
+By creating an unstable system and measuring its internal state at intervals.
+
+More details in a [README](src/README.md) file.
 
 ## Who?
 

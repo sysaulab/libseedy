@@ -4,7 +4,7 @@ Many algorithms are provided with the tools. The tools and prng's are not offici
 
 ## Quad XOR (QX)
 
-- **Not cryptographically safe.**
+- **NOT** cryptographically safe.
 - 64 bit (2M pool -> 128EiB period) 70368744177664x
 - 32 bit (768K pool -> 16GiB period) 22357x
 - 16 bit (16K pool -> 128K period) 8x
@@ -29,7 +29,7 @@ I attempted a simple 16 port of mersenne twister to see if it was possible and w
 
 Original package here : [mtwister/](mtwister/)
 
-- **Not cryptographically safe.**
+- **NOT** cryptographically safe.
 - 32 bit
 - Excellent bit distribution quality
 - Website [github.io](https://github.com/ESultanik/mtwister).
@@ -39,19 +39,19 @@ Original package here : [mtwister/](mtwister/)
 
 ChaCha-8 reference implementation.
 
-- **Not cryptographically safe.**
+- **NOT** cryptographically safe.
 - 32 bit
 - Website [https://cr.yp.to/](https://cr.yp.to/).
-- Fill function drop unused bytes.[^1] 
+- Fill function maintains the sequence. 
 
 ## ChaCha-20 (CC20)
 
 ChaCha-20 reference implementation.
 
-- **Cryptographically safe.**
+- Cryptographically safe.
 - 32 bit
 - Website [https://cr.yp.to/](https://cr.yp.to/).
-- Fill function drop unused bytes.[^1] 
+- Fill function maintains the sequence. 
 
 ## Shishua (SS)
 
@@ -59,7 +59,7 @@ I am not intimate with the internals of this algorithm.
 
 Original package here : [shishua/](shishua/)
 
-- **Not cryptographically safe.**
+- **NOT** cryptographically safe.
 - 64 bit
 - Fastest.
 - Website [github.io](https://espadrine.github.io/blog/posts/shishua-the-fastest-prng-in-the-world.html).

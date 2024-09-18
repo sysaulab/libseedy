@@ -35,7 +35,12 @@
  *                                   HEADER                                   *
  ******************************************************************************/
 
-#include "../../../pstdint.h"
+/*
+<stdint.h>
+removed to integratre with a portable altervative
+Lload after tools.h
+*/
+
 #include <stddef.h>
 
 /** @brief Alias for ChaCha20 key type */

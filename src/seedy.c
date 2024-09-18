@@ -1,11 +1,11 @@
-#include "common.h"
+#include <libseedy/common.h>
 
 #if defined(LIBSEEDY_OPT64)
-#   include "libseedy64.h"
+#   include <libseedy/libseedy64.h>
 #elif defined(LIBSEEDY_OPT32)      
-#   include "libseedy32.h"
+#   include <libseedy/libseedy32.h>
 #elif defined(LIBSEEDY_OPT16) 
-#   include "libseedy16.h"
+#   include <libseedy/libseedy16.h>
 #endif
 
 #include <stdlib.h>
