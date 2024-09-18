@@ -1,17 +1,23 @@
 # Tools
 
+## Files
+
+- [algos/](algos/): Third party integration and shims to provide simple unified interface between prng and tools.
+
 ## Generic generators
 
-Generator commands implement a single algorithm seeded internally with seedy or from an outside source. I created them as debugging, quality control and testing tools. All commands uses the seedy internal seed generator by default. You can override the default by passing the name of the source as an argument like so:
+Generator commands implement a single algorithm seeded internally with seedy or from an outside source. I created them as debugging, quality control and testing tools. All commands uses the seedy internal seed generator by default. You can override the default by passing the name of the source as an argument. Example:
 
-- genqxo64 stdin < /dev/urandom
-- genqxo64 
+- _gen_ qxo64 stdin < /dev/urandom
+- _gen_ qxo64 
 
 stdin: reads from the standard input.
 
 default: self-seeded using libseedy.
 
-**genmt16:** Mersenne Twister - 16 bit - removed (it was no good)
+**gencc832:** ChaCha8 - 32 bit - rerefence
+
+**gencc2032:** ChaCha20 - 32 bit - reference[^cc20]
 
 **genmt32:** Mersenne Twister - 32 bit - reference
 
@@ -49,13 +55,18 @@ Seeding > PRNGs > User
 
 **syccqx64** seedy > CC2032 > QX64
 
-**symt32** seedy > MT32
+**symt32** seedy > MT32[^mt32]
 
 **symtqx32** seedy > MT32 > QX32
 
 **symtqx64** seedy > MT32 > QX64
 
-**syss64** seedy > SS64
+**syss64** seedy > SS64[^ss64]
 
 **wincrypt.c** Example of using Windows Crypto API to obtain a seed.
 
+[^cc20]: Used in saferand.exe in the Windows Programs.
+
+[^ss64]: Used in fastrand.exe in the Windows Programs.
+
+[^mt32]: Used in the dos port. Next time I revisit DOS I will replace it with ChaCha20.
