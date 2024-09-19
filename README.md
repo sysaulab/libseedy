@@ -35,7 +35,7 @@ Website: [sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 
 By creating an unstable system and measuring its internal state at intervals.
 
-More details in a [README](src/libseedy/README.md).
+More details in this [README](src/libseedy/README.md).
 
 ## When?
 
