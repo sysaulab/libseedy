@@ -20,6 +20,12 @@ Windows 95 and up. ( libseedy -> mersenne twister -> qx32 )
 
 - [win32/](win32/)
 
+## Haiku OS
+
+x64 build of a GUI program showing a seed computed by libseedy. A basic driver for a true RNG driver named seedy has compiled with success but remains untested.
+
+- [Haiku/](Haiku/) (64 bit build)
+
 ## DOS
 
 Tested with (Compaq) Dos 2.11 on 86box.

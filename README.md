@@ -17,6 +17,7 @@ Look for README.md in each directories for more information.
 - [Extras/](Extras/): Makefile folder to build the optional tools.
 - [Programs/](Programs/): Prebuilt programs for DOS and Windows
 - VS.zip: Visual Studio Project files.
+- BE.zip: Haiku OS project files, should be source compatible with original BeOS.
 
 Website: [sysaulab/libseedy](https://github.com/sysaulab/libseedy).
 

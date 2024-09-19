@@ -8,11 +8,22 @@ typedef struct seed_thread16_s
     volatile uint16_t *source;
     volatile uint16_t *sink;
     int run;
+/*
+ *   START ##### PORTABLE BLOCK ##### START
+ */
 #   if defined(_WIN32)
         HANDLE thr;
+
+#   elif defined(__HAIKU__)
+        thread_id thr;
+
 #   else
         pthread_t thr;
+
 #   endif
+/*
+ *   END ##### PORTABLE BLOCK ##### END
+ */
 }
 seed_thread_16;
 
@@ -108,24 +119,36 @@ void start_seeder_16(SEEDY16* state)
     state->threads[1].run = 1;
     state->threads[2].run = 1;
 
-    #ifdef _WIN32
+/*
+ *   START ##### PORTABLE BLOCK ##### START
+ */
+     #if defined(_WIN32)
         state->threads[0].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main_16, &(state->threads[0]), (DWORD)0, NULL);
         state->threads[1].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main_16, &(state->threads[1]), (DWORD)0, NULL);
         state->threads[2].thr = CreateThread((LPSECURITY_ATTRIBUTES)NULL, 0, (LPTHREAD_START_ROUTINE)&seed_thread_main_16, &(state->threads[2]), (DWORD)0, NULL);
-    #else
+    
+    #elif defined(__HAIKU__)
+        state->threads[0].thr = spawn_thread((int(*)(void*))&seed_thread_main_16, "Seedy Accountant Number A", B_NORMAL_PRIORITY, &(state->threads[0]));
+        state->threads[1].thr = spawn_thread((int(*)(void*))&seed_thread_main_16, "Seedy Accountant Number B", B_NORMAL_PRIORITY, &(state->threads[1]));
+        state->threads[2].thr = spawn_thread((int(*)(void*))&seed_thread_main_16, "Seedy Accountant Number C", B_NORMAL_PRIORITY, &(state->threads[2]));
+        if ( B_OK != 
+            ( resume_thread(state->threads[0].thr ) ) &
+            ( resume_thread(state->threads[1].thr ) ) &
+            ( resume_thread(state->threads[2].thr ) ) )
+        {
+            fprintf(stderr, "ERROR resuming threads.\n");
+            exit(0);
+        }
+
+    #else /* POSIX */
         pthread_create(&(state->threads[0].thr), NULL, &seed_thread_main_16, &(state->threads[0]));
         pthread_create(&(state->threads[1].thr), NULL, &seed_thread_main_16, &(state->threads[1]));
         pthread_create(&(state->threads[2].thr), NULL, &seed_thread_main_16, &(state->threads[2]));
-    #endif
 
-    while( i < 3 )
-    {
-        state->nodes[i] = 0;
-        state->threads[i].source = &(state->nodes[i]);
-        state->threads[i].sink = &(state->nodes[(i + 1) % 3]);
-        state->threads[i].run = 1;
-        i++;
-    }
+    #endif
+/*
+ *   END ##### PORTABLE BLOCK ##### END
+ */
 }
 
 void stop_seeder_16(SEEDY16* state)

@@ -30,10 +30,15 @@
 #   include <windows.h>
 #   define wait_ms(ms) Sleep(ms)
 #   define wait_us(ms) Sleep(1)
+#elif defined(__HAIKU__)
+#   include <kernel/OS.h>
+#   include <cstdlib>
+#   include <unistd.h>
+#   define wait_ms(ms) usleep(ms * 1000)
+#   define wait_us(us) usleep(us)
 #else
 #   include <pthread.h>
 #   include <unistd.h>
-#   include <sys/random.h>
 #   define wait_ms(ms) usleep(ms * 1000)
 #   define wait_us(us) usleep(us)
 #endif
@@ -46,8 +51,15 @@
 #define SEEDY_INIT_MS_ 1
 #define SEEDY_INTERVAL_US_ 10
 #define NOW() (clock()/(CLOCKS_PER_SEC))
-#define MIN(a,b) (a<b?a:b)
-#define MAX(a,b) (a>b?a:b)
+
+#ifndef MIN
+#define MIN(a,b) ((a)<(b)?(a):(b))
+#endif
+
+#ifndef MAX
+#define MAX(a,b) ((a)>(b)?(a):(b))
+#endif
+
 #define ROT16(a,n) ((a<<(n%16))|(a>>(16-(n%16))))
 #define ROT32(a,n) ((a<<(n%32))|(a>>(32-(n%32))))
 #define ROT64(a,n) ((a<<(n%64))|(a>>(64-(n%64))))
