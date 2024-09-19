@@ -1,10 +1,12 @@
 # libSEEDY
 
-[Windows downloads](Programs/Windows/)
+[Downloads](Programs/)
 
-## What?
+## What...
 
-A portable seedless random number generator.
+...is it? A portable seedless random number generator.
+
+...is new? Support for BeOS!
 
 ## Where?
 
