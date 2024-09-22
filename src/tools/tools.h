@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 /* TODO: Intergrate this to the library */
-typedef int (*filler_t)(void *, const char *, const struct stat *, off_t);
+/* typedef int (*filler_t)(void *, const char *, const struct stat *, off_t); */
 
 /*
  *   AJUST FOR PORTS...
