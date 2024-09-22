@@ -2,6 +2,14 @@
 
 Many algorithms are provided with the tools. The tools and prng's are not officially part of the package and are provided for your convenience only. The only alterations I make to the third party libraries consist to remove the <stdint.h> and move all declarations to the beginning of code blocks when old compilers complains. 
 
+## Noise Map (NM64)
+
+Creates a virtual one-time-pad directly accessible as a file, 16 exbibytes. For the seedyfs implementation. Holds an individual file. Based on QX.
+
+## Noise Map (NM80)
+
+Creates 65536 virtual one-time-pads, each directly accessible as a file, 1 yobibyte long. For the seedyfs implementation A folder will hold 65536 files, one for each individual bank of the static map.
+
 ## Quad XOR (QX)
 
 - **NOT** cryptographically safe.
@@ -23,7 +31,7 @@ I created a 32 bit version to offer the fastest algorithm on 32 bit platforms. T
 
 The 16 bit variation also passes practrand but the performance is not great and requires constant reseed. Also the 768kb state makes it too large for DOS. I do forsee see any practical application, but if anyone needs to "amplify data" in 16 bits, this 8x expander  pass practrand.
 
-## Mersenne Twister (MT)
+## Mersenne Twister (MT) - Historical algorithm
 
 I attempted a simple 16 port of mersenne twister to see if it was possible and went nowhere after an initial port. I removed it from the codebase as it was failing every tests. This is a reference implementation.
 

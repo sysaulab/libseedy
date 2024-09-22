@@ -1,6 +1,8 @@
-#include <libseedy/libseedy64.h>
+#include "tools.h"
+#include "../libseedy/libseedy64.h"
 #include "algos/cc2032.h"
 #include "algos/qx64.h"
+#include "stdio.h"
 
 CC2032 CCprng;
 

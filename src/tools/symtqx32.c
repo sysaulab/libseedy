@@ -1,4 +1,5 @@
-#include <libseedy/libseedy32.h>
+#include "tools.h"
+#include "../libseedy/libseedy32.h"
 #include "algos/mt32.h"
 #include "algos/qx32.h"
 

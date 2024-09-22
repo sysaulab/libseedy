@@ -19,6 +19,8 @@ default: self-seeded using libseedy.
 
 **gencc2032:** ChaCha20 - 32 bit - reference[^cc20]
 
+**gennm64:** Noise Map, first 16 EiB. - 64 bit - to implement random filesystem.
+
 **genmt32:** Mersenne Twister - 32 bit - reference
 
 **genqxo16** Quad XOR - 16 bit - experimental
@@ -47,8 +49,6 @@ Returns the next prime number equal or higher than: nprime64 10 -> 11. Included 
 
 ## Fixed solutions
 
-Seeding > PRNGs > User
-
 **sycc2032** seedy > CC2032
 
 **syccqx32** seedy > CC2032 > QX32
@@ -61,7 +61,13 @@ Seeding > PRNGs > User
 
 **symtqx64** seedy > MT32 > QX64
 
-**syss64** seedy > SS64[^ss64]
+## Other tools
+
+**testnm64** static noise map, 64 bit
+
+**testnm80** static noise map, 80 bit
+
+**testnm64.c** seedy > SS64[^ss64]
 
 **wincrypt.c** Example of using Windows Crypto API to obtain a seed.
 
