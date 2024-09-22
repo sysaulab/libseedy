@@ -1,10 +1,13 @@
 CC=cc
-CFLAGS= -O3 -Wall -lpthread
+CFLAGS= -O0 -lfuse-t -D_FILE_OFFSET_BITS=64
 prefix=/usr/local
 src=../src/tools
 
-all: $(src)/gencc832 $(src)/gencc2032 $(src)/genmt32 $(src)/genqx16 $(src)/genqx32 $(src)/genqx64 $(src)/gensy16 $(src)/gensy32 $(src)/gensy64 $(src)/genss64 $(src)/nprime16 $(src)/nprime32 $(src)/nprime64 $(src)/symt32 $(src)/symtqx32 $(src)/symtqx64 $(src)/syss64 $(src)/sycc2032 $(src)/syccqx32 $(src)/syccqx64
+all: $(src)/gennm64 $(src)/testnm64 $(src)/testnm80 $(src)/gencc832 $(src)/gencc2032 $(src)/genmt32 $(src)/genqx16 $(src)/genqx32 $(src)/genqx64 $(src)/gensy16 $(src)/gensy32 $(src)/gensy64 $(src)/genss64 $(src)/nprime16 $(src)/nprime32 $(src)/nprime64 $(src)/goodprimes $(src)/symt32 $(src)/symtqx32 $(src)/symtqx64 $(src)/syss64 $(src)/sycc2032 $(src)/syccqx32 $(src)/syccqx64
 	mkdir -p bin
+	mv $(src)/testnm64 bin
+	mv $(src)/testnm80 bin
+	mv $(src)/gennm64 bin
 	mv $(src)/gencc832 bin
 	mv $(src)/gencc2032 bin
 	mv $(src)/genmt32 bin
@@ -18,6 +21,7 @@ all: $(src)/gencc832 $(src)/gencc2032 $(src)/genmt32 $(src)/genqx16 $(src)/genqx
 	mv $(src)/nprime16 bin
 	mv $(src)/nprime32 bin
 	mv $(src)/nprime64 bin
+	mv $(src)/goodprimes bin
 	mv $(src)/symt32 bin
 	mv $(src)/symtqx32 bin
 	mv $(src)/symtqx64 bin
@@ -26,6 +30,7 @@ all: $(src)/gencc832 $(src)/gencc2032 $(src)/genmt32 $(src)/genqx16 $(src)/genqx
 	mv $(src)/syccqx32 bin
 	mv $(src)/syccqx64 bin
 
+$(src)/gennm64: $(src)/gennm64.c
 $(src)/gencc832: $(src)/gencc832.c
 $(src)/gencc2032: $(src)/gencc2032.c
 $(src)/genmt32: $(src)/genmt32.c
@@ -36,6 +41,7 @@ $(src)/gensy16: $(src)/gensy16.c
 $(src)/gensy32: $(src)/gensy32.c
 $(src)/gensy64: $(src)/gensy64.c
 $(src)/genss64: $(src)/genss64.c
+$(src)/goodprimes: $(src)/goodprimes.c 
 $(src)/nprime64: $(src)/nprime64.c 
 $(src)/nprime32: $(src)/nprime32.c 
 $(src)/nprime16: $(src)/nprime16.c 

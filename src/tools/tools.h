@@ -1,16 +1,20 @@
 #ifndef LIBSEEDY_COMMON_TOOLS_H_
 #define LIBSEEDY_COMMON_TOOLS_H_
 
-#include <libseedy/common.h>
+#include "../libseedy/common.h"
 #if defined(LIBSEEDY_OPT64)
-    #include <libseedy/libseedy64.h>
+    #include "libseedy/libseedy64.h"
 #elif defined(LIBSEEDY_OPT32)
-    #include <libseedy/libseedy32.h>
+    #include "libseedy/libseedy32.h"
 #elif defined(LIBSEEDY_OPT16)
-    #include <libseedy/libseedy16.h>
+    #include "libseedy/libseedy16.h"
 #endif
 
 #include <string.h>
+#include <stdio.h>
+
+/* TODO: Intergrate this to the library */
+/* typedef int (*filler_t)(void *, const char *, const struct stat *, off_t); */
 
 /*
  *   AJUST FOR PORTS...
@@ -28,10 +32,7 @@ void* parseinputgen(int argc, char** argv)
 
         if(strcmp(argv[1], "stdin") == 0)
             return (void*)stdinput;
-                    /*
-                    The "&" removes a warning in old MS compilers,
-                    The "(void*)" removes an error the & introduced in modern compilers.
-                    */
+
     }
 #   if defined(LIBSEEDY_OPT64)
         return (void*)seedy64;

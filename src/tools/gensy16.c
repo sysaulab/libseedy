@@ -1,5 +1,5 @@
 #include "tools.h"
-#include <libseedy/libseedy16.h>
+#include "../libseedy/libseedy16.h"
 
 int main(int argc, char** argv)
 {
