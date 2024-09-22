@@ -15,8 +15,8 @@
 
 typedef struct NM80_s 
 {
-    uint64_t noise[4][65536];
     uint64_t iters[8192];
+    uint64_t noise[4][65536];
 }
 NM80;
 

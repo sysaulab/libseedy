@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     
     while (1)
     {
-        nm80_fill(&prng, buf, sizeof(buf), 0);
+        nm80_fill(&prng, buf, sizeof(buf), 0, 0);
         fwrite(buf, sizeof(buf), 1, stdout);
     }
     return 0;

@@ -26,19 +26,19 @@ MacOS effective maximum reported file size: 9,223,372,036,854,775,807 bytes. At 
 
 ![Info window displaying information about a file with a size set to 0x7FFFFFFFFFFFFFFF](finder.png)
 
-To see the data in the files, I used the excellent [Hexfiend](https://hexfiend.com). The latest version of the program handles the extremely large files very well. The only complain I have is a minor display issue. The information displayed can be cut when we scroll down.
+To see the data in the files, I used the excellent [Hexfiend](https://hexfiend.com). The latest version of the program handles the extremely large files very well. The only complain I have is a minor display issue. The information displayed can be cut when we scroll down. [🐞](https://github.com/HexFiend/HexFiend/issues/488)
 
 ![Info window displaying information about a file with a size set to 0x7FFFFFFFFFFFFFFF](hexfiend-bad.png)
 
-I did not find any documented mechanish to let programs know of the effective filesize limit in general. It seems to me that the upper limit of edges cases have not been tested and lack documentation.
+I did not find any documented mechanish to let programs know of the effective filesize limit in general. It seems to me that the upper limit of edges cases have not been tested and lack documentation. [🐛](MACOS-BUG-REPORT.txt)
 
-I found a vague reference to _FILE_OFFSET_BITS that *may* be defined on some platforms in Linux [documentation](https://www.man7.org/linux/man-pages/man3/loff_t.3type.html).
+I found a vague reference to _FILE_OFFSET_BITS that *may* be defined on some platforms in Linux [📖](https://www.man7.org/linux/man-pages/man3/loff_t.3type.html).
 
 As of today, macos is preventing me to expose the upper half of my files and FUSE is limiting how many of them I can expose. This makes the noise exposed to be (1/2)*(1/256) 512 times smaller than it could.
 
-I could only list the first file and allow 65536 to be stat open and read, that would take care of the current limits of FUSE-T I experienced but I doubt it would be POSIX compliant. It is regrettable commercial operating systems providers are not providing native libFUSE implementations.
+I could only list the first file and allow 65536 to be stat open and read, that would take care of the current limits of FUSE-T I experienced but I doubt it would be POSIX compliant. It is regrettable commercial operating systems providers are not providing native libFUSE implementations. [🐜](https://github.com/macos-fuse-t/fuse-t/issues/63)
 
-## Bugs
+## Known Bugs
 
 - State is not conserved across mounts.
 
