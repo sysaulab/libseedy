@@ -104,16 +104,14 @@ char VALUE[100];
 #define debugU64(a,b) ;
 #endif
 
-
 /* To handle the opened directories. */
 
-
-
-
-
+#define GET_BANK(fi) (((FILE*)fi->fh)->_cookie)
+#define GET_OFFSET(fi) (((FILE*)fi->fh)->_extra)
+#define GETU128(a,b) (uint128_t)((uint128_t)(a)<<64|(uint128_t)(b))
+#define GETINDEX(fi) GETU128(GET_BANK(fi),GET_OFFSET(fi))
 
 /* MY CODE A A A A A A A A A A A A A A A A A A A A A A A A A A A A A */
-
 
 struct loopback {
     uint32_t blocksize;
@@ -122,38 +120,149 @@ struct loopback {
 
 static struct loopback loopback;
 
+int ishex(char c)
+{
+    if
+    (
+        ( c >= 'a' && c <= 'f' ) ||
+        ( c >= 'A' && c <= 'F' ) ||
+        ( c >= '0' && c <= '9' )
+    )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+uint128_t parse_path (char* path)
+{
+    debug("parse_path","");
+    
+    uint128_t result = 0;
+    int done = 0;
+
+    for(int pos = 3; done == 0; pos++)
+    {
+        switch (path[pos])
+        {
+            case '0':
+                result = (result << 4) | 0;
+                break;
+            case '1':
+                result = (result << 4) | 1;
+                break;
+            case '2':
+                result = (result << 4) | 2;
+                break;
+            case '3':
+                result = (result << 4) | 3;
+                break;
+            case '4':
+                result = (result << 4) | 4;
+                break;
+            case '5':
+                result = (result << 4) | 5;
+                break;
+            case '6':
+                result = (result << 4) | 6;
+                break;
+            case '7':
+                result = (result << 4) | 7;
+                break;
+            case '8':
+                result = (result << 4) | 8;
+                break;
+            case '9':
+                result = (result << 4) | 9;
+                break;
+            case 'a':
+            case 'A':
+                result = (result << 4) | 10;
+                break;
+            case 'b':
+            case 'B':
+                result = (result << 4) | 11;
+                break;
+            case 'c':
+            case 'C':
+                result = (result << 4) | 12;
+                break;
+            case 'd':
+            case 'D':
+                result = (result << 4) | 13;
+                break;
+            case 'e':
+            case 'E':
+                result = (result << 4) | 14;
+                break;
+            case 'f':
+            case 'F':
+                result = (result << 4) | 15;
+                break;
+            default:
+                done = 1;
+        }
+    }
+    debugU64x("r_low",(result>>64));
+    debugU64x("r_high",(result));
+    return result;
+}
+
+#define isData(path) if( path[1] == '0' && path[2] == 'x' && ishex(path[3]) )
+
 static int
 loopback_getattr( const char *path, struct stat *stbuf)
 {
     /* https://www.man7.org/linux/man-pages/man7/inode.7.html */
     
     int res;
-
+debug("loopback_getattr()", (char*)path);
     if (0 == strcmp("/", path) )
     {
         res = lstat(BASEPATH, stbuf);
+        return 0;
     }
     else if (0 == strcmp("/.metadata_never_index", path) )
     {
         res = lstat(RNGPATH, stbuf);
         stbuf->st_size = 0;
-    }
-    else /* is a file */
+        return 0;
+    }    
+    else isData(path)
     {
-        int16_t val;
-        
-        if(1 == sscanf(path, "/%hx.bin", &val))
+        res = lstat(RNGPATH, stbuf);
+        uint128_t base_offset = parse_path((char*)path);
+        uint128_t avail;
+        uint128_t max = GETU128(0x0000000000010000, 0x0);
+        uint128_t two63m1 = 0x7FFFFFFFFFFFFFFF;
+
+        if(base_offset >= max)
         {
-            res = lstat(RNGPATH, stbuf);
-            stbuf->st_size = 0x7FFFFFFFFFFFFFFF; /* MACOS UPPER LIMIT: 0x7FFFFFFFFFFFFFFF. */
+            return -ENOENT;
         }
-        else /* is unknown */
+
+        avail = max - base_offset;
+        if(avail > two63m1)
         {
-            res = lstat("/../bad", stbuf);
+            avail = two63m1;
+            debug("SIZE", "2^31-1");
         }
+        else
+        {
+            debugU64("SIZE", avail);
+        }
+
+        stbuf->st_size = avail;
+            debugU64("SIZE", stbuf->st_size);
+        return 0;
+        }
+    else
+    {
+debug("NONE", "NONE");
+        return -ENOENT;
     }
 
-    return 0;
 }
 
 static int
@@ -258,10 +367,7 @@ loopback_opendir(const char *path, struct fuse_file_info *fi)
         debug("FATAL", "Out of memory");
         exit(EXIT_FAILURE);
     }
-
     i->offset = 1;
-
-
 
     /* Make a new handle */
     if(path[1] != '\0')
@@ -269,10 +375,7 @@ loopback_opendir(const char *path, struct fuse_file_info *fi)
         debug("ERROR", "Path not found");
         return -ENOENT;
     }
-        
-
     fi->fh = (uint64_t)i;
-
     return 0;
 }
 
@@ -280,30 +383,43 @@ static int
 loopback_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi)
 {
     struct loopback_dirp* handl = get_dirp(fi);
-    debugU64("readdir()", handl->offset);
+    if(handl->offset == 4) return 0;
     
-    (void)path;
-    int res;
+    debugU64("readdir()", handl->offset);
+    struct stat st; 
+    struct dirent dir;
+    handl->entry = &dir;
+    lstat(RNGPATH, &st);
 
-    while ( handl->offset < 256 )
+
+    strncpy(handl->entry->d_name, "0xffffffffffffffffffff.bin", 1024);
+    int error = filler(buf, "0xffffffffffffffffffff.bin", &st, 2);
+    if(error)
     {
-        char hex[32];
-        struct stat st; 
-        struct dirent dir;        
-        handl->entry = &dir;
-        lstat(RNGPATH, &st);
-        st.st_ino = handl->offset;
-        snprintf(hex, 10, "%02hx.bin", (uint16_t)handl->offset);
-        strncpy(handl->entry->d_name, hex, 1024);
-        
-        if (filler(buf, hex, &st, handl->offset + 1)) 
-        {
-            break;
-        }
-        handl->offset = handl->offset + 1;
-        //debugU64("ITER-D", handl->offset);
-
+        debug("filler-buffer", "full");
     }
+handl->offset = 2;
+    strncpy(handl->entry->d_name, "0x0.bin", 1024);
+    error += filler(buf, "0x0.bin", &st, 3);
+    if(error)
+    {
+        debug("filler-buffer", "full");
+    }
+handl->offset = 3;
+    uint64_t index, index2;
+    char hex[128];
+    cc2032_fill(&RNG_ROOT, (uint8_t*)&index, sizeof(index));
+    cc2032_fill(&RNG_ROOT, (uint8_t*)&index2, sizeof(index2));
+
+    snprintf(hex, 100, "0x%04hx%016llx.bin", (uint16_t)index, index2 );
+    strncpy(handl->entry->d_name, hex, 1024);
+    
+    error += filler(buf, hex, &st, 4);
+    if(error)
+    {
+        debug("filler-buffer", "full");
+    }
+handl->offset = 4;
     return 0;
 }
 
@@ -319,19 +435,9 @@ static int
 loopback_mknod(const char *path, mode_t mode, dev_t rdev)
 {
 debug("loopback_mknod()", (char*)path);
-    int res;
-
-    if (S_ISFIFO(mode)) {
-        res = mkfifo(path, mode);
-    } else {
-        res = mknod(path, mode, rdev);
-    }
-
-    if (res == -1) {
-        return -errno;
-    }
-
-    return 0;
+    isData(path)
+        return 0;
+    return -EROFS;
 }
 
 static int
@@ -346,7 +452,6 @@ static int
 loopback_unlink(const char *path)
 {
 debug("loopback_unlink()", (char*)path);
-    return -EROFS;
     return 0;
 }
 
@@ -354,7 +459,6 @@ static int
 loopback_rmdir(const char *path)
 {
 debug("loopback_rmdir()", (char*)path);
-    return -EROFS;
     return 0;
 }
 
@@ -362,7 +466,6 @@ static int
 loopback_symlink(const char *from, const char *to)
 {
 debug("loopback_symlink()", (char*)from);
-    return -EROFS;
     return 0;
 }
 
@@ -370,7 +473,6 @@ static int
 loopback_rename(const char *from, const char *to)
 {
 debug("loopback_rename()", (char*)from);
-    return -EROFS;
     return 0;
 }
 
@@ -429,8 +531,9 @@ static int
 loopback_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 {
 debug("loopback_create()", (char*)path);
+    isData(path)
+        return 0;
     return -EROFS;
-    return 0;
 }
 
 static int
@@ -443,12 +546,9 @@ debug("open()", (char*)path);
         debug("FATAL", "Out of memory");
         exit(EXIT_FAILURE);
     }
-    sscanf(path, "/%hx.bin", &fd->_file);
-    if (fd->_file < 0 || fd->_file > 255)
-    {
-        return -ENOENT;
-    }
-
+    uint128_t basepos = parse_path((char*)path);
+    *(uint64_t*)&fd->_cookie = basepos>>64; /* base bank */
+    *(uint64_t*)&fd->_extra  = basepos; /* base offset */
     fi->fh = (uint64_t)fd;
     return 0;
 }
@@ -457,7 +557,7 @@ static int
 loopback_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
     debug("read()", (char*)path);
-    nm80_fill(&RNG_FS, (uint8_t*)buf, size, ((FILE*)fi->fh)->_file, offset);
+    nm80_fill(&RNG_FS, (uint8_t*)buf, size, GETINDEX( fi ) + offset);
     return size;
 }
 
@@ -646,7 +746,7 @@ main(int argc, char *argv[])
     struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
     cc2032_init(&RNG_ROOT,seedy64);
     snprintf(BASEPATH, 1024, "%s/.randfs", home);
-    mkdir(BASEPATH, 0740);
+    mkdir(BASEPATH, 0777);
     debug("START", "##### ##### ##### ##### ##### ##### ##### #####\n\n");
     snprintf(RNGPATH, 1024, "%s/state.bin", BASEPATH);
     nm80_init(&RNG_FS, RNGPATH);

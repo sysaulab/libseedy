@@ -9,6 +9,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+/*#include <sqlite3.h>*/
+
+
+#if defined(__GNUC__)
+typedef unsigned __int128 uint128_t;
+typedef __int128 int128_t;
+#else
+#   error "Unsupported compiler"
+#endif /* defined(__GNUC__) */
 
 /*
  *   NM80 (NoiseMap, 64 bits addressable)
@@ -30,6 +39,20 @@ void nm80_close(NM80* s)
     fflush( s->store );
     fclose( s->store );
 }
+
+
+#define GETBANK(i) ((i>>67)&0x1FFF)
+#define GETSEG(i) ((i>>3)&0x1fffFFFFffffFFFF)
+
+
+int __prime_exist(void)
+{
+    return 1;
+}
+
+uint64_t __make_prime(void){return 1;}
+uint64_t __get_prime(void){return 1;}
+
 
 void nm80_init(NM80* s, char* p)
 {
@@ -71,65 +94,66 @@ void nm80_init(NM80* s, char* p)
 }
 
 
-
-uint64_t nm80_block(NM80* s, uint64_t i, uint16_t b)
+uint64_t __nm80_block(NM80* state, uint64_t segment, uint64_t iter_bank)
 {
     uint64_t pos64;
-    uint16_t* pos16 = (uint16_t*) & pos64;
-    uint16_t iter_bank = b >> 3;
+    uint16_t* pos16 = (uint16_t*) & segment;
 
-    if ( s->iters[iter_bank] == 0 )
+    if ( state->iters[iter_bank] == 0 )
     {
         /* Lazy Initialisation, it takes some time making a unique iterator. Making them as needed avoid spending an hour finding prime numbers.*/
-        s->iters[iter_bank] = prime64sub16();
-        if(s->store != NULL) {
-            rewind( s->store );
-            fwrite( s, sizeof(NM80), 1, s->store );
-            ftruncate( fileno(s->store), sizeof(NM80) );
-            fflush( s->store );
+        state->iters[iter_bank] = prime64sub16();
+        if(state->store != NULL) {
+            rewind( state->store );
+            fwrite( state, sizeof(NM80), 1, state->store );
+            ftruncate( fileno(state->store), sizeof(NM80) );
+            fflush( state->store );
         }
     }
 
-    if ( i == 0 )
+    if ( segment == 0 )
     {
         /* To avoid having all index zero being the same, I redefine index zero as the binary not of the iterator.*/
-        i = ~s->iters[b >> 3];
+        segment = ~state->iters[iter_bank];
     }
 
-    pos64 = i * s->iters[b >> 3];
+    pos64 = segment * state->iters[iter_bank];
 
-    return  ( s->noise[0][pos16[0]] ) ^
-            ( s->noise[1][pos16[1]] ) ^
-            ( s->noise[2][pos16[2]] ) ^
-            ( s->noise[3][pos16[3]] ) ;
+    return  ( state->noise[0][pos16[0]] ) ^
+            ( state->noise[1][pos16[1]] ) ^
+            ( state->noise[2][pos16[2]] ) ^
+            ( state->noise[3][pos16[3]] ) ;
 }
 
-void nm80_fill(NM80* s, uint8_t* buf, size_t num, uint16_t bank, uint64_t offset)
+#define GETBANK(i) ((i>>67)&0x1FFF)
+#define GETSEG(i) ((i>>3)&0x1fffFFFFffffFFFF)
+
+void nm80_fill(NM80* s, uint8_t* buf, size_t num, uint128_t user_offset)
 {
     size_t t = 0;
     uint64_t next = 0;
 
-    next = nm80_block(s, bank << 13 | offset >> 3, bank);
-    while( (offset % 8) && (t < num) )
+    next = __nm80_block(s, GETSEG(user_offset), GETBANK(user_offset));
+    while( (user_offset % 8) && (t < num) )
     {
-        buf[t] = ((uint8_t*)&next)[offset % 8];
+        buf[t] = ((uint8_t*)&next)[(user_offset % 8)];
         t++;
-        offset++;
+        user_offset++;
     }
 
     while( (num - t) >> 3 )
     {
-        *(uint64_t*)(&buf[t]) = nm80_block(s, offset >> 3, bank);
+        *(uint64_t*)(&buf[t]) = __nm80_block(s, GETSEG(user_offset), GETBANK(user_offset));
         t = t + 8;
-        offset = offset + 8;
+        user_offset = user_offset + 8;
     }
 
-    next = nm80_block(s, offset >> 3, bank);
+    next = __nm80_block(s, GETSEG(user_offset), GETBANK(user_offset));
     while( num - t )
     {
-        buf[t] = ((uint8_t*)&next)[offset % 8];
+        buf[t] = ((uint8_t*)&next)[(user_offset % 8)];
         t++;
-        offset++;
+        user_offset++;
     }
 }
 
