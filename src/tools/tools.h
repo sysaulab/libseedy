@@ -29,10 +29,8 @@ void* parseinputgen(int argc, char** argv)
 {
     if(argc > 1)
     {
-
         if(strcmp(argv[1], "stdin") == 0)
             return (void*)stdinput;
-
     }
 #   if defined(LIBSEEDY_OPT64)
         return (void*)seedy64;

@@ -8,7 +8,7 @@
 int main(int argc, char** argv)
 {
     NM80 noise;
-    nm80_init(&noise);
+    nm80_init(&noise, "./nm80.bin");
 
     uint16_t user_bank;
     uint64_t user_offset;
@@ -51,20 +51,6 @@ int main(int argc, char** argv)
             /* BANK */
             count = MIN(strtoull(command+1, NULL, 10), 65535);
             user_bank = count;
-        }
-        else if(command[0] == 'w')
-        {
-            /* SAVE */
-            FILE* state_file = fopen("state.bin", "w");
-            fwrite(&noise, sizeof(noise), 1, state_file);
-            fclose(state_file);
-        }
-        else if(command[0] == 'r')
-        {
-            /* SAVE */
-            FILE* state_file = fopen("state.bin", "r");
-            fread(&noise, sizeof(noise), 1, state_file);
-            fclose(state_file);
         }
         else if(command[0] == 'q')
         {

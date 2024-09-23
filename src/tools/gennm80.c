@@ -5,7 +5,7 @@ int main(int argc, char** argv)
 {
     uint8_t buf[1024];
     NM80 prng;
-    nm80_init(&prng);
+    nm80_init(&prng, "nm80_test.bin");
     
     while (1)
     {

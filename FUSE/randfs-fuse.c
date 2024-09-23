@@ -538,11 +538,11 @@ loopback_statfs_x(const char *path, struct statfs *stbuf)
 {
 debug("loopback_statfs_x()", (char*)path);
 
-    stbuf->f_bsize = 65536;    /* optimal transfer block size */
-    stbuf->f_blocks = 0xffffffff;    /* total data blocks in file system */
+    stbuf->f_bsize = 4096;    /* optimal transfer block size */
+    stbuf->f_blocks = 0x0;    /* total data blocks in file system */
     stbuf->f_bavail = 0;    /* free blocks available to unprivileged user */
     stbuf->f_bfree = 0;     /* free blocks in fs */
-    stbuf->f_files = 256;     /* total file nodes in file system */
+    stbuf->f_files = 0;     /* total file nodes in file system */
     stbuf->f_ffree = 0;  /* free file nodes in fs */
     return 0;
 }
@@ -641,50 +641,16 @@ int
 main(int argc, char *argv[])
 {
     int new = 0;
-    cc2032_init(&RNG_ROOT,seedy64);
     int res = 0;
-    struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
     char* home = getenv("HOME");
+    struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
+    cc2032_init(&RNG_ROOT,seedy64);
     snprintf(BASEPATH, 1024, "%s/.randfs", home);
     mkdir(BASEPATH, 0740);
     debug("START", "##### ##### ##### ##### ##### ##### ##### #####\n\n");
     snprintf(RNGPATH, 1024, "%s/state.bin", BASEPATH);
-    FILE* state_file = fopen(RNGPATH, "r+");
-    if (state_file == NULL)
-    {
-        new = 1;
-    }
-    else 
-    {
-        fseek(state_file, 0, SEEK_END);
-        /* there is a file and it matches the expected size... */
-        if (ftell(state_file) == sizeof(RNG_FS))
-        {
-            debug("load from", RNGPATH);
-            rewind(state_file);
-            fread(&RNG_FS, sizeof(RNG_FS), 1, state_file);
-        }
-        else
-        {
-            new = 1;
-        }
-        fclose(state_file);
-    }
+    nm80_init(&RNG_FS, RNGPATH);
 
-    if (new > 0)
-    {
-        debug("make new state at", RNGPATH);
-        state_file = fopen(RNGPATH, "w");
-        if (state_file == NULL)
-        {
-            debugU64("Cannot open state: errno", errno);
-            exit(EXIT_FAILURE);
-        }
-        nm80_init(&RNG_FS);
-        rewind(state_file);
-        fwrite(&RNG_FS, sizeof(RNG_FS), 1, state_file);
-        fclose(state_file);
-    }
 
 
 

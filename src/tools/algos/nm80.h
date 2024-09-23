@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 /*
  *   NM80 (NoiseMap, 64 bits addressable)
@@ -17,17 +18,58 @@ typedef struct NM80_s
 {
     uint64_t iters[8192];
     uint64_t noise[4][65536];
+    FILE* store;
 }
 NM80;
 
-void nm80_init(NM80* s)
+void nm80_close(NM80* s)
 {
-    CC2032 seed_gen;
-    cc2032_init( &seed_gen, (void*)seedy64 );
-    cc2032_fill( &seed_gen, (uint8_t*)&s->noise, sizeof(s->noise) );
-    /* Iterators must NULL to indicate its need for initialisation */
-    memset(s->iters, 0, 8192 * sizeof(uint64_t));
+    rewind( s->store );
+    fwrite( s, sizeof(NM80), 1, s->store );
+    ftruncate( fileno(s->store), sizeof(NM80) );
+    fflush( s->store );
+    fclose( s->store );
 }
+
+void nm80_init(NM80* s, char* p)
+{
+    int need_new = 0;
+    s->store = fopen(p, "r");
+    if (s->store == NULL)
+    {
+        need_new = 1;
+    }
+    else
+    {
+        fseek(s->store, 0, SEEK_END);
+        if (ftell(s->store) == sizeof(NM80))
+        {
+            rewind(s->store);
+            fread(s, sizeof(NM80), 1, s->store);
+            fclose(s->store);
+        }
+        else
+        {
+            need_new = 1;
+        }
+    }
+    if(need_new)
+    {
+        CC2032 seed_gen;
+        cc2032_init( &seed_gen, (void*)seedy64 );
+        cc2032_fill( &seed_gen, (uint8_t*) s->noise, sizeof(s->noise) );
+        memset( s->iters, 0, sizeof(s->iters) );
+    }
+    s->store = fopen(p, "w");
+    if (s->store != NULL)
+    {
+        rewind( s->store );
+        fwrite( s, sizeof(NM80), 1, s->store );
+        ftruncate( fileno(s->store), sizeof(NM80) );
+        fflush( s->store );
+    }
+}
+
 
 
 uint64_t nm80_block(NM80* s, uint64_t i, uint16_t b)
@@ -38,9 +80,14 @@ uint64_t nm80_block(NM80* s, uint64_t i, uint16_t b)
 
     if ( s->iters[iter_bank] == 0 )
     {
-//fprintf(stderr, "P");
         /* Lazy Initialisation, it takes some time making a unique iterator. Making them as needed avoid spending an hour finding prime numbers.*/
         s->iters[iter_bank] = prime64sub16();
+        if(s->store != NULL) {
+            rewind( s->store );
+            fwrite( s, sizeof(NM80), 1, s->store );
+            ftruncate( fileno(s->store), sizeof(NM80) );
+            fflush( s->store );
+        }
     }
 
     if ( i == 0 )
