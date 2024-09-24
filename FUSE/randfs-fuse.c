@@ -72,6 +72,7 @@ CC2032 RNG_ROOT;
 NM80 RNG_FS;
 char BASEPATH[1025];
 char RNGPATH[1025];
+char MNTPATH[1025];
 
 //#define RANDFS_OPT_DEBUG_ON
 
@@ -392,7 +393,7 @@ loopback_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
     uint128_t big_step = GETU128(0x0000000000000000,0x8000000000000000);
     uint128_t cur_step = 0;
 
-    for( int i = 0; i < 4; i = i + 1 )
+    for( int i = 0; i < 1; i = i + 1 )
     {
         handl->entry = &dir;
         lstat(RNGPATH, &st);
@@ -408,13 +409,13 @@ loopback_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
 
     cc2032_fill(&RNG_ROOT, (uint8_t*)&cur_step, sizeof(cur_step));
     snprintf(handl->entry->d_name, 1023, "0x%04hX%016llX.bin", (uint16_t)(cur_step), (uint64_t)(cur_step>>64));
-    if(filler(buf, handl->entry->d_name, &st, 9000))
+    if(filler(buf, handl->entry->d_name, &st, 7000))
     {
         debug("filler-buffer", "full");
         return 0;
     }
 
-    for( int i = 131068; i < 131072; i = i + 1 )
+    for( int i = 131071; i < 131072; i = i + 1 )
     {
         handl->entry = &dir;
         lstat(RNGPATH, &st);
@@ -428,6 +429,8 @@ loopback_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offs
         }
     }
 
+    handl->entry = &dir;
+    lstat(RNGPATH, &st);
     snprintf(handl->entry->d_name, 1023, "0x%04hX%016llX.bin", 0xfFfF, 0xffffFFFFffffFFFFLLU);
     if(filler(buf, handl->entry->d_name, &st, 9000))
     {
@@ -745,33 +748,33 @@ static const struct fuse_opt loopback_opts[] = {
 
 
 int
-main(int argc, char *argv[])
+main(int argc, char **argv)
 {
     int new = 0;
     int res = 0;
     char* home = getenv("HOME");
-    struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
-    cc2032_init(&RNG_ROOT,seedy64);
     snprintf(BASEPATH, 1024, "%s/.randfs", home);
-    mkdir(BASEPATH, 0777);
+    snprintf(MNTPATH, 1024, "%s/RandomFS", BASEPATH);
+    snprintf(RNGPATH, 1024, "%s/seed.bin", BASEPATH);
+    mkdir(BASEPATH, 0740);
+    mkdir(MNTPATH, 0740);
+    int forced_argc = 2;
+    char* forced_argv[2] = {"randfs", MNTPATH};
+    struct fuse_args args = FUSE_ARGS_INIT(forced_argc, forced_argv);
+
+    cc2032_init(&RNG_ROOT,seedy64);
     debug("START", "##### ##### ##### ##### ##### ##### ##### #####\n\n");
-    snprintf(RNGPATH, 1024, "%s/state.bin", BASEPATH);
+    
+
+
     nm80_init(&RNG_FS, RNGPATH);
-
-
-
-
-debug("home", home);
-debug("BASEPATH", BASEPATH);
-
-
 
     loopback.blocksize = 4096;
     loopback.case_insensitive = 0;
     if (fuse_opt_parse(&args, &loopback, loopback_opts, NULL) == -1) {
         exit(1);
     }
-
+char* new_args[2] = {"randfs","~/"};
     umask(0);
     res = fuse_main(args.argc, args.argv, &loopback_oper, NULL);
     
