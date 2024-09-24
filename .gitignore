@@ -1,3 +1,6 @@
 
 *.DS_Store
 *.o
+/Extras/bin
+FUSE/randfs-fuse
+FUSE/randfs-fuse

@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS= -O0 -lfuse-t -D_FILE_OFFSET_BITS=64
+CFLAGS= -O0 -D_FILE_OFFSET_BITS=64
 prefix=/usr/local
 src=../src/tools
 
