@@ -4,7 +4,7 @@ Version 0.1 - Beta
 
 The random random filesystem contains randomly accessible random data.
 
-In my seemingly neverending quest to understand cryptography, I created a new filesystem that expose a cryptographic algorithm I have been using for some time now. Here are some of my notes and taughts as well as the state of the project.
+In my seemingly neverending quest to understand cryptography, I created a new filesystem that expose a an algorithm I have been using for some time. Here are some of my notes and taughts as well as the state of the project.
 
 We all know /dev/random, it offers the capability to generate a sequence one byte/block at a time. We cannot usually playback the past bytes or predict the bytes far ahead. This is excellent for cryptographic applications where secrecy is essential. 
 
