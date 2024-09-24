@@ -73,7 +73,7 @@ NM80 RNG_FS;
 char BASEPATH[1025];
 char RNGPATH[1025];
 
-#define RANDFS_OPT_DEBUG_ON
+//#define RANDFS_OPT_DEBUG_ON
 
 
 
@@ -96,10 +96,12 @@ void debug(char* key, char* val)
     fflush(debug_file);
 }
 char VALUE[100];
+#define debugU128x(label,value) sprintf(VALUE, "%016llx%016llx", (uint64_t)(value>>64),(uint64_t)value);debug(label, VALUE)
 #define debugU64x(label,value) sprintf(VALUE, "%016llx", (uint64_t)value);debug(label, VALUE)
 #define debugU64(label,value) sprintf(VALUE, "%llu", (uint64_t)value);debug(label, VALUE)
 #else
 #define debug(a,b) ;
+#define debugU128x(a,b) ;
 #define debugU64x(a,b) ;
 #define debugU64(a,b) ;
 #endif
@@ -137,11 +139,8 @@ int ishex(char c)
 
 uint128_t parse_path (char* path)
 {
-    debug("parse_path","");
-    
     uint128_t result = 0;
     int done = 0;
-
     for(int pos = 3; done == 0; pos++)
     {
         switch (path[pos])
@@ -204,8 +203,8 @@ uint128_t parse_path (char* path)
                 done = 1;
         }
     }
-    debugU64x("r_low",(result>>64));
-    debugU64x("r_high",(result));
+//    debugU64x("r_low",(result>>64));
+//    debugU64x("r_high",(result));
     return result;
 }
 
@@ -291,6 +290,7 @@ loopback_access(
     const char *path, 
     int mask)
 {
+    debug("access()", "");
     int res;
 
     /*
@@ -353,6 +353,7 @@ struct loopback_dirp
 static inline struct loopback_dirp *
 get_dirp(struct fuse_file_info *fi)
 {
+    debug("get_dirp()", "");
     return (struct loopback_dirp *)(uintptr_t)fi->fh;
 }
 
@@ -361,13 +362,13 @@ static int
 loopback_opendir(const char *path, struct fuse_file_info *fi)
 {
     int result;
-    struct loopback_dirp* i = malloc(sizeof(struct loopback_dirp)); 
+    struct loopback_dirp* handl = malloc(sizeof(struct loopback_dirp)); 
     debug("opendir()", (char*)path);
-    if(i == NULL){
+    if(handl == NULL){
         debug("FATAL", "Out of memory");
         exit(EXIT_FAILURE);
     }
-    i->offset = 1;
+    handl->offset = 0;
 
     /* Make a new handle */
     if(path[1] != '\0')
@@ -375,58 +376,72 @@ loopback_opendir(const char *path, struct fuse_file_info *fi)
         debug("ERROR", "Path not found");
         return -ENOENT;
     }
-    fi->fh = (uint64_t)i;
+    fi->fh = (uint64_t)handl;
     return 0;
 }
 
 static int
 loopback_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi)
 {
-    struct loopback_dirp* handl = get_dirp(fi);
-    if(handl->offset == 4) return 0;
-    
-    debugU64("readdir()", handl->offset);
     struct stat st; 
     struct dirent dir;
-    handl->entry = &dir;
-    lstat(RNGPATH, &st);
+    struct loopback_dirp* handl = get_dirp(fi);
+    if(handl->offset > 0) return 0;
 
+    debugU64("readdir()",handl->offset);
+    uint128_t big_step = GETU128(0x0000000000000000,0x8000000000000000);
+    uint128_t cur_step = 0;
 
-    strncpy(handl->entry->d_name, "0xffffffffffffffffffff.bin", 1024);
-    int error = filler(buf, "0xffffffffffffffffffff.bin", &st, 2);
-    if(error)
+    for( int i = 0; i < 4; i = i + 1 )
+    {
+        handl->entry = &dir;
+        lstat(RNGPATH, &st);
+        handl->offset = i;
+        cur_step = big_step * i;
+        snprintf(handl->entry->d_name, 1023, "0x%04hX%016llX.bin", (uint16_t)(cur_step >> 64), (uint64_t)cur_step);
+        if(filler(buf, handl->entry->d_name, &st, i + 1))
+        {
+            debug("filler-buffer", "full");
+            return 0;
+        }
+    }
+
+    cc2032_fill(&RNG_ROOT, (uint8_t*)&cur_step, sizeof(cur_step));
+    snprintf(handl->entry->d_name, 1023, "0x%04hX%016llX.bin", (uint16_t)(cur_step), (uint64_t)(cur_step>>64));
+    if(filler(buf, handl->entry->d_name, &st, 9000))
     {
         debug("filler-buffer", "full");
+        return 0;
     }
-handl->offset = 2;
-    strncpy(handl->entry->d_name, "0x0.bin", 1024);
-    error += filler(buf, "0x0.bin", &st, 3);
-    if(error)
-    {
-        debug("filler-buffer", "full");
-    }
-handl->offset = 3;
-    uint64_t index, index2;
-    char hex[128];
-    cc2032_fill(&RNG_ROOT, (uint8_t*)&index, sizeof(index));
-    cc2032_fill(&RNG_ROOT, (uint8_t*)&index2, sizeof(index2));
 
-    snprintf(hex, 100, "0x%04hx%016llx.bin", (uint16_t)index, index2 );
-    strncpy(handl->entry->d_name, hex, 1024);
-    
-    error += filler(buf, hex, &st, 4);
-    if(error)
+    for( int i = 131068; i < 131072; i = i + 1 )
+    {
+        handl->entry = &dir;
+        lstat(RNGPATH, &st);
+        handl->offset = i;
+        cur_step = big_step * i;
+        snprintf(handl->entry->d_name, 1023, "0x%04hX%016llX.bin", (uint16_t)(cur_step >> 64), (uint64_t)cur_step);
+        if(filler(buf, handl->entry->d_name, &st, i + 1))
+        {
+            debug("filler-buffer", "full");
+            return 0;
+        }
+    }
+
+    snprintf(handl->entry->d_name, 1023, "0x%04hX%016llX.bin", 0xfFfF, 0xffffFFFFffffFFFFLLU);
+    if(filler(buf, handl->entry->d_name, &st, 9000))
     {
         debug("filler-buffer", "full");
+        return 0;
     }
-handl->offset = 4;
+
     return 0;
 }
 
 static int
 loopback_releasedir(const char *path, struct fuse_file_info *fi)
-{ /* Should be OK, Untested. */
-debugU64x("releasedir()", fi->fh);
+{
+    debug("releasedir()", "");
     free((struct loopback_dirp*)fi->fh);
     return 0;
 }
@@ -434,46 +449,43 @@ debugU64x("releasedir()", fi->fh);
 static int
 loopback_mknod(const char *path, mode_t mode, dev_t rdev)
 {
-debug("loopback_mknod()", (char*)path);
-    isData(path)
-        return 0;
+    debug("mknod()", (char*)path);
     return -EROFS;
 }
 
 static int
 loopback_mkdir(const char *path, mode_t mode)
 {
-debug("loopback_mkdir()", (char*)path);
+    debug("mkdir()", (char*)path);
     return -EROFS;
-    return 0;
 }
 
 static int
 loopback_unlink(const char *path)
 {
-debug("loopback_unlink()", (char*)path);
-    return 0;
+    debug("unlink()", (char*)path);
+    return -EROFS;
 }
 
 static int
 loopback_rmdir(const char *path)
 {
-debug("loopback_rmdir()", (char*)path);
-    return 0;
+    debug("rmdir()", (char*)path);
+    return -EROFS;
 }
 
 static int
 loopback_symlink(const char *from, const char *to)
 {
-debug("loopback_symlink()", (char*)from);
-    return 0;
+    debug("symlink()", (char*)from);
+    return -EROFS;
 }
 
 static int
 loopback_rename(const char *from, const char *to)
 {
-debug("loopback_rename()", (char*)from);
-    return 0;
+    debug("symlink()", (char*)from);
+    return -EROFS;
 }
 
 #if HAVE_EXCHANGE
@@ -497,7 +509,7 @@ debug("loopback_exchange()", (char*)path1);
 static int
 loopback_link(const char *from, const char *to)
 {
-debug("loopback_link()", (char*)from);
+    debug("link()", (char*)from);
     return -EROFS;
     return 0;
 }
@@ -505,7 +517,7 @@ debug("loopback_link()", (char*)from);
 static int
 loopback_fsetattr_x(const char *path, struct setattr_x *attr, struct fuse_file_info *fi)
 {
-debug("loopback_fsetattr_x()", (char*)path);
+    debug("fsetattr_x()", (char*)path);
     return -EROFS;
     return 0;
 }
@@ -513,7 +525,7 @@ debug("loopback_fsetattr_x()", (char*)path);
 static int
 loopback_setattr_x(const char *path, struct setattr_x *attr)
 {
-debug("loopback_setattr_x()", (char*)path);
+    debug("setattr_x()", (char*)path);
     return -EROFS;
     return 0;
 }
@@ -522,63 +534,67 @@ static int
 loopback_getxtimes(const char *path, struct timespec *bkuptime,
                    struct timespec *crtime)
 {
-debug("loopback_getxtimes()", (char*)path);
-    return -EROFS;
+    debug("getxtimes()", (char*)path);
+    return -ENOATTR;
     return 0;
 }
 
 static int
 loopback_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 {
-debug("loopback_create()", (char*)path);
-    isData(path)
-        return 0;
+    debug("create()", (char*)path);
     return -EROFS;
 }
 
 static int
 loopback_open(const char *path, struct fuse_file_info *fi)
 {
-debug("open()", (char*)path);
-    FILE* fd = calloc(1, sizeof(FILE));
-    if( fd == NULL )
+    debug("open()", (char*)path);
+    isData(path)
     {
-        debug("FATAL", "Out of memory");
-        exit(EXIT_FAILURE);
+        FILE* fd = calloc(1, sizeof(FILE));
+        if( fd == NULL )
+        {
+            debug("FATAL", "Out of memory");
+            exit(EXIT_FAILURE);
+        }
+        uint128_t basepos = parse_path((char*)path);
+        *(uint64_t*)&fd->_cookie = basepos>>64; /* base bank */
+        *(uint64_t*)&fd->_extra  = basepos; /* base offset */
+        fi->fh = (uint64_t)fd;
+        return 0;
     }
-    uint128_t basepos = parse_path((char*)path);
-    *(uint64_t*)&fd->_cookie = basepos>>64; /* base bank */
-    *(uint64_t*)&fd->_extra  = basepos; /* base offset */
-    fi->fh = (uint64_t)fd;
-    return 0;
+    return -ENODATA;
 }
 
 static int
 loopback_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
-    debug("read()", (char*)path);
-    nm80_fill(&RNG_FS, (uint8_t*)buf, size, GETINDEX( fi ) + offset);
+    uint128_t base_index = GETINDEX( fi );
+    uint128_t full_index = GETINDEX( fi ) + offset;
+    debugU128x("read()", full_index);
+    nm80_fill(&RNG_FS, (uint8_t*)buf, size, full_index);
     return size;
 }
 
 static int
 loopback_write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
-    debug("write()", (char*)path);
     return -EROFS;
 }
 
 static int
 loopback_flush(const char *path, struct fuse_file_info *fi)
 {
-debugU64("flush()", ((FILE*)fi->fh)->_file);
+    debug("flush()", (char*)path);
+    fflush(RNG_FS.store);
     return 0;
 }
 
 static int
 loopback_release(const char *path, struct fuse_file_info *fi)
 {
-debugU64("release()", ((FILE*)fi->fh)->_file);
+    debug("release()", (char*)path);
     free((FILE*)fi->fh);
     return 0;
 }
@@ -586,64 +602,56 @@ debugU64("release()", ((FILE*)fi->fh)->_file);
 static int
 loopback_fsync(const char *path, int isdatasync, struct fuse_file_info *fi)
 {
-debugU64("fsync()", ((FILE*)fi->fh)->_file);
+    fflush(RNG_FS.store);
     return 0;
 }
 
 static int
 loopback_setxattr(const char *path, const char *name, const char *value, size_t size, int flags, uint32_t position)
 {
-    debug("setxattr()", (char*)path);
-    return 0;
+    return -EROFS;
 }
 
 static int
 loopback_getxattr(const char *path, const char *name, char *value, size_t size,
                   uint32_t position)
 {
-    debug("setxattr()", (char*)path);
-    return 0;
+    return -ENOATTR;
 }
 
 static int
 loopback_listxattr(const char *path, char *list, size_t size)
 {
-    debug("listxattr()", (char*)path);
-    return 0;
+    return -ENOATTR;
 }
 
 static int
 loopback_removexattr(const char *path, const char *name)
 {
-    debug("removexattr()", (char*)path);
-    return 0;
+    return -EROFS;
 }
 
 static int
 loopback_fallocate(const char *path, int mode, off_t offset, off_t length, struct fuse_file_info *fi)
 {
-    debug("fallocate()", (char*)path);
-    return 0;
+    return -EROFS;
 }
 
 static int
 loopback_setvolname(const char *name)
 {
-    debug("setvolname()", (char*)name);
-    return 0;
+    return -EROFS;
 }
 
 static int
 loopback_statfs_x(const char *path, struct statfs *stbuf)
 {
-debug("loopback_statfs_x()", (char*)path);
-
-    stbuf->f_bsize = 4096;    /* optimal transfer block size */
-    stbuf->f_blocks = 0x0;    /* total data blocks in file system */
+    stbuf->f_bsize  = 64;   /* optimal transfer block size */
+    stbuf->f_blocks = 0x1;  /* total data blocks in file system */
     stbuf->f_bavail = 0;    /* free blocks available to unprivileged user */
     stbuf->f_bfree = 0;     /* free blocks in fs */
-    stbuf->f_files = 0;     /* total file nodes in file system */
-    stbuf->f_ffree = 0;  /* free file nodes in fs */
+    stbuf->f_files = 65536;     /* total file nodes in file system */
+    stbuf->f_ffree = 0;     /* free file nodes in fs */
     return 0;
 }
 
@@ -652,8 +660,7 @@ debug("loopback_statfs_x()", (char*)path);
 static int
 loopback_renamex(const char *path1, const char *path2, unsigned int flags)
 {
-    debug("renamex()", "start");
-    return 0;
+    return -EROFS;
 }
 
 #endif /* HAVE_RENAMEX */
@@ -661,7 +668,6 @@ loopback_renamex(const char *path1, const char *path2, unsigned int flags)
 void *
 loopback_init(struct fuse_conn_info *conn)
 {
-    debug("init()", "start");
     conn->want |= FUSE_CAP_VOL_RENAME | FUSE_CAP_XTIMES ;
 
 #if HAVE_ACCESS
@@ -679,6 +685,7 @@ loopback_init(struct fuse_conn_info *conn)
 void
 loopback_destroy(void *userdata)
 {
+    nm80_close(&RNG_FS);
     /* nothing */
 }
 

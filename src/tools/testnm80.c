@@ -10,8 +10,7 @@ int main(int argc, char** argv)
     NM80 noise;
     nm80_init(&noise, "./nm80.bin");
 
-    uint16_t user_bank;
-    uint64_t user_offset;
+    uint128_t user_offset;
     
     while (1)
     {
@@ -26,31 +25,25 @@ int main(int argc, char** argv)
         {
             /* GET */
             count = MIN(strtoull(command+1, NULL, 10), 1024);
-            nm80_fill(&noise, (uint8_t*)command, count, user_bank, user_offset);
+            nm80_fill(&noise, (uint8_t*)command, count, user_offset);
             for(int x = 0; x < count; x++)
             {
                 printf("%02x", (uint8_t)command[x]);
             }
+            user_offset += count;
                 printf("\n");
         }
         else if(command[0] == 'p')
         {
             /* PRINT */
-            printf("cur_iter:%llu\n", noise.iters[user_bank>>3]);
-            printf("bank:%u\n", user_bank);
-            printf("seek_pos:%llu\n", user_offset);
+            printf("cur_iter:%llu\n", noise.iters[GETBANK(user_offset)]);
+            printf("bank:%u\n", (uint16_t)GETBANK(user_offset));
+            printf("seek_pos:%016llx%016llx\n", (uint64_t)(user_offset>>64), (uint64_t)user_offset);
         }
         else if(command[0] == 's')
         {
-            /* SEEK */
-            count = strtoull(command+1, NULL, 10);
-            user_offset = count;
-        }
-        else if(command[0] == 'b')
-        {
-            /* BANK */
-            count = MIN(strtoull(command+1, NULL, 10), 65535);
-            user_bank = count;
+            /* SEEK MUST ADAPT TO 128+ bits*/
+            user_offset = hexU128(command+1);
         }
         else if(command[0] == 'q')
         {

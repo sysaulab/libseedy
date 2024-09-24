@@ -41,9 +41,77 @@ void nm80_close(NM80* s)
 }
 
 
-#define GETBANK(i) ((i>>67)&0x1FFF)
-#define GETSEG(i) ((i>>3)&0x1fffFFFFffffFFFF)
+uint128_t hexU128(char* hext)
+{
+    uint128_t result = 0;
+    int done = 0;
+    for(int pos = 0; done == 0 && pos < 32; pos++)
+    {
+        switch (hext[pos])
+        {
+            case '0':
+                result = (result << 4) | 0;
+                break;
+            case '1':
+                result = (result << 4) | 1;
+                break;
+            case '2':
+                result = (result << 4) | 2;
+                break;
+            case '3':
+                result = (result << 4) | 3;
+                break;
+            case '4':
+                result = (result << 4) | 4;
+                break;
+            case '5':
+                result = (result << 4) | 5;
+                break;
+            case '6':
+                result = (result << 4) | 6;
+                break;
+            case '7':
+                result = (result << 4) | 7;
+                break;
+            case '8':
+                result = (result << 4) | 8;
+                break;
+            case '9':
+                result = (result << 4) | 9;
+                break;
+            case 'a':
+            case 'A':
+                result = (result << 4) | 10;
+                break;
+            case 'b':
+            case 'B':
+                result = (result << 4) | 11;
+                break;
+            case 'c':
+            case 'C':
+                result = (result << 4) | 12;
+                break;
+            case 'd':
+            case 'D':
+                result = (result << 4) | 13;
+                break;
+            case 'e':
+            case 'E':
+                result = (result << 4) | 14;
+                break;
+            case 'f':
+            case 'F':
+                result = (result << 4) | 15;
+                break;
+            default:
+                done = 1;
+        }
+    }
+    return result;
+}
 
+#define GETBANK(i) ((i>>67)&0x1FFF)
+#define GETSEG(i) ((i>>3)&0xffffFFFFffffFFFF)
 
 int __prime_exist(void)
 {
@@ -125,9 +193,6 @@ uint64_t __nm80_block(NM80* state, uint64_t segment, uint64_t iter_bank)
             ( state->noise[3][pos16[3]] ) ;
 }
 
-#define GETBANK(i) ((i>>67)&0x1FFF)
-#define GETSEG(i) ((i>>3)&0x1fffFFFFffffFFFF)
-
 void nm80_fill(NM80* s, uint8_t* buf, size_t num, uint128_t user_offset)
 {
     size_t t = 0;
@@ -141,7 +206,7 @@ void nm80_fill(NM80* s, uint8_t* buf, size_t num, uint128_t user_offset)
         user_offset++;
     }
 
-    while( (num - t) >> 3 )
+    while( (num - t) / 8 )
     {
         *(uint64_t*)(&buf[t]) = __nm80_block(s, GETSEG(user_offset), GETBANK(user_offset));
         t = t + 8;
