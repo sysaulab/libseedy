@@ -16,6 +16,7 @@
 #include <AvailabilityMacros.h>
 //#include <cstdlib>
 //#include <cstdio>
+//#include <cstdio>
 #include <stdio.h>
 #include <time.h>
 
@@ -74,7 +75,7 @@ char BASEPATH[1025];
 char RNGPATH[1025];
 char MNTPATH[1025];
 
-//#define RANDFS_OPT_DEBUG_ON
+#define RANDFS_OPT_DEBUG_ON
 
 
 
@@ -753,24 +754,27 @@ main(int argc, char **argv)
     int new = 0;
     int res = 0;
     char* home = getenv("HOME");
-    char cmd[1025];
-    snprintf(cmd, 1024, "umount %s", MNTPATH);
-    system(cmd);
     snprintf(BASEPATH, 1024, "%s/.randfs", home);
     snprintf(MNTPATH, 1024, "%s/RandomFS", BASEPATH);
     snprintf(RNGPATH, 1024, "%s/seed.bin", BASEPATH);
+
+    char cmd[1025];
+    snprintf(cmd, 1024, "umount %s", MNTPATH);
+    system(cmd);
     mkdir(BASEPATH, 0740);
     mkdir(MNTPATH, 0740);
+
     int forced_argc = 2;
     char* forced_argv[2] = {"randfs", MNTPATH};
     struct fuse_args args = FUSE_ARGS_INIT(forced_argc, forced_argv);
 
-    cc2032_init(&RNG_ROOT,seedy64);
-    debug("START", "##### ##### ##### ##### ##### ##### ##### #####\n\n");
-    
 
+    cc2032_init(&RNG_ROOT,seedy64);
 
     nm80_init(&RNG_FS, RNGPATH);
+
+
+    debug("START", "##### ##### ##### ##### ##### ##### ##### #####\n\n");
 
     loopback.blocksize = 4096;
     loopback.case_insensitive = 0;

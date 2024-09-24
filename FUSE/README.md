@@ -80,6 +80,10 @@ The NFS implementation of FUSE-T is a bandwidth bottle neck. It eats up about ha
 
 Of course piping a file into a statistical test suite like PractRand yields good results. The underlying algorithms have been tested previously.
 
+## Bugs
+
+- Underlying algorithm passes practrand but not the stream from a file. Must investigate.
+
 ## Applications
 
 - Test operating systems's FS interfaces

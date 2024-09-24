@@ -1,13 +1,14 @@
 CC=cc
-CFLAGS= -O0 -D_FILE_OFFSET_BITS=64
+CFLAGS= -O3 -D_FILE_OFFSET_BITS=64
 prefix=/usr/local
 src=../src/tools
 
-all: $(src)/gennm64 $(src)/testnm64 $(src)/testnm80 $(src)/gencc832 $(src)/gencc2032 $(src)/genmt32 $(src)/genqx16 $(src)/genqx32 $(src)/genqx64 $(src)/gensy16 $(src)/gensy32 $(src)/gensy64 $(src)/genss64 $(src)/nprime16 $(src)/nprime32 $(src)/nprime64 $(src)/goodprimes $(src)/symt32 $(src)/symtqx32 $(src)/symtqx64 $(src)/syss64 $(src)/sycc2032 $(src)/syccqx32 $(src)/syccqx64
+all: $(src)/gennm64 $(src)/gennm80 $(src)/testnm64 $(src)/testnm80 $(src)/gencc832 $(src)/gencc2032 $(src)/genmt32 $(src)/genqx16 $(src)/genqx32 $(src)/genqx64 $(src)/gensy16 $(src)/gensy32 $(src)/gensy64 $(src)/genss64 $(src)/nprime16 $(src)/nprime32 $(src)/nprime64 $(src)/goodprimes $(src)/symt32 $(src)/symtqx32 $(src)/symtqx64 $(src)/syss64 $(src)/sycc2032 $(src)/syccqx32 $(src)/syccqx64
 	mkdir -p bin
 	mv $(src)/testnm64 bin
 	mv $(src)/testnm80 bin
 	mv $(src)/gennm64 bin
+	mv $(src)/gennm80 bin
 	mv $(src)/gencc832 bin
 	mv $(src)/gencc2032 bin
 	mv $(src)/genmt32 bin
@@ -31,6 +32,7 @@ all: $(src)/gennm64 $(src)/testnm64 $(src)/testnm80 $(src)/gencc832 $(src)/gencc
 	mv $(src)/syccqx64 bin
 
 $(src)/gennm64: $(src)/gennm64.c
+$(src)/gennm80: $(src)/gennm80.c
 $(src)/gencc832: $(src)/gencc832.c
 $(src)/gencc2032: $(src)/gencc2032.c
 $(src)/genmt32: $(src)/genmt32.c

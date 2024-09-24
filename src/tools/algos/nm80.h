@@ -40,7 +40,6 @@ void nm80_close(NM80* s)
     fclose( s->store );
 }
 
-
 uint128_t hexU128(char* hext)
 {
     uint128_t result = 0;
@@ -121,46 +120,57 @@ int __prime_exist(void)
 uint64_t __make_prime(void){return 1;}
 uint64_t __get_prime(void){return 1;}
 
+/* 
+ *   0 = 
+ */
 
-void nm80_init(NM80* s, char* p)
+int nm80_init(NM80* state, char* path)
 {
-    int need_new = 0;
-    s->store = fopen(p, "r");
-    if (s->store == NULL)
+    state->store = fopen(path, "r+");
+    if (state->store == NULL)
     {
-        need_new = 1;
+        state->store = fopen(path, "w");
+        if (state->store == NULL)
+        {
+            return -1;
+        }
+        CC2032 seed_gen;
+        cc2032_init( &seed_gen, (void*)seedy64 );
+        cc2032_fill( &seed_gen, (uint8_t*) state->noise, sizeof(state->noise) );
+        seedy64((uint8_t*) state->noise, sizeof(state->noise));
+        memset( state->iters, 0, sizeof(state->iters) );
+        rewind( state->store );
+        fwrite( state, sizeof(NM80), 1, state->store );
+        fflush( state->store );
+        return 0;
     }
     else
     {
-        fseek(s->store, 0, SEEK_END);
-        if (ftell(s->store) == sizeof(NM80))
+        fseek(state->store, 0, SEEK_END);
+        if (ftell(state->store) == sizeof(NM80))
         {
-            rewind(s->store);
-            fread(s, sizeof(NM80), 1, s->store);
-            fclose(s->store);
+            rewind(state->store);
+
+            /* Save the FILE pointer */
+            FILE* temp = state->store; 
+
+            /* Overwrite the FILE pointer */
+            if ( sizeof(NM80) != fread(state, sizeof(NM80), 1, state->store) ) 
+            {
+                return -1;
+            }
+
+            /* Restore the FILE pointer */
+            state->store = temp;
+
+            return 1;
         }
         else
         {
-            need_new = 1;
+            return -1;
         }
     }
-    if(need_new)
-    {
-        CC2032 seed_gen;
-        cc2032_init( &seed_gen, (void*)seedy64 );
-        cc2032_fill( &seed_gen, (uint8_t*) s->noise, sizeof(s->noise) );
-        memset( s->iters, 0, sizeof(s->iters) );
-    }
-    s->store = fopen(p, "w");
-    if (s->store != NULL)
-    {
-        rewind( s->store );
-        fwrite( s, sizeof(NM80), 1, s->store );
-        ftruncate( fileno(s->store), sizeof(NM80) );
-        fflush( s->store );
-    }
 }
-
 
 uint64_t __nm80_block(NM80* state, uint64_t segment, uint64_t iter_bank)
 {
@@ -169,7 +179,10 @@ uint64_t __nm80_block(NM80* state, uint64_t segment, uint64_t iter_bank)
 
     if ( state->iters[iter_bank] == 0 )
     {
-        /* Lazy Initialisation, it takes some time making a unique iterator. Making them as needed avoid spending an hour finding prime numbers.*/
+        /*
+         *   Lazy Initialisation, it takes some time making a unique iterator. 
+         *   Making them as needed avoid spending an hour finding prime numbers.
+         */
         state->iters[iter_bank] = prime64sub16();
         if(state->store != NULL) {
             rewind( state->store );
