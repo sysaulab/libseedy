@@ -1,6 +1,8 @@
-# The Random Filesystem
+# The Random Random Filesystem
 
-Version 0.1 - Beta 1
+Version 0.1 - Beta
+
+The random random filesystem contains randomly accessible random data.
 
 In my seemingly neverending quest to understand cryptography, I created a new filesystem that expose a cryptographic algorithm I have been using for some time now. Here are some of my notes and taughts as well as the state of the project.
 

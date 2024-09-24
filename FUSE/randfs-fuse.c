@@ -753,6 +753,9 @@ main(int argc, char **argv)
     int new = 0;
     int res = 0;
     char* home = getenv("HOME");
+    char cmd[1025];
+    snprintf(cmd, 1024, "umount %s", MNTPATH);
+    system(cmd);
     snprintf(BASEPATH, 1024, "%s/.randfs", home);
     snprintf(MNTPATH, 1024, "%s/RandomFS", BASEPATH);
     snprintf(RNGPATH, 1024, "%s/seed.bin", BASEPATH);
