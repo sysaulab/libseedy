@@ -75,7 +75,7 @@ char BASEPATH[1025];
 char RNGPATH[1025];
 char MNTPATH[1025];
 
-#define RANDFS_OPT_DEBUG_ON
+//#define RANDFS_OPT_DEBUG_ON
 
 
 
